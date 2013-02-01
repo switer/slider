@@ -2,8 +2,6 @@
 <html>
 <!--
     <head>
-
-
         <title>Slider player---by CoSu</title>
         <script type="text/javascript">
         window.DATA = window.DATA || JSON.parse(window.localStorage.getItem('data'));
@@ -19,11 +17,8 @@
                     return -1;
                 };
                 Object.prototype.get = function(index){
-        
                     var i = 0;
-        
                     for(var o in this){
-            
                         if(this.hasOwnProperty(o)){
                             i++;
                             if(index==i) return o;
@@ -31,24 +26,17 @@
                     }
                     return null;
                 };
-                
                 Object.prototype.length = function(){
-        
                     var i = 0;
-        
                     for(var o in this){
-            
                         if(this.hasOwnProperty(o)){
                             i++;
                         }   
                     }
                     return i;
                 };
-            
             }());
-            
         </script>
-
         <style type="text/css">
             .anim-scale{
                 -webkit-transform-style: preserve-3d;
@@ -90,7 +78,6 @@
                 -webkit-animation-iteration-count: 1;
                 -webkit-animation-timing-function: linear; 
             }
-            
             @-webkit-keyframes scale{
                 /* 宽会是双倍，而高度保持不变 */ 
                 0%{ -webkit-transform: scale(1, 1); 
@@ -104,7 +91,6 @@
                 -moz-transform: scale(1, 1);
             }
             }
-
             @-webkit-keyframes leftRotate{
                 0%{ -webkit-transform: rotate(0deg);
                 -moz-transform: rotate(0deg);}
@@ -117,7 +103,6 @@
                 -moz-transform: rotate(-360deg);
             }
             }
-
             @-webkit-keyframes rightRotate{
                 0%{ -webkit-transform: rotate(0deg);
                 -moz-transform: rotate(0deg);}
@@ -130,7 +115,6 @@
                 -moz-transform: rotate(360deg);
             }
             }
-
             @-webkit-keyframes x-spin {
                 0% { -webkit-transform: rotateX(0deg); } 
             50% { -webkit-transform: rotateX(180deg); }
@@ -141,7 +125,6 @@
             50% { -webkit-transform: rotateY(180deg); }
             100% { -webkit-transform: rotateY(360deg); } 
             }
-
             .anim-move-top{
     -webkit-transform-style: preserve-3d;
     /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
@@ -244,8 +227,6 @@
     -webkit-animation-iteration-count: 1;
     -webkit-animation-timing-function: linear; 
 }
-
-
 .anim-move-right{
     -webkit-transform-style: preserve-3d;
     /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
@@ -258,7 +239,6 @@
 {
     0%{
     -webkit-transform: translate(500px, 0px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -268,7 +248,6 @@
 {
     0%{
     -webkit-transform: translate(-500px, 0px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -278,7 +257,6 @@
 {
     0%{
     -moz-transform: translate(-500px, 0px); 
-
 } 
 100%{
     -moz-transform: translate(0px, 0px); 
@@ -288,7 +266,6 @@
 {
     0%{
     -webkit-transform: translate(0px, -500px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -298,18 +275,15 @@
 {
     0%{
     -webkit-transform: translate(0px, 500px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
 }
 }
-
 @-webkit-keyframes anim-move-top-left
 {
     0%{
     -webkit-transform: translate(-500px, -500px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -319,7 +293,6 @@
 {
     0%{
     -webkit-transform: translate(500px, -500px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -329,7 +302,6 @@
 {
     0%{
     -webkit-transform: translate(-500px, 500px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -339,7 +311,6 @@
 {
     0%{
     -webkit-transform: translate(500px, 500px); 
-
 } 
 100%{
     -webkit-transform: translate(0px, 0px); 
@@ -358,7 +329,6 @@
     -moz-transform: scale(1, 1);
 }
 }
-
 @-webkit-keyframes leftRotate{
     0%{ -webkit-transform: rotate(360deg);
     -moz-transform: rotate(360deg);}
@@ -374,9 +344,7 @@
     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
 }
-
 }
-
 @-webkit-keyframes rightRotate{
     0%{ -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);}
@@ -393,7 +361,6 @@
     -moz-transform: rotate(360deg);
 }
 }
-
 @-webkit-keyframes x-spin {
     0% { -webkit-transform: rotateX(0deg); } 
 50% { -webkit-transform: rotateX(180deg); }
@@ -404,12 +371,9 @@
 50% { -webkit-transform: rotateY(180deg); }
 100% { -webkit-transform: rotateY(360deg); } 
 }
-
-
         </style>
         <style type="text/css">
             body{
-
             }
             #slider-preview{
                 position: relative;
@@ -441,7 +405,6 @@
                 height: 600px;
                 width: 800px;
             }
-
         </style>
     </head>
     <body>
@@ -451,148 +414,85 @@
         <script type="text/javascript">
             (function(){
                 var canvas = document.getElementById("slider-preview"),code = document.getElementById("code"),
-            
                 sliders = {};
-            
                 var height = canvas.style.height;
                 var h = parseInt(height.substr(0, height.length-2));
-            
                 canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
-            
                 var targetSlider = null;
-            
                 var module = {
-              
                     init:function(){
-                    
                         for(var s in DATA){
-                    
                             if(DATA.hasOwnProperty(s)){
-                            
-                        
                                 var slider = document.createElement("DIV"),elements = DATA[s].element;
-                            
                                 slider.className = "slider "+DATA[s].anim;
-                            
                                 sliders[s] = slider;
-                    
                                 slider.style.display = "none";
-                    
                                 for (var e in elements) {
-                            
                                     if(elements.hasOwnProperty(e)){
-                                
                                         var data = elements[e],elem;
-                                
                                         if(data.type=="DIV"){
-                                    
                                             elem = document.createElement("DIV");
-                                    
                                             elem.innerHTML = data.value;
-                                    
                                             elem.setAttribute("style", data.cAttr+data.eAttr);
-                                    
                                             elem.style.zIndex = data.zIndex;
-                                    
                                         }
                                         else if(data.type=="IMG"){
-                                    
                                             elem = new Image();
-                                    
                                             elem.src = data.value;
-                                    
                                             elem.setAttribute("style", data.cAttr);
-                                    
                                             elem.style.zIndex = data.zIndex;
-                                    
                                         }
-                                
                                         if(elem) slider.appendChild(elem);
-                        
                                     }
                                 }
                                 canvas.appendChild(slider);
                             }
                         }
-                    
                         module.setTarget(sliders.get(1));
                     },
-                
                     start:function(){
-                    
                         module.init();
                         module.keyOn();
-                    
                     },
-                
                     setTarget:function(newTar){
-                    
                         var className;
-                    
                         if(targetSlider&&sliders[targetSlider]) {
-                        
                             sliders[targetSlider].style.display = "none";
                         }
-                    
-                    
                         targetSlider = newTar;
-                    
                         code.innerHTML = sliders.findIndex(targetSlider)+"/"+sliders.length();
-                    
                         className = sliders[targetSlider].className;
-                    
                         sliders[targetSlider].style.display = "block";
-                    
                         window.setTimeout(function(){
-                        
                             sliders[targetSlider].className = className;
-                        
                         });
-                    
                     },
-            
                     keyOn:function(){
-                
                         window.addEventListener("keyup",function(event){
-                        
                             if(event.keyCode ==37||event.keyCode ==38) module.preSlider(); 
                             else if(event.keyCode==39||event.keyCode ==40) module.nextSlider(); 
-                
                         });
-                
                     },
                     preSlider:function(){
-                    
                         var index = sliders.findIndex(targetSlider),tar = sliders[targetSlider],newTar;
-                    
                         if(index==1) {
-                        
                             alert("It is the first slider !");
                             return;
                         }
-                    
                         newTar = sliders.get(index-1);
-                    
                         module.setTarget(newTar);
-                
                     },
                     nextSlider:function(){
                         var index = sliders.findIndex(targetSlider),length = sliders.length(),newTar;
-                    
                         if(index==length) {
-                        
                             alert("It is the last slider !");
                             return;
                         }
-                    
                         newTar = sliders.get(index+1);
-                    
                         module.setTarget(newTar);
                     }
                 };
-            
                 module.start();
-                
             }());
         </script>
     </body>

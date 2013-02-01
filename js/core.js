@@ -4,7 +4,6 @@
  * modules and events managementf
  */
 var Core = (function() {
-	
 	/**
 	 * store obj of module
 	 * obj: {
@@ -22,9 +21,7 @@ var Core = (function() {
 	var modules = {}, 
 	events = {}, 
 	elemEvents = {};
-	
 	return {
-		
 		/**
 		 * register module by moduleName and its creator function,
 		 * but do not start
@@ -38,17 +35,14 @@ var Core = (function() {
 		 * 
 		 */
 		registerModule: function(moduleName, creator) {
-			
 			if(!moduleName || !creator) {
 				this.log("Core.registerModule: module name and creator should be defined");
 				return;
 			}
-			
 			if(modules[moduleName]) {
 				this.log("Core.registerModule: module '" + moduleName + "' is already existed");
 				return;
 			}
-			
 			module = modules[moduleName] = {
 				creator: creator,
 				instance: null,
@@ -56,7 +50,6 @@ var Core = (function() {
 				events: []
 			};
 		},
-		
 		/**
 		 * start module which have been registered and have not been started,
 		 * invoke creator of module and init function of module instance
@@ -67,27 +60,22 @@ var Core = (function() {
 		 * 		extra parameters should be passed to creator if is necessary
 		 */
 		start: function(moduleName, varArgs) {
-			
 			var module = modules[moduleName];
 			if(!module) {
 				this.log("Core.start: module '" + moduleName + "' has not been registered");
 				return;
 			}
-			
 			if(module.instance) {
 				return;
 			}
-
 			var args = [];
 			args.push(module.sandBox);
 			for(var i = 1, arg; arg = arguments[i]; i++) {
 				args.push(arg);
 			}
-
 			module.instance = module.creator.apply(this, args);
 			module.instance.init();
 		},
-		
 		/**
 		 * stop module which have already been started,
 		 * invoke destroy function of module instance and ignore all events
@@ -97,21 +85,16 @@ var Core = (function() {
 		 * 		module name
 		 */
 		stop: function(moduleName) {
-			
 			var module = modules[moduleName];
 			if(!module || !module.instance) {
 				return;
 			}
-			
 			module.instance.destroy();
-			
 			for(var evt in module.events) {
 				this.unregisterEvent(moduleName, evt);
 			}
-			
 			module.instance = null;
 		},
-		
 		/**
 		 * start all modules if the module has not been started before
 		 * 
@@ -121,11 +104,8 @@ var Core = (function() {
 		 * 		extraParams: {{string} moduleName: {Array} params}
 		 */
 		startAll: function(extraParams) {
-			
 			for(var moduleName in modules) {
-
 				var module = modules[moduleName];
-			
 				//这里if + continue可以替换if else
 				if(module && module.instance) {
 					continue;
@@ -140,21 +120,17 @@ var Core = (function() {
 						args.push(t);
 					}
 				}
-				
 				this.start.apply(this, args);
 			}
 		},
-		
 		/**
 		 * stop all modules
 		 */
 		stopAll: function() {
-			
 			for(var moduleName in modules) {
 				this.stop(moduleName);
 			}
 		},
-		
 		/**
 		 * register event of module
 		 * 
@@ -166,23 +142,19 @@ var Core = (function() {
 		 *		function to be invoked when this event is triggered 		
 		 */
 		registerEvent: function(moduleName, evt, fn) {
-			
 			var module = modules[moduleName];
 			if(!module || !module.instance) {
 				this.log("Core.registerEvent: module '" + moduleName + "' does not exist");
 				return;
 			}
-			
 			if(!fn || typeof fn != "function") {
 				this.log("Core.registerEvent: module '" + moduleName + "' register a undefined function");
 				return;
 			}
-			
 			var oldFn = module.events[evt];
 			if(oldFn) {
 				this.unregisterEvent(moduleName, evt);
 			}
-			
 			module.events[evt] = fn;
 			var fns = events[evt];
 			if(!fns) {
@@ -191,7 +163,6 @@ var Core = (function() {
 			}
 			fns.push(fn);
 		},
-		
 		/**
 		 * unregister event of module
 		 * 
@@ -201,15 +172,12 @@ var Core = (function() {
 		 * 		event name
 		 */
 		unregisterEvent: function(moduleName, evt) {
-			
 			var module = modules[moduleName];
 			if(!module || !module.instance) {
 				this.log("Core.unregisterEvent: module '" + moduleName + "' does not exist");
 				return;
 			}
-			
 			var fn = module.events[evt], fns = events[evt];
-			
 			if(fn && fns) {
 				for(var i = 0, tmpFn; tmpFn = fns[i]; i++) {
 					if(tmpFn == fn) {
@@ -221,10 +189,8 @@ var Core = (function() {
 					delete events[evt];
 				}
 			}
-			
 			delete module.events[evt];
 		},
-		
 		/**
 		 * trigger event
 		 * 
@@ -234,24 +200,19 @@ var Core = (function() {
 		 * 				data: parameter should be passed to event function
 		 */
 		triggerEvent: function(evtObj) {
-
 			var type = evtObj.type, data = evtObj.data;
-			
 			if(!type) {
 				this.log("Core.triggerEvent: please specify the type of event");
 				return;
 			}
-			
 			var fns = events[type];
 			if(!fns) {
 				return;
 			}
-			
 			for(var i = 0, fn; fn = fns[i]; i++) {
 				fn(data);
 			}
 		},
-		
 		/**
 		 * bind event to element
 		 * 
@@ -260,20 +221,15 @@ var Core = (function() {
 		 * @param {Function} fn
 		 */
 		bind: function(obj, eventName, fn) {
-			
 			if(!obj) {
 				this.log("Core.bind: obj should not be null");
 				return;
 			}
-			
 			if (obj.addEventListener) {
-				
 				obj.addEventListener(eventName, fn, false);
 				return;
 			}
-			
 			eventName = "on" + eventName;
-			
 			var event = obj[eventName], fns = elemEvents[event];
 			if(!fns) {
 				fns = [];
@@ -284,10 +240,8 @@ var Core = (function() {
 				};
 				elemEvents[event] = fns;
 			}
-			
 			fns.push(fn);
 		},
-		
 		/**
 		 * unbind event from element
 		 * 
@@ -296,20 +250,15 @@ var Core = (function() {
 		 * @param {Function} fn
 		 */
 		unbind: function(obj, eventName, fn) {
-			
 			if(!obj) {
 				this.log("Core.bind: obj should not be null");
 				return;
 			}
-			
 			if (obj.removeEventListener) {
-				
 				obj.removeEventListener(eventName, fn, false);
 				return;
 			}
-			
 			eventName = "on" + eventName;
-			
 			var fns = elemEvents[obj[eventName]];
 			if(fns) {
 				for(var i = 0, evt; evt = fns[i]; i++) {
@@ -320,7 +269,6 @@ var Core = (function() {
 				}
 			}
 		},
-		
 		/**
 		 * log
 		 * 

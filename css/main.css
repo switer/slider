@@ -1,7 +1,7 @@
 body{
     background-color: #EEE;
     padding: 0px;
-    overflow: hidden;
+    /*overflow: hidden;*/
     margin-left: 0;
 }
 input{

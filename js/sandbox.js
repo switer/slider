@@ -4,12 +4,10 @@
  * provides public data get/set, event listen/ignore/notify and DOM manipulation 
  */
 var SandBox = (function() {
-
     /**
      * public data used among modules
      */
     var pubData = {},
-	
     /**
      * used in show and hide function
      * 
@@ -18,7 +16,6 @@ var SandBox = (function() {
      * visibilityMode == 2; use position(absolute) and left of element's style
      */
     visibilityMode = 0;
-	
     /**
      * @param {Core} core
      * @param {string} moduleName
@@ -26,22 +23,18 @@ var SandBox = (function() {
      * @constructor
      */
     var SandBox = function(core, moduleName) {
-			
         if(!moduleName) {
             core.log("SandBox.constructor: module name should be defined");
             return;
         }
-		
         this.moduleName = moduleName;
         this.container = document.getElementById(moduleName);
         this.core = core;
         this.xhr = new XMLHttpRequest();
     };
-	
     SandBox.setVisibilityMode = function(mode) {
         visibilityMode = mode;
     };
-	
     /**
      * get/set public data
      * if value is defined, set data, or get data
@@ -54,7 +47,6 @@ var SandBox = (function() {
      * @returns {object|undefined}
      */
     SandBox.prototype.data = function(name, value) {
-		
         if(typeof value != "undefined") {
             pubData[name] = value;
         }
@@ -62,7 +54,6 @@ var SandBox = (function() {
             return pubData[name];
         }
     };
-	
     /**
      * remove public data
      * 
@@ -72,7 +63,6 @@ var SandBox = (function() {
     SandBox.prototype.removeData = function(name) {
         delete pubData[name];
     };
-	
     /**
      * notify event registered by events
      * 
@@ -80,10 +70,8 @@ var SandBox = (function() {
      * @see Core.triggerEvent
      */
     SandBox.prototype.notify = function(evtObj) {
-		
         this.core.triggerEvent(evtObj);
     };
-	
     /**
      * listen events
      * 
@@ -91,12 +79,10 @@ var SandBox = (function() {
      * 		{{string} eventName: {function(data:object) fn}}
      */
     SandBox.prototype.listen = function(evts) {
-		
         for(var evt in evts) {
             this.core.registerEvent(this.moduleName, evt, evts[evt]);
         }
     };
-	
     /**
      * ignore events
      * 
@@ -104,12 +90,10 @@ var SandBox = (function() {
      * 		events' name
      */
     SandBox.prototype.ignore = function(evts) {
-		
         for(var i = 0, evt; evt = evts[i]; i++) {
             this.core.unregisterEvent(this.moduleName, evt);
         }
     };
-	
     /**
      * parse selector (.@/)
      * 
@@ -120,7 +104,6 @@ var SandBox = (function() {
         .replace(/\//g, "\\/")
         .replace(/\./g, "\\.");
     };
-	
     /**
      * find one DOM element
      * 
@@ -134,7 +117,6 @@ var SandBox = (function() {
         ctx = ctx || this.container;
         return ctx.querySelector(selector);
     };
-	
     /**
      * query DOM elements
      * 
@@ -148,7 +130,6 @@ var SandBox = (function() {
         ctx = ctx || this.container;
         return ctx.querySelectorAll(selector);
     };
-	
     /**
      * add class to DOM element
      * 
@@ -156,14 +137,12 @@ var SandBox = (function() {
      * @param {string} className
      */
     SandBox.prototype.addClass = function(elem, className) {
-		
         if(elem.classList) {
             elem.classList.add(className);
         }
         else {
             var clses = elem.className.split(" "), 
             cls, len = clses.length, find = false;
-			
             for(var i = 0; i < len; i++) {
                 if(cls == className) {
                     find = true;
@@ -175,7 +154,6 @@ var SandBox = (function() {
             }
         }
     };
-	
     /**
      * remove class of DOM element
      * 
@@ -183,21 +161,15 @@ var SandBox = (function() {
      * @param {string} className
      */
     SandBox.prototype.removeClass = function(elem, className) {
-		
         if(elem.classList) {
             elem.classList.remove(className);
         }
         else {
-			
             var clses = elem.className.split(" "), 
             cls, len = clses.length;
-			
             for(var i = 0; i < len; i++) {
-				
                 cls = clses[i];
-				
                 if(cls == className) {
-					
                     if(i == 0) {
                         if(clses.length > 1) {
                             className = className + " ";
@@ -206,15 +178,12 @@ var SandBox = (function() {
                     else {
                         className = " " + className;
                     }
-					
                     elem.className = elem.className.replace(className, "");
-					
                     break;
                 }
             }
         }
     };
-	
     /**
      * check if DOM element has specified class
      * 
@@ -222,35 +191,27 @@ var SandBox = (function() {
      * @param {string} className
      */
     SandBox.prototype.hasClass = function(elem, className) {
-		
         if(elem.classList) {
             return elem.classList.contains(className);
         }
         else {
-			
             var clses = elem.className.split(" "),
             cls, len = clses.length;
-			
             for(var i = 0; i < len; i++) {
-				
                 cls = clses[i];
-				
                 if(cls == className) {
                     return true;
                 }
             }
-			
             return false;
         }
     };
-	
     /**
      * show element
      * 
      * @param {DOMElement} elem
      */
     SandBox.prototype.show = function(elem) {
-		
         switch (visibilityMode) {
             case 0:
                 elem.style.display = "";
@@ -259,39 +220,32 @@ var SandBox = (function() {
                 elem.style.visibility = "visible";
                 break;
             case 2:
-			
                 var oldPosition = elem.style.oldPosition,
                 oldLeft = elem.style.oldLeft;
-			
                 if(oldPosition) {
                     elem.style.position = oldPosition;
                 }
                 else {
                     elem.style.position = "";
                 }
-			
                 if(oldLeft) {
                     elem.style.left = oldLeft;
                 }
                 else {
                     elem.style.left = "";
                 }
-			
                 elem.isHidden = false;
-			
                 break;
             default:
                 break;
         }
     };
-	
     /**
      * hide element
      * 
      * @param {DOMElement} elem
      */
     SandBox.prototype.hide = function(elem) {
-		
         switch (visibilityMode) {
             case 0:
                 elem.style.display = "none";
@@ -309,13 +263,11 @@ var SandBox = (function() {
                 elem.style.position = "absolute";
                 elem.style.left = "-2000px";
                 elem.isHidden = true;
-			
                 break;
             default:
                 break;
         }
     };
-	
     /**
      * the same as document.createElement
      * 
@@ -324,7 +276,6 @@ var SandBox = (function() {
     SandBox.prototype.elem = function(tagName) {
         return document.createElement(tagName);
     };
-	
     /**
      * trim string
      * 
@@ -334,7 +285,6 @@ var SandBox = (function() {
     SandBox.prototype.trim = function(str) {
         return str.replace(/(^\s*)|(\s*$)/g, "");
     };
-	
     /**
      * return nextSibling but ignore text node
      * 
@@ -350,7 +300,6 @@ var SandBox = (function() {
             sibl = sibl.nextSibling;
         }
     };
-	
     /**
      * return previousSibling but ignore text node
      * 
@@ -366,37 +315,27 @@ var SandBox = (function() {
             sibl = sibl.previousSibling;
         }
     };
-	
     /**
      * execute in queue
      * 
      * @param {object...} objs
      */
     SandBox.prototype.queue = function() {
-		
         var fns = function() {}, oldFns;
-		
         for (var i = arguments.length - 1, obj; i >= 0; i--) {
-
             obj = arguments[i];
             oldFns = fns;
-			
             (function(obj, oldFns) {
-				
                 fns = function() {
-					
                     setTimeout(function() {
-						
                         obj.fn();
                         oldFns();
                     }, obj.time || 0);
                 };
             })(obj, oldFns);
         }
-		
         fns();
     };
-	
     /**
      * bind event to object
      * 
@@ -407,7 +346,6 @@ var SandBox = (function() {
     SandBox.prototype.bind = function(obj, eventName, fn) {
         Core.bind(obj, eventName, fn);
     };
-	
     /**
      * unbind event from element
      * 
@@ -418,48 +356,33 @@ var SandBox = (function() {
     SandBox.prototype.unbind = function(obj, eventName, fn) {
         Core.unbind(obj, eventName, fn);
     };
-        
     /*
      *load an image from imagefile selection
      * @returns {DOMElement}
      */
     SandBox.prototype.addImage = function(obj){
         var image  = new Image(),URL = window.webkitURL|| window.mozURL||window.URL;
-        
         var src = URL.createObjectURL(obj.files.item(0));
-        
         //       image.src = src;
-        
         if(obj.files){
-           
             var reader = new FileReader();
             reader.onerror = function(e){
                 Core.log(e.message);
             }
             reader.readAsDataURL(obj.files.item(0));
-           
             reader.onload = function(){
-               
                 image.src = reader.result;
-               
             };
-
             return image;
         }
-               
     //        return image;
-                
-        
-        
     };
     /*
      *load an image as DataURL from imagefile selection
      * @returns {DOMElement}
      */
     SandBox.prototype.readAsDataURL = function(obj){
-        
         var image = new Image();
-        
         if(obj){
             //ie
             if (window.navigator.userAgent.indexOf("MSIE")>=1){
@@ -484,56 +407,32 @@ var SandBox = (function() {
         }
         return null;
     };
-    
-    
     SandBox.prototype.subrgb = function(rgb){
-        
         var indexA,indexB,numstr,numStrArr,numArr = [],item;
-        
         indexA = rgb.indexOf("(");
         indexB = rgb.indexOf(")");
-        
         if(indexA==-1||indexB==-1) return null;
-        
         numstr = rgb.substring(indexA+1, indexB);
-        
         numStrArr = numstr.split(",");
-        
         for (var i = 0; item  = numStrArr[i]; i++) {
-            
             numArr[i] = parseInt(item);
-            
         }
-        
         return numArr;
-        
     };
-    
-    
     SandBox.prototype.subColorHexToInt = function(hex){
-        
         var arr = [];
-        
         arr[0] = parseInt(hex.substr(1,2),16);
         arr[1] = parseInt(hex.substr(3,2),16);
         arr[2] = parseInt(hex.substr(5,2),16);
-        
         return arr;
-        
     };
-    
     SandBox.prototype.subColorHex = function(hex){
-        
         var arr = [];
-        
         arr[0] = hex.substr(1,2);
         arr[1] = hex.substr(3,2);
         arr[2] = hex.substr(5,2);
-        
         return arr;
-        
     };
-                
     /*
      * Fixed the img
      * @param {object} obj
@@ -547,7 +446,6 @@ var SandBox = (function() {
         var min_x = 50,min_y = 50;
         obj.height= obj.height <min_x?min_x:obj.height;
         obj.width= obj.width <min_y?min_y:obj.width;
-        
         var scaley = obj.height/y,scalex=obj.width/x;
         if(scaley>1||scalex>1){
             if(scaley>scalex){
@@ -561,13 +459,8 @@ var SandBox = (function() {
         }
         return obj;
     }
-    
-    
     SandBox.prototype.ObjectLink = function(){
-        
     }
-    
-    
     /*
      *insert a element into a Object-set
      *
@@ -577,14 +470,10 @@ var SandBox = (function() {
      *
      */
     SandBox.prototype.ObjectLink.prototype.insert = function(elem,seq,insert){
-        
         var obj = {},inValue = null,flag = false;
-        
         if(seq=="append"){
-            
             this[elem.key] = elem.value;
             return;
-            
         }
         for(var o in this){
             if(this.hasOwnProperty(o)){
@@ -597,31 +486,20 @@ var SandBox = (function() {
                     delete this[o];
                 }
             }   
-            
         }
         if(seq=="before"){
             delete this[insert];
             this[elem.key] = elem.value;
-            
             this[insert] =  inValue;
-            
         }else{
-            
             this[elem.key] = elem.value;
-            
         }
-        
         for(var ap in obj){
-            
             if(obj.hasOwnProperty(ap)){
-                
                 this[ap] = obj[ap];
             }
-            
         }
-        
     };
-    
     /*
      *find the index of a specify object in the specify obj-set
      *index begin of 1
@@ -630,29 +508,17 @@ var SandBox = (function() {
      *@returns {Number}
      */
     SandBox.prototype.ObjectLink.prototype.findIndex = function(attName){
-        
         var i = 0;
-        
         for(var o in this){
-            
             if(this.hasOwnProperty(o)){
-             
                 i++;
-            
                 if(attName==o){
-                
                     return i;
-                
                 }
             }   
-           
-            
         }
-        
         return -1;
-        
     };
-    
     /*
      * sub a set from indexA to indexB ; indexA,indexB value begin in 1
      * if indexB > indexA ,indexB = this.length
@@ -663,43 +529,24 @@ var SandBox = (function() {
      *
      */
     SandBox.prototype.ObjectLink.prototype.subSet = function(indexA,indexB){
-        
         var i = 1 , j=0 , flag = false , array = [];
-        
         if( indexA > indexB ){
-            
             Core.log("wrong params in function:subset !");
-            
             return null;
-            
         }
-        
         for( var o in this ){
-            
             if(this.hasOwnProperty(o)){
-                
                 if(indexA==i) flag =true;
-            
                 if(flag){
-                
                     array[j] = o;
-                
                     j++;
-                
                 }
-            
                 if(indexB==i) return array;
-            
                 i++;
             }
-            
-            
         }
-        
         return array;
-        
     }
-    
     /*
      *return size
      *
@@ -707,32 +554,21 @@ var SandBox = (function() {
      *
      */
     SandBox.prototype.ObjectLink.prototype.length = function(){
-        
         var i = 0;
-        
         for(var o in this){
-            
             if(this.hasOwnProperty(o))
                 i++;
-            
         }
-        
         return i;
-        
     }
-    
     /*
      *@returns {String}
      */
     SandBox.prototype.ObjectLink.prototype.getFirstElement = function(){
-            
         for(var s in this){
-            
             if(this.hasOwnProperty(s)){
-                
                 return s;
             }    
-           
         }
         return null;
     };
@@ -740,109 +576,60 @@ var SandBox = (function() {
      *@returns {String}
      */    
     SandBox.prototype.ObjectLink.prototype.getLastElement = function(){
-            
         var o = null;
-            
         for(var s in this){
-                
             if(this.hasOwnProperty(s)) o = s;
-                
         }
-            
         return o;
-            
     };
-    
     /*
      *@param {String} att
      *
      */    
     SandBox.prototype.ObjectLink.prototype.sortBy = function(att){
-
         var arrA = this.toArray(),o;
-       
         arrA.sort(function(a,b){
-           
-            
             if(a["value"][att]<b["value"][att]) return -1;
-           
             else if(a["value"][att]>b["value"][att]) return 1;
-           
             return 0;
-           
         });
-        
         this.clear();
-        
         for (var i = 0; o = arrA[i]; i++) {
-            
             this[o["key"]] = o["value"];
-            
         }
-       
     };
-    
-    
     /*
      *delete all properties
      */  
     SandBox.prototype.ObjectLink.prototype.clear = function(){
-        
         for (var o in this) {
-            
             if(this.hasOwnProperty(o))
                 delete this[o];
-            
         }
-        
-        
     };
-    
     /*
      *@returns {Array.<Object>}
      */    
     SandBox.prototype.ObjectLink.prototype.toArray = function(){
-       
         var arrA = [],j=0;
-       
         for(var o in this){
-           
             if(this.hasOwnProperty(o)){
-               
                 arrA[j] = {
-                    
                     key:o,
-                    
                     value:this[o]
-                    
                 };
-               
                 j++;
             }
-           
         }
-       
         return arrA;
-            
     };
-    
     SandBox.prototype.ObjectLink.prototype.forEach = function(func){
-       
         for(var o in this){
-           
             if(this.hasOwnProperty(o)){
-               
                 func(this[o],o);
-               
             }
-           
         }
-       
     };
-    
-    
-    
-    
     /*
      *seq:pre next first last,index:-1 1 2 3....,tar: the target slider-elementID
      *
@@ -853,17 +640,11 @@ var SandBox = (function() {
      *
      */
     SandBox.prototype.ObjectLink.prototype.getSlider = function(seq,tar,index){
-        
         var sliders = this;
-        
         if(index!=-1){
-                
             var i = 1;
-                
             for(var s in sliders){
-                
                 if(sliders.hasOwnProperty(s)){
-                    
                     if(i==index){
                         return s;
                     }
@@ -875,57 +656,37 @@ var SandBox = (function() {
             }
         }
         else{
-                
             if(!seq){
-                
                 Core.log("arguments are illegle when find the target in slider!");
                 return null;
-                
             }else if(seq!="first"&&seq!="last"&&!tar){
                 Core.log("arguments are illegle when find the target in slider!");
                 return null;
             }
             switch (seq) {
                 case "first":
-                    
                     for(var s1 in sliders){
-                        
                         if(sliders.hasOwnProperty(s1))
-                            
                             return s1;
                     }
                     break;
-                        
                 case "last":
-                    
                     var s22 = null;
-                    
                     for(var s2 in sliders){
-                        
                         if(sliders.hasOwnProperty(s2)){
-                            
                             s22 = s2;
-                            
                         }
                     }
                     return s22;
                     break;
-                        
                 case "pre":
                     var ss = null;
-                    
                     for(var s3 in sliders){
-                        
                         if(sliders.hasOwnProperty(s3)){
-                            
                             if(s3==tar) return ss;
-                            
                             ss =s3
-                            
                         }
-                       
                     }
-                        
                     break;
                 case "next":
                     var flag = false;
@@ -936,138 +697,85 @@ var SandBox = (function() {
                         }
                     }
                     break;
-                    
                 default:
-                    
                     return null;
-                    
                     break;
             }
         }
         return null;
-            
     };
-    
     /*
      * @param {String} pxv
      * @param {Number} len
      * @returns {Number}
      */
     SandBox.prototype.subPX = function(pxv,len){
-      
-        
         if(len||len==0) {
-            
             if(typeof pxv != "string") pxv = pxv.toString();
             return parseInt(pxv.substr(0, pxv.length-len))|| parseFloat(pxv.substr(0, pxv.length-len));
         }
         else {
-            
             return parseInt(pxv.substr(0, pxv.length-2))|| parseFloat(pxv.substr(0, pxv.length-2));
         }
-      
     };
-    
-    
     SandBox.prototype.proxy = function(fn,ctx){
-        
         return function(args){
             fn.apply(ctx, args);
         }
-        
     };
-    
     SandBox.prototype.ajaxPost = function(url,callback,args){
-        
         var xhr =  this.xhr;
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
         xhr.setRequestHeader("If-Modified-Since","0");
-        
         xhr.onreadystatechange = function(){
-            
             if(xhr.readyState==4&&xhr.status==200){
-              
                 callback();
             }  
-            
         };
         xhr.send(args);
-        
     };
-    
     SandBox.prototype.ajaxGet = function(url,callback){
-        
         var xhr =  this.xhr;
         xhr.open("GET", url);
         xhr.onreadystatechange = function(){
-            
             if(xhr.readyState==4&&xhr.status==200){
-              
                 callback();
             }  
-            
         };
         xhr.send();
-        
     };
-    
-    
     SandBox.prototype.move = function(elem,tar){
-        
         var initY=0,initX=0,pInitX=0,pInitY=0,
-        
         flag={
             isInit:false,
             isDown:false
         };
         this.ondrag(elem,flag, function(event){
-            
             if(flag.isDown){
-                
                 var eventX = event.screenX;
-            
                 var eventY = event.screenY;
-                
                 if(!flag.isInit){
-                
                     initX=eventX;
-                
                     initY=eventY;
-                
                     pInitX=parseInt(tar.style.left.substr(0, tar.style.left.length-2)),
-                
                     pInitY=parseInt(tar.style.top.substr(0, tar.style.top.length-2)),
-                
                     flag.isInit = true;
                 }
                 //                if(eventX!=0||eventY!=0){
-                    
                 tar.style.left = (pInitX+eventX-initX)+"px";
-            
                 tar.style.top = (pInitY+eventY-initY)+"px";
-                    
             //                }
-                
             }
         });
-        
-        
-        
     };
-    
-    
     SandBox.prototype.resizeRX =function(elem,tar,other){
-        
         var initX=0,pInitW=0,
-        
         flag={
             isInit:false,
             isDown:false
         };
-       
         this.ondrag(elem,flag, function(event){
-            
             if(flag.isDown){
                 var clientX = event.screenX;
                 if(!flag.isInit){
@@ -1081,40 +789,27 @@ var SandBox = (function() {
                 }
                 if(other) other.style.width = (pInitW+clientX-initX)+"px";
                 else tar.style.width = (pInitW+clientX-initX)+"px";
-                
             }
         });
-      
     };
-    
     SandBox.prototype.resizeLX =function(elem,tar,other){
-        
         var initX=0,pInitW=0,pInitL,
-        
         flag={
             isInit:false,
             isDown:false
         };
-        
         this.ondrag(elem,flag, function(event){
-            
             if(flag.isDown){
-                
                 var clientX = event.screenX;
-            
                 if(!flag.isInit){
-                
                     initX=clientX;
-                
                     if(other){
-                        
                         pInitW = parseInt(other.style.width.substr(0, other.style.width.length-2));
                     }
                     else{
                         pInitW = parseInt(tar.style.width.substr(0, tar.style.width.length-2));
                     }
                     pInitL = parseInt(tar.style.left.substr(0, tar.style.left.length-2));
-                
                     flag.isInit = true;
                 }
                 if(other)  other.style.width = (pInitW-(clientX-initX))+"px";
@@ -1122,10 +817,7 @@ var SandBox = (function() {
                 tar.style.left = (pInitL+(clientX-initX))+"px";
             }
         });
-      
     };
-    
-    
     SandBox.prototype.resizeBY =function(elem,tar,other){
         var initY=0,pInitH=0,
         flag={
@@ -1148,8 +840,6 @@ var SandBox = (function() {
             }
         });
     };
-    
-    
     SandBox.prototype.resizeRB =function(elem,tar,other){
         var initY=0,initX=0,pInitW=0,pInitH=0,
         flag={
@@ -1157,7 +847,6 @@ var SandBox = (function() {
             isDown:false
         };
         this.ondrag(elem,flag, function(event){
-            
             if(flag.isDown){
                 var clientY = event.screenY;
                 var clientX = event.screenX;
@@ -1184,9 +873,7 @@ var SandBox = (function() {
             }
         });
     };
-    
     SandBox.prototype.resizeRX =function(elem,tar,other){
-        
         var initX=0,pInitW=0,
         flag={
             isInit:false,
@@ -1208,10 +895,7 @@ var SandBox = (function() {
                 else tar.style.width = (pInitW+clientX-initX)+"px";
             }
         });
-      
     };
-    
-    
     SandBox.prototype.resizeTY =function(elem,tar,other){
         var initY=0,pInitH=0,pInitT,
         flag={
@@ -1238,7 +922,6 @@ var SandBox = (function() {
             }
         });
     };
-    
     SandBox.prototype.resizeLT =function(elem,tar,other){
         var initX,initY=0,pInitH=0,pInitT,pInitL,pInitW,
         flag={
@@ -1277,9 +960,7 @@ var SandBox = (function() {
             }
         });
     };
-    
     SandBox.prototype.resizeLB =function(elem,tar,other){
-        
         var initX,initY=0,pInitH=0,pInitL,pInitW,
         flag={
             isInit:false,
@@ -1315,9 +996,7 @@ var SandBox = (function() {
             }
         });
     };
-    
     SandBox.prototype.resizeRT =function(elem,tar,other){
-        
        var initX,initY=0,pInitH=0,pInitT,pInitW,
         flag={
             isInit:false,
@@ -1340,7 +1019,6 @@ var SandBox = (function() {
                         pInitW = parseInt(tar.style.width.substr(0, tar.style.width.length-2));
                     }
                     pInitT = parseInt(tar.style.top.substr(0, tar.style.top.length-2));
-                   
                     flag.isInit = true;
                 }
                 if(other) {
@@ -1355,49 +1033,32 @@ var SandBox = (function() {
             }
         });
     };
-    
     SandBox.prototype.ondrag =function(elem,flag,handle){
         elem.setAttribute("draggable", false);
         elem.addEventListener("mousedown", function(e){
             if(e.button==0){
                 flag.isDown = true;
             }
-            
         }, false);
-        
         window.addEventListener("mouseup", function(e){
-            
             if(e.button==0){
-                
                 flag.isDown = false;
                 flag.isInit = false;
-                
             }
-            
         }, false);
         window.addEventListener("mousemove",handle,false);
-        
     };
-    
     SandBox.prototype.css = function(e,att){
-        
         if(!e.style){
-            
             e.setAttribute("style", "");
         }
-        
         for (var a in att) {
-            
             e.style[a] = att[a];
-            
         }
-        
     };
-
     SandBox.prototype.File = {
         save : function (fileName, content, success) {
             var type = 'text/plain';
-            
             function onInitFs(fs) {
                 function errorHandler(error) {
                     //文件已经存在就删除掉
@@ -1434,7 +1095,6 @@ var SandBox = (function() {
                         fileWriter.write(bb.getBlob('text/plain'));
                     }, errorHandler);
                 }
-
                 fs.root.getFile(fileName, {create: true,exclusive : true}, writeFileHandler, errorHandler);
             }
             window.webkitRequestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, function(e) {
@@ -1442,16 +1102,10 @@ var SandBox = (function() {
             });
         }
     }
-    
-    
     SandBox.prototype.create = function(tagName){
-        
         return document.createElement(tagName);
-        
     };
-    
     if (!SandBox.prototype.ObjectLink.prototype.toJSONString) {
-        
         SandBox.prototype.ObjectLink.prototype.toJSONString = function (filter) {
             return JSON.stringify(this, filter);
         };
@@ -1459,11 +1113,9 @@ var SandBox = (function() {
             return JSON.parse(this, filter);
         };
     }
-    
     var pubSandBox = new SandBox(Core, "public_sandbox");
     SandBox.pub = function() {
         return pubSandBox;
     };
-	
     return SandBox;
 })();

@@ -12,11 +12,11 @@
     box-shadow:0px 0px 5px black;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
-    right: -60px;
+    right: 0px;
     top:100px; 
     z-index: 800;
 }
-#stylebar:hover{
+/*#stylebar:hover{
 
     -webkit-transform:translateX(-60px);
     -webkit-animation-name: move-out;
@@ -29,7 +29,7 @@
     -moz-animation-duration: 0.2s;
     -moz-animation-iteration-count: 1;
     -moz-animation-timing-function: linear; 
-}
+}*/
 #execCommand-detail{
     
     display: none;
