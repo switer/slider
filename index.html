@@ -8,11 +8,11 @@
         <meta name="format-detection" content="telephone=no">
         <link rel="stylesheet" href="css/canvas.css" type="text/css" />
         <link rel="stylesheet" href="css/toolbar.css" type="text/css" />
+        <link rel="stylesheet" href="css/stylebar.css" type="text/css" />
         <link rel="stylesheet" href="css/main.css" type="text/css" />
         <link rel="stylesheet" href="css/view.css" type="text/css" />
         <link rel="stylesheet" href="css/animation.css" type="text/css" />
         <link rel="stylesheet" href="css/preview.css" type="text/css" />
-        <link rel="stylesheet" href="css/stylebar.css" type="text/css" />
         <script type="text/javascript" src="web.fs.mobile/src/lib/underscore.js"></script>
         <script type="text/javascript" src="web.fs.mobile/src/lib/zepto.js"></script>
         <script type="text/javascript" src="js/util/util.js"></script>
@@ -152,14 +152,14 @@
                 <a href="javascript:;" class="execC-but" onclick="document.execCommand('removeFormat',false);"></a>
             </div> 
         </div>
-        <div id="stylebar">
+<!--         <div id="stylebar">
             <div>
                 <button class="style-button show_execCommandDetail" ></button>
             </div>
              <div>
                 <button class="style-button imageProcess" ></button>
             </div>
-        </div>
+        </div> -->
         <div id="alert-box">
             <span class="alert-content"></span>
         </div>
@@ -324,16 +324,20 @@
         </div>
         <div id="toolbar" >
             <div id="tool-buttons">
-                <div id="tool-enterPreviewMode" class="tool-app title" data-title="enter preivew mode"></div>
-                <div id="tool-addimage" class="tool-app title" data-title="add a image">
+                <div id="tool-enterPreviewMode" class="tool-app title" data-title="保存"></div>
+                <div id="tool-addimage" class="tool-app title" data-title="添加一张图片">
                     <input type="file" id="addImageInp"/>
                 </div>
-                <div id="tool-addtext" class="tool-app title" data-title="add a text editor"></div>
-                <div id="tool-addAnimation" class="tool-app ondetail title" data-title="add animation for this slider"></div>
-                <div id="tool-elemOperation" class="tool-app ondetail title" data-title="operate element in slider-editor"></div>
-                <div id="tool-addslider" class="tool-app title" data-title="append a new slider"></div>
-                <div id="tool-insertSlider" class="tool-app title" data-title="insert a new slider"></div>
-                <div id="tool-deleteSlider" class="tool-app title" data-title="delete this slider"></div>
+                <div id="tool-import" class="tool-app title" data-title="导入">
+                    <input type="file" id="importInp"/>
+                </div>
+                <div id="tool-addtext" class="tool-app title" data-title="添加文本输入框"></div>
+                <div id="tool-addAnimation" class="tool-app ondetail title" data-title="更改动画"></div>
+                <div id="tool-elemOperation" class="tool-app ondetail title" data-title="操作"></div>
+                <div class="tool-app show_execCommandDetail" data-title="显示文本编辑工具"></div>
+                <div id="tool-addslider" class="tool-app title" data-title="添加新的幻灯片"></div>
+                <div id="tool-insertSlider" class="tool-app title" data-title="插入新的幻灯片"></div>
+                <div id="tool-deleteSlider" class="tool-app title" data-title="删除当前幻灯片"></div>
             </div>
             <!--工具栏详细操作菜单-->
             <div id="tool-operation" >
@@ -373,6 +377,10 @@
                     <!--
         <!DOCTYPE html><html><head>
         <title>Slider player---by CoSu</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="MobileOptimized" content="320"/>
+        <meta name="format-detection" content="telephone=no">
         <script type="text/javascript">
             (function(){
                 Object.prototype.findIndex = function(attName){
@@ -449,58 +457,49 @@
             }
             @-webkit-keyframes scale{
                 /* 宽会是双倍，而高度保持不变 */ 
-                0%{ -webkit-transform: scale(1, 1); 
-                -moz-transform: scale(1, 1);}
-            50%{
-                -webkit-transform: scale(1.4, 1.4); 
-                -moz-transform: scale(1.4, 1.4);
-            }
-            100%{
-                -webkit-transform: scale(1, 1); 
-                -moz-transform: scale(1, 1);
-            }
+                0%{ -webkit-transform: scale(1, 1); }
+                50%{
+                    -webkit-transform: scale(1.4, 1.4); 
+                }
+                100%{
+                    -webkit-transform: scale(1, 1); 
+                }
             }
             @-webkit-keyframes leftRotate{
-                0%{ -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);}
-            50%{
-                -webkit-transform: rotate(-180deg);
-                -moz-transform: rotate(-180deg);
-            }
-            100%{
-                -webkit-transform: rotate(-360deg);
-                -moz-transform: rotate(-360deg);
-            }
+                0%{ -webkit-transform: rotate(0deg);}
+                50%{
+                    -webkit-transform: rotate(-180deg);
+                }
+                100%{
+                    -webkit-transform: rotate(-360deg);
+                }
             }
             @-webkit-keyframes rightRotate{
-                0%{ -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);}
-            50%{
-                -webkit-transform: rotate(180deg);
-                -moz-transform: rotate(180deg);
-            }
-            100%{
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-            }
+                0%{ -webkit-transform: rotate(0deg);}
+                50%{
+                    -webkit-transform: rotate(180deg);
+                }
+                100%{
+                    -webkit-transform: rotate(360deg);
+                }
             }
             @-webkit-keyframes x-spin {
                 0% { -webkit-transform: rotateX(0deg); } 
-            50% { -webkit-transform: rotateX(180deg); }
-            100% { -webkit-transform: rotateX(360deg); } 
+                50% { -webkit-transform: rotateX(180deg); }
+                100% { -webkit-transform: rotateX(360deg); } 
             }
             @-webkit-keyframes y-spin { 
                 0% { -webkit-transform: rotateY(0deg); } 
-            50% { -webkit-transform: rotateY(180deg); }
-            100% { -webkit-transform: rotateY(360deg); } 
+                50% { -webkit-transform: rotateY(180deg); }
+                100% { -webkit-transform: rotateY(360deg); } 
             }
             .anim-move-top{
-            -webkit-transform-style: preserve-3d;
-            /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-            -webkit-animation-name: anim-move-top;
-            -webkit-animation-duration: 0.5s;
-            -webkit-animation-iteration-count: 1;
-            -webkit-animation-timing-function: linear; 
+                -webkit-transform-style: preserve-3d;
+                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
+                -webkit-animation-name: anim-move-top;
+                -webkit-animation-duration: 0.5s;
+                -webkit-animation-iteration-count: 1;
+                -webkit-animation-timing-function: linear; 
             }
             .anim-move-bottom{
                 -webkit-transform-style: preserve-3d;
@@ -517,12 +516,6 @@
                 -webkit-animation-duration: 0.5s;
                 -webkit-animation-iteration-count: 1;
                 -webkit-animation-timing-function: linear; 
-                -moz-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -moz-animation-name: anim-move-top-left;
-                -moz-animation-duration: 0.5s;
-                -moz-animation-iteration-count: 1;
-                -moz-animation-timing-function: linear; 
             }
             .anim-move-top-right{
                 -webkit-transform-style: preserve-3d;
@@ -604,141 +597,117 @@
                 -webkit-animation-iteration-count: 1;
                 -webkit-animation-timing-function: linear; 
             }
+            @-webkit-keyframes anim-move-bottom-right
+            {
+                0%{
+                    -webkit-transform: translate(500px, 500px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
+            }
             @-webkit-keyframes anim-move-right
             {
                 0%{
-                -webkit-transform: translate(500px, 0px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
+                    -webkit-transform: translate(500px, 0px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
             @-webkit-keyframes anim-move-left
             {
                 0%{
                 -webkit-transform: translate(-500px, 0px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
-            }
-            @-moz-keyframes anim-move-left
-            {
-                0%{
-                -moz-transform: translate(-500px, 0px); 
-            } 
-            100%{
-                -moz-transform: translate(0px, 0px); 
-            }
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
             @-webkit-keyframes anim-move-top
             {
                 0%{
-                -webkit-transform: translate(0px, -500px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
+                    -webkit-transform: translate(0px, -500px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
             @-webkit-keyframes anim-move-bottom
             {
                 0%{
-                -webkit-transform: translate(0px, 500px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
+                    -webkit-transform: translate(0px, 500px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
             @-webkit-keyframes anim-move-top-left
             {
                 0%{
-                -webkit-transform: translate(-500px, -500px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
+                    -webkit-transform: translate(-500px, -500px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
             @-webkit-keyframes anim-move-top-right
             {
                 0%{
-                -webkit-transform: translate(500px, -500px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
+                    -webkit-transform: translate(500px, -500px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
             @-webkit-keyframes anim-move-bottom-left
             {
                 0%{
-                -webkit-transform: translate(-500px, 500px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
+                    -webkit-transform: translate(-500px, 500px); 
+                } 
+                100%{
+                    -webkit-transform: translate(0px, 0px); 
+                }
             }
-            }
-            @-webkit-keyframes anim-move-bottom-right
-            {
-                0%{
-                -webkit-transform: translate(500px, 500px); 
-            } 
-            100%{
-                -webkit-transform: translate(0px, 0px); 
-            }
-            }
+
+            
             @-webkit-keyframes scale{
                 /* 宽会是双倍，而高度保持不变 */ 
-                0%{ -webkit-transform: scale(1, 1); 
-                -moz-transform: scale(1, 1);}
-            50%{
-                -webkit-transform: scale(1.4, 1.4); 
-                -moz-transform: scale(1.4, 1.4);
-            }
-            100%{
-                -webkit-transform: scale(1, 1); 
-                -moz-transform: scale(1, 1);
-            }
+                0%{ -webkit-transform: scale(1, 1);}
+                50%{
+                    -webkit-transform: scale(1.4, 1.4); 
+                }
+                100%{
+                    -webkit-transform: scale(1, 1); 
+                }
             }
             @-webkit-keyframes leftRotate{
-                0%{ -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);}
-            25%{
-                -webkit-transform: rotate(240deg);
-                -moz-transform: rotate(240deg);
-            }
-            75%{
-                -webkit-transform: rotate(120deg);
-                -moz-transform: rotate(120deg);
-            }
-            100%{
-                -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);
-            }
+                0%{ -webkit-transform: rotate(360deg);}
+                25%{
+                    -webkit-transform: rotate(240deg);
+                }
+                75%{
+                    -webkit-transform: rotate(120deg);
+                }
+                100%{
+                    -webkit-transform: rotate(0deg);
+                }
             }
             @-webkit-keyframes rightRotate{
-                0%{ -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);}
-            25%{
-                -webkit-transform: rotate(120deg);
-                -moz-transform: rotate(120deg);
-            }
-            75%{
-                -webkit-transform: rotate(240deg);
-                -moz-transform: rotate(240deg);
-            }
-            100%{
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-            }
+                0%{ -webkit-transform: rotate(0deg);}
+                25%{-webkit-transform: rotate(120deg);}
+                75%{-webkit-transform: rotate(240deg);}
+                100%{-webkit-transform: rotate(360deg);}
             }
             @-webkit-keyframes x-spin {
                 0% { -webkit-transform: rotateX(0deg); } 
-            50% { -webkit-transform: rotateX(180deg); }
-            100% { -webkit-transform: rotateX(360deg); } 
+                50% { -webkit-transform: rotateX(180deg); }
+                100% { -webkit-transform: rotateX(360deg); } 
             }
             @-webkit-keyframes y-spin { 
                 0% { -webkit-transform: rotateY(0deg); } 
-            50% { -webkit-transform: rotateY(180deg); }
-            100% { -webkit-transform: rotateY(360deg); } 
+                50% { -webkit-transform: rotateY(180deg); }
+                100% { -webkit-transform: rotateY(360deg); } 
             }
         </style>
         <style type="text/css">
@@ -805,7 +774,7 @@
                                         var data = elements[e],elem;
                                         if(data.type=="DIV"){
                                             elem = document.createElement("DIV");
-                                            elem.innerHTML = data.value;
+                                            elem.innerHTML = decodeURIComponent(data.value);
                                             elem.setAttribute("style", data.cAttr+data.eAttr);
                                             elem.style.zIndex = data.zIndex;
                                         }
@@ -877,7 +846,7 @@
         <script type="text/javascript" src="js/module/toolbar.js"></script>
         <script type="text/javascript" src="js/module/view.js"></script>
         <script type="text/javascript" src="js/module/preview.js"></script>
-        <script type="text/javascript" src="js/module/stylebar.js"></script>
+        <!--<script type="text/javascript" src="js/module/stylebar.js"></script>-->
         <script type="text/javascript" src="js/module/filesystem.js"></script>
         <!-- <script type="text/javascript" src="js/loader.js" ></script> -->
         <!-- UI Plugin sui is used by Android SDK H5 -->

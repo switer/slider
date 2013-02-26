@@ -23,6 +23,7 @@ Core.registerModule("view",function(sb){
             sb.listen({
                 "deleteSlider":this.deleteFrame,
                 "addSlider":this.addSlider,
+                "importSlider":this.addSlider,
                 "showSlider":this.showFrame,
                 "changeSliderStyle":this.changeSliderStyle,
                 "changeFrame":this.showFrame,

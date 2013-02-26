@@ -480,7 +480,7 @@ define('webfs/fs/util', function () {
 define('webfs/ui/dom', function () {
 	var conf = {
 		'del_icon_sel' : '.fs-icon-opt'
-	}
+	};
 	return {
 		'showDelIcon' : function (container) {
 			$(container).find(conf.del_icon_sel).css('visibility', 'visible');

@@ -23,8 +23,14 @@ Core.registerModule("canvas",function(sb){
     copyElem = null,pasteElem=null,addImageFunc = null,addTextFunc = null,copyParams = null,eomItems = null,
     rgbSettingItems = null,defaultAtt,setSettingDefaultAttFunc,keyOperate,boxshadowsettingBut,boxshadowsetting,
     bgsettingBut,bordersettingBut,bgsetting,bordersetting,settingElements;
+
+    var global = {};
+    var DATA = '{"slider1":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data1":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"hello%20%2C%E4%BD%A0%E5%A5%BD%E5%90%97"}}},"slider2":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data2":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"%E6%88%91%E5%BE%88%E5%97%A8"}}}}';
     return {
         init : function() {
+
+            // global.importData
+
             document.onselectstart =  function(){
                 return false;
             }
@@ -224,8 +230,10 @@ Core.registerModule("canvas",function(sb){
             easmCloseButton.addEventListener("click", function(){
                 easm.style.display = "none";
             }, false);
+
             sb.data("sliderDataSet",SliderDataSet);
             sb.listen({
+                "onImportSlider" : this.readData,
                 "enterEditorMode":this.enterEditorMode,
                 "enterPreviewMode":this.enterPreviewMode,
                 "addImage":this.addImage,
@@ -311,6 +319,48 @@ Core.registerModule("canvas",function(sb){
                                 value:attrValue
                             }
                         });
+                    }
+                }
+            }
+        },
+        readData:function () {
+            var importData = JSON.parse(DATA);
+            for(var s in importData){
+                if(importData.hasOwnProperty(s)){
+                    var slider = document.createElement("DIV"),elements = importData[s].element;
+                    // slider.className = "slider "+importData[s].anim;
+                    // sliders[s] = slider;
+                    // slider.style.display = "none";
+                    createSliderFunc('append', {attr:importData[s]['panelAttr'], anim:importData[s]['anim']});
+                    sb.notify({
+                        type:"importSlider",
+                        data: 'append'
+                    });
+                    for (var e in elements) {
+                        if(elements.hasOwnProperty(e)){
+                            var data = elements[e],elem;
+                            if(data.type=="DIV"){
+                                sb.notify({
+                                    type:"addText",
+                                    data: {
+                                        paste : true,
+                                        attr : data.cAttr,
+                                        elemAttr : data.eAttr,
+                                        value : decodeURIComponent(data.value)
+                                    }
+                                });
+                            }
+                            else if(data.type=="IMG"){
+                                sb.notify({
+                                    type:"addText",
+                                    data: {
+                                        paste : true,
+                                        attr : data.attr,
+                                        value : data.value
+                                    }
+                                });
+                            }
+                        }
                     }
                 }
             }
@@ -410,7 +460,7 @@ Core.registerModule("canvas",function(sb){
                     e.cAttr = b["container"].getAttribute("style");
                     e.eAttr = b["data"].getAttribute("style");
                     e.zIndex = b["zIndex"];
-                    e.value = b["data"].src||b["data"].innerHTML;
+                    e.value = b["data"].src|| encodeURIComponent(b["data"].innerHTML);
                     if(e.type=="IMG"){
                         e.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
                     }
@@ -485,15 +535,25 @@ Core.registerModule("canvas",function(sb){
             console.log('after currentSlider', currentSlider);
             console.log('before delete',sliders.toArray());
         },
-        createSlider:function(method){
+        createSlider:function(method, pasteObj){
             var newSlider = document.createElement("div");
             var panel = document.createElement("div");
-            panel.setAttribute("style", "width:100%;height:100%;position:absolute;left:0;top:0;");
+
+            if (pasteObj) {
+                panel.setAttribute("style", pasteObj.attr);
+                newSlider.setAttribute("data-anim", pasteObj.anim);
+                console.log('add slider', panel);
+            } else {
+                panel.setAttribute("style", "width:100%;height:100%;position:absolute;left:0;top:0;");
+                newSlider.setAttribute("data-anim", "anim-move-right");
+            }
+            
             panel.className = "panel";
             elementOpertateFunc("panel",panel);
             newSlider.appendChild(panel);
             newSlider.className = "editor";
-            newSlider.setAttribute("data-anim", "anim-move-right");
+            
+
             if(currentSlider) sliders[currentSlider].style.display = "none";
             slider_number++;
             slider_count++;

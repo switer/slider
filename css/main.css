@@ -1,5 +1,6 @@
 body{
     background-color: #EEE;
+    background-image: url(../img/bg-pattern.png);
     padding: 0px;
     /*overflow: hidden;*/
     margin-left: 0;
