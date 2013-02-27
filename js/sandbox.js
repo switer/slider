@@ -1002,7 +1002,6 @@ var SandBox = (function() {
             isInit:false,
             isDown:false
         };
-        console.log(elem);
         this.ondrag(elem,flag, function(event){
             if(flag.isDown){
                 var eventY = event.screenY;

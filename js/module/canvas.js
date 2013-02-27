@@ -323,46 +323,91 @@ Core.registerModule("canvas",function(sb){
                 }
             }
         },
-        readData:function () {
-            var importData = JSON.parse(DATA);
-            for(var s in importData){
-                if(importData.hasOwnProperty(s)){
-                    var slider = document.createElement("DIV"),elements = importData[s].element;
-                    // slider.className = "slider "+importData[s].anim;
-                    // sliders[s] = slider;
-                    // slider.style.display = "none";
-                    createSliderFunc('append', {attr:importData[s]['panelAttr'], anim:importData[s]['anim']});
+        readData:function (inp) {
+
+            var reader = new FileReader();
+            var file = inp.files.item(0);
+
+            reader.readAsText(file, 'UTF-8');
+            reader.onloadend = function (event) {
+                var datajson = reader.result.match(/\<script\ type\=\"text\/html\"\ id\=\"datajson\"\>.*\<\/script\>/);
+                if (datajson) {
+                   var data =  datajson[0].replace(/^\<script[^\<\>]*\>/,'').replace(/\<\/script\>/,'');
+                    renderSlider(data);
+                } 
+
+            }
+            function renderSlider(data) {
+
+                var importData = JSON.parse(data);
+                var sliderArray = readAsArray(importData);
+                render(sliderArray);
+                function readAsArray(data) {
+                    var sliders = [], imgCount = 0;
+                    for(var s in data){
+                        if ( data.hasOwnProperty(s) ) {
+                            var elementArray = [];
+                            var elements = data[s].element;
+                            for (var e in elements) {
+                                if(elements.hasOwnProperty(e)){
+                                    elementArray.push(elements[e]);
+                                    if (elements[e].type === 'IMG') imgCount ++;
+                                }
+                            }
+                            sliders.push({
+                                data : data[s],
+                                elements : elementArray,
+                                imgCount : imgCount
+                            });
+                        }
+                    }
+                    return sliders;
+                }
+                function render(array) {
+                    var slider = array.shift();
+                    if (slider) {
+                        renderElements(slider);
+                        render(array);
+                    }
+                }
+                
+                function renderElements (slider, callback) {
+                    var elements = slider.elements;
+
+                    createSliderFunc('append', {attr:slider.data['panelAttr'], anim:slider.data['anim']});
                     sb.notify({
                         type:"importSlider",
                         data: 'append'
                     });
-                    for (var e in elements) {
-                        if(elements.hasOwnProperty(e)){
-                            var data = elements[e],elem;
-                            if(data.type=="DIV"){
-                                sb.notify({
-                                    type:"addText",
-                                    data: {
-                                        paste : true,
-                                        attr : data.cAttr,
-                                        elemAttr : data.eAttr,
-                                        value : decodeURIComponent(data.value)
-                                    }
-                                });
-                            }
-                            else if(data.type=="IMG"){
-                                sb.notify({
-                                    type:"addText",
-                                    data: {
-                                        paste : true,
-                                        attr : data.attr,
-                                        value : data.value
-                                    }
-                                });
-                            }
+                    var count = 0;
+                    for (var i = 0; i < elements.length; i++) {
+                        var data = elements[i],elem;
+                        if(data.type === "DIV"){
+                            sb.notify({
+                                type:"addText",
+                                data: {
+                                    paste : true,
+                                    attr : data.cAttr,
+                                    elemAttr : data.eAttr,
+                                    value : decodeURIComponent(data.value)
+                                }
+                            });
+                        }
+                        else if(data.type === "IMG") {
+                            sb.notify({
+                                type:"addImage",
+                                data: {
+                                    paste : true,
+                                    attr : data.cAttr,
+                                    value : data.value
+                                }
+                            });
                         }
                     }
-                }
+                    if (slider.imgCount === 0) {
+                        callback && callback();
+                    }
+                }//renderElements
             }
         },
         destroy:function(){
@@ -488,7 +533,7 @@ Core.registerModule("canvas",function(sb){
                   break;
                 }
             }
-            var dataHtml = '<script type="text/javascript">var DATA = ' + stream + ';</script>';
+            var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
             sb.notify({
                 type : "showFileSystem",
                 data : headerHtml.data + dataHtml + footerHtml.data
@@ -516,13 +561,13 @@ Core.registerModule("canvas",function(sb){
             createSliderFunc("insert");
         },
         deleteSlider:function(){
-            console.log('before delete',sliders.toArray());
             var preSlider = sliders.getSlider("pre",currentSlider,-1)||
             sliders.getSlider("next",currentSlider,-1);
             if(currentSlider){
                 //删除slider DOM 元素
                 editorContainer.removeChild(sliders[currentSlider]);
                 delete sliders[currentSlider];
+                delete SliderDataSet[currentSlider]
                 //重置当前slider
                 currentSlider = preSlider;
             }
@@ -532,8 +577,6 @@ Core.registerModule("canvas",function(sb){
                 //如果前slider不存在，那么就创建新的
                 createSliderFunc("append");
             }
-            console.log('after currentSlider', currentSlider);
-            console.log('before delete',sliders.toArray());
         },
         createSlider:function(method, pasteObj){
             var newSlider = document.createElement("div");
@@ -542,7 +585,6 @@ Core.registerModule("canvas",function(sb){
             if (pasteObj) {
                 panel.setAttribute("style", pasteObj.attr);
                 newSlider.setAttribute("data-anim", pasteObj.anim);
-                console.log('add slider', panel);
             } else {
                 panel.setAttribute("style", "width:100%;height:100%;position:absolute;left:0;top:0;");
                 newSlider.setAttribute("data-anim", "anim-move-right");
@@ -583,7 +625,6 @@ Core.registerModule("canvas",function(sb){
             };
         },
         addSliderObject:function(slider,method,pos){
-            console.log('addSliderObject', slider,method,pos);
             if(method=="insert") {
                 SliderDataSet.insert({
                     key:slider.key,
@@ -598,14 +639,15 @@ Core.registerModule("canvas",function(sb){
             else Core.log("wrong insert slider method!");
         },
         addSliderElement:function(elem,method,pos,container){
-            console.log('addSliderElement',elem,method,pos,container);
             if(method=="insert") container.insertBefore(elem, pos);
             else if(method=="append") container.appendChild(elem);
             else Core.log("wrong insert slider-Element method!");
         },
         addImage:function(obj){
-            console.log('before add image', SliderDataSet.toArray());
             var img = null,file;
+            var preCont = document.createElement('div');
+                editor.appendChild(preCont);
+
             if(obj["paste"]) {
                 img = new Image();
                 img.src= obj["value"];
@@ -619,9 +661,24 @@ Core.registerModule("canvas",function(sb){
             if(!img) {
                 return;
             }
+            addImageConfig(preCont, img, obj);
             img.onload = function(){
+                var sizeObj = {
+                    height:img.height,
+                    width:img.width
+                };
+                var partSize = 6,con_obj=null;
+                sizeObj = sb.fixedImgSize(sizeObj,canvasX,canvasY);
+                newContainerFunc(sizeObj,partSize, null, preCont);
+                img.style.height = '100%';
+                img.style.width = '100%';
+                // img.setAttribute("style", "height:100%;width:100%;");
+            }
+
+            function addImageConfig (container, img, obj) {
                 img.setAttribute("draggable", false);
                 img.className = "imgelement";
+
                 var panel = document.createElement("div");
                 panel.className = "element-panel";
                 sb.css(panel, {
@@ -631,26 +688,24 @@ Core.registerModule("canvas",function(sb){
                     width:"100%",
                     height:"100%"
                 });
-                var sizeObj = {
-                    height:img.height,
-                    width:img.width
-                };
-                var partSize = 6,con_obj=null,container=null,dataID,maxZIndexElem,maxZIndex,cur;
-                sizeObj = sb.fixedImgSize(sizeObj,canvasX,canvasY);
-                con_obj =  newContainerFunc(sizeObj,partSize);
-                container = con_obj.container;
+
+                var partSize = 6,dataID,maxZIndexElem,maxZIndex,cur;
+
                 sb.move(panel, container);
+
                 if(obj["paste"]) container.setAttribute("style", obj["attr"]);
+                else container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+
                 data_number++;
                 zIndex_Number++;
                 cur = SliderDataSet[currentSlider];
-                console.log('add to currentSlider : ', currentSlider);
                 maxZIndexElem =cur.getLastElement();
                 maxZIndex = maxZIndexElem==null?1:cur[maxZIndexElem]["zIndex"]+1;
-                img.setAttribute("style", "height:100%;width:100%;");
+                
                 container.style.zIndex = maxZIndex;
                 container.appendChild(img);
                 container.appendChild(panel);
+
                 editor.appendChild(container);
                 dataID = "data"+data_number;
                 elementSet[dataID] = {
@@ -661,8 +716,7 @@ Core.registerModule("canvas",function(sb){
                 }
                 SliderDataSet[currentSlider][dataID] = elementSet[dataID];
                 SliderDataSet[currentSlider].sortBy("zIndex");
-                elementOpertateFunc(dataID,con_obj.container,con_obj.container);
-                console.log('after add image', SliderDataSet.toArray());
+                elementOpertateFunc(dataID,container, container);
             }
         },
         addText:function(textObj){
@@ -1042,14 +1096,14 @@ Core.registerModule("canvas",function(sb){
             elem.style.left = (event.screenX+offsetX)+"px";
             elem.style.top = (event.screenY+offsetY)+"px";
         },
-        createElementContainer:function(obj,partSize,elem){
+        createElementContainer:function(obj,partSize,elem, preCont){
             /*
              * names:con_e container:east
              *      con_w container:west
              *      con_s container:south
              *      con_n container:north
              */
-            var container = document.createElement("div");
+            var container = preCont || document.createElement("div");
             var move_e = document.createElement("div");
             var move_w = document.createElement("div");
             var move_s = document.createElement("div");
@@ -1105,16 +1159,20 @@ Core.registerModule("canvas",function(sb){
                 parts[item].resizeHandle([element,container,elem]);
                 frag.appendChild(element);
             }
-            container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;height:"+obj.height+"px;width:"+obj.width+"px;");
+            
+            !preCont && container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+            container.style.height = obj.height + 'px';
+            container.style.width = obj.width + 'px';
+
             container.className = "element-container";
             move_e.className = "element-container-apart-move con-move-e";
             move_w.className = "element-container-apart-move con-move-w";
             move_s.className = "element-container-apart-move con-move-s";
             move_n.className = "element-container-apart-move con-move-n";
-            move_w.setAttribute("style", "left:0px;height:100%;width:10px;");
-            move_e.setAttribute("style", "right:0px;height:100%;width:10px;");
-            move_s.setAttribute("style", "bottom:0px;height:10px;width:100%;");
-            move_n.setAttribute("style", "top:0px;height:10px;width:100%;");
+            move_w.setAttribute("style", "left:0px;top:0;height:100%;width:10px;");
+            move_e.setAttribute("style", "right:0px;top:0;height:100%;width:10px;");
+            move_s.setAttribute("style", "bottom:0px;left:0;height:10px;width:100%;");
+            move_n.setAttribute("style", "top:0px;left:0;height:10px;width:100%;");
             container.setAttribute("draggable", false);
             container.appendChild(move_w);
             container.appendChild(move_e);

@@ -761,6 +761,8 @@
                 var h = parseInt(height.substr(0, height.length-2));
                 canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
                 var targetSlider = null;
+                var datajson = document.getElementById('datajson').innerHTML,
+                    DATA = JSON.parse(datajson);
                 var module = {
                     init:function(){
                         for(var s in DATA){

@@ -85,29 +85,21 @@ Core.registerModule("view",function(sb){
             //select from display frames
             nearFrame = frames.getSlider("pre",currentFrame,-1)||
             frames.getSlider("next",currentFrame,-1);
-            console.log('nearFrame',nearFrame);
             if(nearFrame==null){
-                console.log("preFrame is not in display");
                 //select from all frames
                 nearFrame = frames.getSlider(method="pre",currentFrame,-1)||
                 frames.getSlider(method="next",currentFrame,-1);
             }
-            console.log('deleteFrame : frames ', frames.toArray())
             //显示新的预览列表
-            console.log('currentFrame : ', currentFrame);
             var oldCurr = showFrameFunc(nearFrame,method=="pre"?"before":"after");
-            console.log('delete frame', oldCurr);
             //删除预览frame
             if(oldCurr){
-                console.log('removeChild', frames[oldCurr]);
                 frameContainer.removeChild(frames[oldCurr]);
                 frame_count--;
                 delete frames[oldCurr];
                 if(dispFrames[oldCurr]) delete dispFrames[oldCurr];
                 if(hidFrames[oldCurr]) delete hidFrames[oldCurr];  
             }
-            console.log('oldCurr ', oldCurr, '  currentFrame ', currentFrame);
-            console.log('changeDisplayFrameListFunc');
             changeDisplayFrameListFunc(currentFrame,"delete");
         },
         /*
@@ -149,23 +141,19 @@ Core.registerModule("view",function(sb){
         showFrame:function(frameID){
             var curr;
             if(frameID&&frames[frameID]){
-                console.log('[showFrame] : ',frameID);
                 //currentFrame = frameID;
                 //若为第一个帧，显示该帧所在的组
                 if(frameID==dispFrames.getFirstElement()){
                     curr = currentFrame;
-                    console.log('is first frame');
                     changeDisplayFrameListFunc(frameID,"showPre");
                     window.setTimeout(function(){
                         frameContainer.className = "anim-move-left";
                     });
-                    console.log('first return',currentFrame);
                     return curr;
                 }
                 //若为最后一个帧，显示该帧所在的组
                 else if(frameID == dispFrames.getLastElement()&&dispFrames.length()>=MAX_FRAME_NUMBER){
                     curr = currentFrame;
-                    console.log('is last frame');
                     changeDisplayFrameListFunc(frameID,"showNext");
                     window.setTimeout(function(){
                         frameContainer.className = "anim-move-right";
@@ -188,7 +176,6 @@ Core.registerModule("view",function(sb){
          * 
          */
         changeCurrFrame:function(newCurr,method){
-            console.log('changeCurrFrame newCurr : ', newCurr, 'frames : ', frames.toArray());
             var oldCurr = null;
             if(!dispFrames[newCurr]){
                 delete hidFrames[newCurr];
@@ -213,7 +200,6 @@ Core.registerModule("view",function(sb){
                 var elements = getElementDataFunc(frameData);
                 showFrameElementByDataFunc(elements,oldCurr);
             }
-            console.log('changeCurrFrame oldCurr : ', oldCurr);
             return oldCurr;
         },
         getElementData:function(dataSet){
