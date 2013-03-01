@@ -866,13 +866,15 @@ Core.registerModule("canvas",function(sb){
                     borderBottomLeftRadius:true,
                     borderTopRightRadius:true,
                     borderBottomRightRadius:true,
-                    boxShadow:true
+                    boxShadow:true,
+                    opacity : true
                 };
+                console.log((img = sb.find("img",container)), elemAtt[key], key);
                 if((img = sb.find("img",container))&&elemAtt[key]) {
                     sb.find(".element-panel",container).style[key] = value;
                     img.style[key] = value;
                 }
-                container.style[key] = value;
+                if (key !== 'opacity') container.style[key] = value;
             }else{
                 var compatibleAtt = {
                     backgroundColor:true,
