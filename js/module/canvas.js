@@ -1031,6 +1031,26 @@ Core.registerModule("canvas",function(sb){
         },
         elementOpertate:function(elemID,etar,container){
             var i;
+            sb.bind(etar,'click', function (e) {
+                    //取消现有目标的效果
+                    if(target&&elementSet[target]) {
+                        sb.removeClass(elementSet[target].container,"element-select");
+                        var parts = sb.query(".element-container-apart", elementSet[target].container);
+                        for (i = 0; i < parts.length; i++) {
+                            sb.removeClass(parts[i],"show-container-apart");
+                        }
+                    }
+                    if (target === elemID) {
+                        target = null;
+                        return;
+                    }
+                    target = elemID;
+                    sb.addClass(container, "element-select");
+                    var elements = sb.query(".element-container-apart", elementSet[target].container);
+                    for (i = 0; i < elements.length; i++) {
+                        sb.addClass(elements[i],"show-container-apart");
+                    }
+            })
             sb.bind(etar,"mousedown",function(e){
                 //监听鼠标右键
                 if(e.button==2){
@@ -1043,14 +1063,14 @@ Core.registerModule("canvas",function(sb){
                         window.clearTimeout(eomTout);
                         eomTout = -1;
                     }
-                    //取消现有目标的效果
-                    if(target&&elementSet[target]) {
-                        sb.removeClass(elementSet[target].container,"element-select");
-                        var parts = sb.query(".element-container-apart", elementSet[target].container);
-                        for (i = 0; i < parts.length; i++) {
-                            sb.removeClass(parts[i],"show-container-apart");
-                        }
-                    }
+                    // //取消现有目标的效果
+                    // if(target&&elementSet[target]) {
+                    //     sb.removeClass(elementSet[target].container,"element-select");
+                    //     var parts = sb.query(".element-container-apart", elementSet[target].container);
+                    //     for (i = 0; i < parts.length; i++) {
+                    //         sb.removeClass(parts[i],"show-container-apart");
+                    //     }
+                    // }
                     //elemID==canvas时为面板触发右键
                     if(elemID=='panel'){
                         //如果上次为面板触发右键，隐藏菜单
@@ -1075,12 +1095,12 @@ Core.registerModule("canvas",function(sb){
                         target = null;
                         return;
                     }
-                    target = elemID;
-                    sb.addClass(container, "element-select");
-                    var elements = sb.query(".element-container-apart", elementSet[target].container);
-                    for (i = 0; i < elements.length; i++) {
-                        sb.addClass(elements[i],"show-container-apart");
-                    }
+                    // target = elemID;
+                    // sb.addClass(container, "element-select");
+                    // var elements = sb.query(".element-container-apart", elementSet[target].container);
+                    // for (i = 0; i < elements.length; i++) {
+                    //     sb.addClass(elements[i],"show-container-apart");
+                    // }
                     eom.style.display = "block";
                     setPositionFunc(e,eom,-50,-50,-100,-200);
                     eomTout = window.setTimeout(function(){
