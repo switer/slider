@@ -203,7 +203,8 @@ define('webfs/ui',
 	var  iconHtml = "<div data-type='@{fileType}' data-path='@{path}' data-event='icon-event' class='fs-icon @{iconType}' >"
 					+ "<div data-event='icon-event' class='fs-icon-img @{iconClass}'></div>"
 				 	+ "<a data-event='icon-event' class='fs-icon-name'>@{name}</a>"
-				 	+ "<button data-event='icon-del' class='fs-icon-opt @{visibleClass}'></button>"
+				 	+ "<a class='fs-icon-opt fs-icon-opt-download @{downloadVisibleClass}' download='@{name}' href='@{fullPath}' ></a>"
+				 	+ "<button data-event='icon-del' class='fs-icon-opt fs-icon-opt-del @{visibleClass}'></button>"
 				 	+ "</div>";
 
 	// ROOT and Back Item HTML Template
@@ -264,7 +265,7 @@ define('webfs/ui',
 	/*删除文件的事件操作*/
 	function initIconDel (eventType, container, error) {
 
-		var delBtnSel = '.fs-icon-opt';
+		var delBtnSel = '.fs-icon-opt-del';
 
 		var handle = function (e) {
 
@@ -334,7 +335,9 @@ define('webfs/ui',
 				"iconType" : iconType,
 				"iconClass" : iconClass,
 				"path" : name,
-				"visibleClass" : _this._delIconVisi[container] ? '' : 'fs-visi-hide'
+				"visibleClass" : _this._delIconVisi[container] ? '' : 'fs-visi-hide',
+				'fullPath' : file.toURL(),
+				'downloadVisibleClass' : !file.isDirectory ? '' : 'fs-visi-hide'
 			}, iconHtml);
 		$(container).append(html);
 	}
@@ -413,7 +416,9 @@ define('webfs/ui',
 						"path" : name,//文件路径
 						//指定删除是否可见
 						//TODO 可优化点
-						"visibleClass" : _this._delIconVisi[container] ? '' : 'fs-visi-hide' 
+						"visibleClass" : _this._delIconVisi[container] ? '' : 'fs-visi-hide',
+						'fullPath' : item.toURL(),
+						'downloadVisibleClass' : !item.isDirectory ? '' : 'fs-visi-hide'
 					}, iconHtml)
 			html += iconContent;
 		});
@@ -479,7 +484,7 @@ define('webfs/fs/util', function () {
 **/
 define('webfs/ui/dom', function () {
 	var conf = {
-		'del_icon_sel' : '.fs-icon-opt'
+		'del_icon_sel' : '.fs-icon-opt-del'
 	};
 	return {
 		'showDelIcon' : function (container) {

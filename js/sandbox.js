@@ -1047,6 +1047,24 @@ var SandBox = (function() {
         }, false);
         window.addEventListener("mousemove",handle,false);
     };
+    SandBox.prototype.click =function(elem,flag,handle){
+        elem.addEventListener("mousedown", function (e){
+            if(e.button==0){
+                flag.isDown = true;
+            }
+        }, false);
+        window.addEventListener("mouseup", function (e){
+            if(e.button == 0 && flag.isDown === true){
+                flag.isDown = false;
+                handle(e);
+            }
+        }, false);
+        window.addEventListener("mousemove",function (e) {
+            if(e.button==0){
+                flag.isDown = false;
+            }
+        },false);
+    };
     SandBox.prototype.css = function(e,att){
         if(!e.style){
             e.setAttribute("style", "");

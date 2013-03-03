@@ -24,12 +24,13 @@ Core.registerModule("canvas",function(sb){
     rgbSettingItems = null,defaultAtt,setSettingDefaultAttFunc,keyOperate,boxshadowsettingBut,boxshadowsetting,
     bgsettingBut,bordersettingBut,bgsetting,bordersetting,settingElements;
 
-    var global = {};
+    var global = {},
+        rightMenuBtn; //右键选中标志
     var DATA = '{"slider1":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data1":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"hello%20%2C%E4%BD%A0%E5%A5%BD%E5%90%97"}}},"slider2":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data2":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"%E6%88%91%E5%BE%88%E5%97%A8"}}}}';
     return {
         init : function() {
 
-            // global.importData
+            global = this;
 
             document.onselectstart =  function(){
                 return false;
@@ -643,7 +644,7 @@ Core.registerModule("canvas",function(sb){
             else if(method=="append") container.appendChild(elem);
             else Core.log("wrong insert slider-Element method!");
         },
-        addImage:function(obj){
+        addImage:function(obj, callback){
             var img = null,file;
             var preCont = document.createElement('div');
                 editor.appendChild(preCont);
@@ -661,7 +662,7 @@ Core.registerModule("canvas",function(sb){
             if(!img) {
                 return;
             }
-            addImageConfig(preCont, img, obj);
+            var imgElementId = addImageConfig(preCont, img, obj);
             img.onload = function(){
                 var sizeObj = {
                     height:img.height,
@@ -672,7 +673,7 @@ Core.registerModule("canvas",function(sb){
                 newContainerFunc(sizeObj,partSize, null, preCont);
                 img.style.height = '100%';
                 img.style.width = '100%';
-                // img.setAttribute("style", "height:100%;width:100%;");
+                callback && callback(imgElementId)
             }
 
             function addImageConfig (container, img, obj) {
@@ -717,7 +718,10 @@ Core.registerModule("canvas",function(sb){
                 SliderDataSet[currentSlider][dataID] = elementSet[dataID];
                 SliderDataSet[currentSlider].sortBy("zIndex");
                 elementOpertateFunc(dataID,container, container);
+                return dataID;
             }
+
+            return imgElementId;
         },
         addText:function(textObj){
             var obj = {
@@ -774,6 +778,7 @@ Core.registerModule("canvas",function(sb){
             SliderDataSet[currentSlider][dataID] = elementSet[dataID];
             SliderDataSet[currentSlider].sortBy("zIndex");
             elementOpertateFunc(dataID,con_obj.container,con_obj.container);
+            return dataID;
         },
         elemAttrSetting:function(e){
             var tar;
@@ -859,6 +864,9 @@ Core.registerModule("canvas",function(sb){
         setStyleAttr:function(params){
             var key = params.key,value = params.value;
             defaultAtt[key] = value;
+
+            var target = rightMenuBtn;
+
             if(target&&elementSet[target]){
                 var container = elementSet[target].container;
                 var img,elemAtt = {
@@ -897,10 +905,12 @@ Core.registerModule("canvas",function(sb){
             sb.find(".panel",editor)["style"][data.key] = data.value;
         },
         moveUpward:function(){
+            var target = rightMenuBtn;
+            
             var cur = SliderDataSet[currentSlider];
             var maxElemID = cur.getLastElement(),tmp,forwardIndex = -1,forwardElemID,forwardElem,
             targetIndex;
-            if(maxElemID!=target){
+            if(target && maxElemID !== target){
                 targetIndex = cur.findIndex(target);
                 forwardIndex = targetIndex+1;
                 forwardElemID = cur.getSlider(null, null, forwardIndex);
@@ -914,10 +924,12 @@ Core.registerModule("canvas",function(sb){
             }
         },
         moveDownward:function(){
+            var target = rightMenuBtn;
+            
             var cur = SliderDataSet[currentSlider];
             var minElemID = cur.getFirstElement(),tmp,backwardIndex = -1,backwardElemID,backwardElem,
             targetIndex;
-            if(minElemID!=target){
+            if(target && minElemID !== target){
                 targetIndex = cur.findIndex(target);
                 backwardIndex = targetIndex-1;
                 backwardElemID = cur.getSlider(null, null, backwardIndex);
@@ -931,20 +943,25 @@ Core.registerModule("canvas",function(sb){
             }
         },
         moveToTop:function(){
+            var target = rightMenuBtn;
+
             var maxElemID = SliderDataSet[currentSlider].getLastElement(),maxZIndex = 0,maxElem;
             maxElem = SliderDataSet[currentSlider][maxElemID];
             maxZIndex = maxElem.zIndex+1;
-            if(target!=maxElemID){
+
+            if(target && target!=maxElemID){
                 SliderDataSet[currentSlider][target]["zIndex"] = maxZIndex;
                 SliderDataSet[currentSlider][target]["container"].style.zIndex = maxZIndex;
                 SliderDataSet[currentSlider].sortBy("zIndex");
             }
         },
         moveToBottom:function(){
+            var target = rightMenuBtn;
+            
             var minElemID = SliderDataSet[currentSlider].getFirstElement(),minZIndex = 0,minElem;
             minElem = SliderDataSet[currentSlider][minElemID];
             minZIndex = minElem.zIndex;
-            if(target!=minElemID){
+            if(target && target!=minElemID){
                 SliderDataSet[currentSlider].forEach(function(a){
                     a["zIndex"]++;
                     a["container"].style.zIndex  = a["zIndex"];
@@ -955,6 +972,8 @@ Core.registerModule("canvas",function(sb){
             }
         },
         deleteElement:function(){
+            var target = rightMenuBtn;
+            
             if(!target) return;
             var elemNum = target;
             if(elementSet[elemNum].container) sliders[currentSlider].removeChild(elementSet[elemNum].container);
@@ -964,6 +983,8 @@ Core.registerModule("canvas",function(sb){
             if(target==elemNum) target = null;
         },
         copyElement:function(){
+            var target = rightMenuBtn;
+            
             if(!target) return;
             copyElem = target;
             if(copyElem&&elementSet[copyElem]){
@@ -980,9 +1001,19 @@ Core.registerModule("canvas",function(sb){
             }
         },
         pasteElement:function(){
+
             if(copyParams){
-                if(copyParams["type"]=="IMG") addImageFunc(copyParams);
-                else if(copyParams["type"]=="DIV") addTextFunc(copyParams);
+                if(copyParams["type"]=="IMG") {
+                    addImageFunc(copyParams, function (imgElementId) {
+                        global.setSelect(imgElementId);
+                    });
+                    
+                }
+                else if(copyParams["type"]=="DIV") {
+                    var textElementId = addTextFunc(copyParams);
+                    global.setSelect(textElementId);
+                }
+                
             }
         },
         changeSlider:function(snum){
@@ -1031,9 +1062,35 @@ Core.registerModule("canvas",function(sb){
         changeShowAnim:function(anim){
             showAnim.innerHTML = anim_name[anim];
         },
+        setSelect : function (elemID) {
+            if (elemID === "panel") return;
+            //取消现有目标的效果
+            if(target&&elementSet[target]) {
+                sb.removeClass(elementSet[target].container,"element-select");
+                var parts = sb.query(".element-container-apart", elementSet[target].container);
+                for (i = 0; i < parts.length; i++) {
+                    sb.removeClass(parts[i],"show-container-apart");
+                }
+            }
+            if (target === elemID) {
+                target = null;
+                return;
+            }
+            target = elemID;
+
+            var container = elementSet[target].container;
+            sb.addClass(container, "element-select");
+            var elements = sb.query(".element-container-apart", elementSet[target].container);
+            for (i = 0; i < elements.length; i++) {
+                sb.addClass(elements[i],"show-container-apart");
+            }
+
+        },
         elementOpertate:function(elemID,etar,container){
             var i;
-            sb.bind(etar,'click', function (e) {
+            sb.click(etar, {isDown : false}, function (e) {
+                    cancelRightMenu();
+                    if (elemID === "panel") return;
                     //取消现有目标的效果
                     if(target&&elementSet[target]) {
                         sb.removeClass(elementSet[target].container,"element-select");
@@ -1052,7 +1109,13 @@ Core.registerModule("canvas",function(sb){
                     for (i = 0; i < elements.length; i++) {
                         sb.addClass(elements[i],"show-container-apart");
                     }
+                    
             })
+
+            function cancelRightMenu () {
+                cancelElementOperateMenuFunc();
+                easm.style.display = "none";
+            }
             sb.bind(etar,"mousedown",function(e){
                 //监听鼠标右键
                 if(e.button==2){
@@ -1074,6 +1137,8 @@ Core.registerModule("canvas",function(sb){
                     //     }
                     // }
                     //elemID==canvas时为面板触发右键
+
+                    rightMenuBtn = elemID;
                     if(elemID=='panel'){
                         //如果上次为面板触发右键，隐藏菜单
                         if(eom.style.display == "block"){
@@ -1091,12 +1156,13 @@ Core.registerModule("canvas",function(sb){
                         }, 3000); 
                         return;
                     }
-                    if(target==elemID){
-                        cancelElementOperateMenuFunc();
-                        easm.style.display = "none";
-                        target = null;
-                        return;
-                    }
+                    //再点击就取消选中
+                    // if(target==elemID){
+                    //     cancelElementOperateMenuFunc();
+                    //     easm.style.display = "none";
+                    //     target = null;
+                    //     return;
+                    // }
                     // target = elemID;
                     // sb.addClass(container, "element-select");
                     // var elements = sb.query(".element-container-apart", elementSet[target].container);
