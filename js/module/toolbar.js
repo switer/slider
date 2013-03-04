@@ -85,7 +85,7 @@ Core.registerModule("toolbar",function(sb){
 
 
             /**/
-            sb.container.style["marginTop"] = ((window.innerHeight-toolbarY-viewY-header)/2+header)+"px";
+            // sb.container.style["marginTop"] = ((window.innerHeight-toolbarY-viewY-header)/2+header)+"px";
             toolAppItems = sb.query(".tool-app");
             enterPreviewMode = sb.find("#tool-enterPreviewMode");
             addImageApp = sb.find("#tool-addimage");
@@ -164,7 +164,7 @@ Core.registerModule("toolbar",function(sb){
             }
             enterPreviewMode.onclick = function(){
                 sb.notify({
-                    type:"enterPreviewMode",
+                    type:"enterSaveFile",
                     data:{}
                 });
             }
@@ -181,6 +181,12 @@ Core.registerModule("toolbar",function(sb){
                     data: sb.find("#importInp")
                 });
                 $('#tool-import').html("<input type='file' id='importInp'/>");
+            })
+            $('#tool-openFileSystem').on('click', function () {
+                sb.notify ({
+                    type: "openFileSystem",
+                    data: sb.find("#importInp")
+                });
             })
 
             addTextApp.onclick = function(){
@@ -213,7 +219,7 @@ Core.registerModule("toolbar",function(sb){
             addTextApp=null;
         },
         windowResize:function(){
-            sb.container.style["marginTop"] = ((window.innerHeight-toolbarY-viewY-header)/2+header)+"px";
+            // sb.container.style["marginTop"] = ((window.innerHeight-toolbarY-viewY-header)/2+header)+"px";
         },
         enterEditorMode:function(){
             sb.container.style.display = "block";

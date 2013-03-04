@@ -2,7 +2,7 @@
     position: absolute;
     width: 240px;
     height: 600px;
-
+    margin-top: 10px;
     left: 0px;
     top: 10px;
 
@@ -12,7 +12,8 @@
     position: relative;
     float: left;
     width: 80px;
-    height: 600px;
+    height: auto;
+    padding-bottom: 10px;
     background-color: #EEE;
     -webkit-box-shadow:3px 0px 8px #BBB;
     -webkit-border-top-right-radius:10px;
@@ -114,6 +115,10 @@
 }
 #tool-import {
     background-image: url(../img/downloader.png);
+    background-size: 50px 50px;
+}
+#tool-openFileSystem {
+    background-image: url(../img/cloud.png);
     background-size: 50px 50px;
 }
 .show_execCommandDetail{

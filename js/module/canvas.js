@@ -38,7 +38,7 @@ Core.registerModule("canvas",function(sb){
             sb.container.oncontextmenu =  function(){
                 return false;
             }
-            sb.container.style["marginTop"] = ((window.innerHeight-canvasY-viewY-header)/2+header)+"px";
+            // sb.container.style["marginTop"] = ((window.innerHeight-canvasY-viewY-header)/2+header)+"px";
             sb.data("mode", "editor");
             defaultAtt = {
                 backgroundColor:"transparent",
@@ -236,7 +236,7 @@ Core.registerModule("canvas",function(sb){
             sb.listen({
                 "onImportSlider" : this.readData,
                 "enterEditorMode":this.enterEditorMode,
-                "enterPreviewMode":this.enterPreviewMode,
+                "enterSaveFile":this.enterSaveFile,
                 "addImage":this.addImage,
                 "addText":this.addText,
                 "addSlider":this.createSlider,
@@ -256,7 +256,8 @@ Core.registerModule("canvas",function(sb){
                 "setStyleAttr":this.setStyleAttr,
                 "changeShowAnim":this.changeShowAnim,
                 "changeSliderStyle":this.changeSliderStyle,
-                "windowResize":this.windowResize
+                "windowResize":this.windowResize,
+                "showFileSystem" : this.hideSliderEditor
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
@@ -415,7 +416,7 @@ Core.registerModule("canvas",function(sb){
             editor=null;
         },
         windowResize:function(){
-            sb.container.style["marginTop"] = ((window.innerHeight-canvasY-viewY-header)/2+header)+"px";
+            // sb.container.style["marginTop"] = ((window.innerHeight-canvasY-viewY-header)/2+header)+"px";
         },
         keyOperate:function(event){
             if(isEditor) return;
@@ -438,7 +439,7 @@ Core.registerModule("canvas",function(sb){
             // if(event.keyCode ==49){
             //     event.preventDefault();
             //     sb.notify({
-            //         type:"enterPreviewMode",
+            //         type:"enterSaveFile",
             //         data:null
             //     });
             // }else if(event.keyCode ==50){
@@ -482,6 +483,7 @@ Core.registerModule("canvas",function(sb){
             }
         },
         enterEditorMode:function(){
+            window.location.hash = ''
             sb.container.style.display = "block";
             sb.bind(window, "keyup",keyOperate);
             sb.notify({
@@ -489,13 +491,9 @@ Core.registerModule("canvas",function(sb){
                 data:null
             });
         },
-        enterPreviewMode:function(){
-            sb.unbind(window, "keyup", keyOperate);
-            sb.container.style.display = "none";
-            sb.notify({
-                type:"hiddenStyleBar",
-                data:null
-            });
+
+        enterSaveFile:function(){
+            
             var json = new sb.ObjectLink();
             SliderDataSet.forEach(function(a,m){
                 var data = new sb.ObjectLink();
@@ -535,10 +533,12 @@ Core.registerModule("canvas",function(sb){
                 }
             }
             var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
+
             sb.notify({
-                type : "showFileSystem",
+                type : "preSave",
                 data : headerHtml.data + dataHtml + footerHtml.data
             });
+
             // //一般localstorage容量不会超过5M
             // if (stream.length < 5*1024*1024/2) window.localStorage.setItem('data',html);
             // else alert('所存储的内容大于5M，请选择文件存储'); 
@@ -557,6 +557,14 @@ Core.registerModule("canvas",function(sb){
         //                alert("finish");
         //                
         //            },"username=guan&userdata="+jsonenc);
+        },
+        hideSliderEditor : function () {
+            sb.unbind(window, "keyup", keyOperate);
+            sb.container.style.display = "none";
+            sb.notify({
+                type:"hiddenStyleBar",
+                data:null
+            });
         },
         insertSlider:function(){
             createSliderFunc("insert");

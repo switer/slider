@@ -15,13 +15,14 @@
 		}
 			
 	})
-	$(document.body).on('click',  function (e) {
+	$(document.body).on('touchstart mousedown',  function (e) {
 		var $target = $(e.target), $parent;
 		if ( $target.data('feed') ) $parent = $target;
+		console.log(e.target);
 		if ($parent) {
-			$parent.css('background-color', 'steelblue');
+			$parent.addClass('fs-feed-effect');
 			setTimeout(function () {
-				$parent.css('background-color', 'white');
+				$parent.removeClass('fs-feed-effect');
 			}, 300);
 		}
 			

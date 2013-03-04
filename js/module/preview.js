@@ -24,7 +24,7 @@ Core.registerModule("slider-preview",function(sb){
         destroy:function(){
         },
         windowResize:function(){
-            sb.container.style["marginTop"] = (window.innerHeight-sliderH)/2+"px";
+            // sb.container.style["marginTop"] = (window.innerHeight-sliderH)/2+"px";
         },
         start:function(DATA){
             sliders = new sb.ObjectLink();
@@ -101,7 +101,7 @@ Core.registerModule("slider-preview",function(sb){
             setTargetFunc(newTar);
         },
         preview:function(DATA){
-            canvas.style["marginTop"] = (window.innerHeight-sliderH)/2+"px";
+            // canvas.style["marginTop"] = (window.innerHeight-sliderH)/2+"px";
             for(var s in DATA){
                 if(DATA.hasOwnProperty(s)){
                     var slider = document.createElement("DIV"),elements = DATA[s].element;

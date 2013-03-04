@@ -70,8 +70,11 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 
 	/*Public Method*/
 	//create a file
-	function link (filename, cwd, success, error) {
-		cwd.getFile(filename, config.CREATE_ENTRY_OPTIONS, success, error)
+	function link (filename, cwd, success, error, options) {
+		console.log(options , options && options.override);
+		var type = config.CREATE_ENTRY_OPTIONS;
+		if (options && options.override) type = config.CREATE_OVERRIDE_ENTRY_OPTIONS;
+		cwd.getFile(filename, type, success, error)
 	}
 	// create a directory
 	function mkdir (directoryname, cwd, success, error) {
@@ -98,7 +101,7 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 		}, error);
 	}
 	// create a file and write conent
-	function writefile (filename, cwd, content, success , error) {
+	function writefile (filename, cwd, content, success , error, options) {
 		link(filename, cwd, function (file) {
 			file.createWriter(function(fileWriter) {
                 fileWriter.onwriteend = function(e) {
@@ -115,7 +118,7 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 					fileWriter.write(content);
                 }
             }, error);
-		} , error);
+		} , error, options);
 	}
 	/**
 	*	Open a dir 
@@ -147,11 +150,28 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 		}
 	}
 	/**
+	*	往指定路径上写一个文件
+	**/
+	function writeFileInPath (path, filename, content, success, error, options) {
+		filesystem(window.TEMPORARY, function (fs) {
+			var root = fs.root.toURL(),
+				rootPath = root.match(/.*\/$/) ? root : root + '/';
+
+			path = path.match(/.*\/$/) ? path : path + '/';
+			path = path.replace(new RegExp('^' + rootPath), './'); 
+			opendir(path, fs.root, function (directoryEntry) {
+				console.log(directoryEntry);
+				writefile(filename, directoryEntry, content, success, error, options)
+			}, error)
+		}, error);
+	}
+	/**
 	*	Rquest FileSystem
 	*	Use singleton Parttern
 	*	@param storageType <TEMPORARY, PERSISTENT>
 	**/
 	function filesystem (storageType, success, error) {
+
 		if ( !_this._fsInstance ) {
 			_requestFileSystem(storageType, 1024 * 1024, function (fs) {
 
@@ -163,7 +183,7 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 			// window.webkitStorageInfo.requestQuota(PERSISTENT, 1024*1024, function(grantedBytes) {
 			//   window.webkitRequestFileSystem(PERSISTENT, grantedBytes, success, error); 
 			// }, error);
-		} else callback(_this._fsInstance);
+		} else success(_this._fsInstance);
 	}
 
 	return {
@@ -178,7 +198,8 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 		"writefile" 	: writefile,
 		'filesystem' 	: filesystem,
 		"errorCodeMap" 	: errorCodeMap,
-		"phonegapErrorCodeMap" : phonegapErrorCodeMap
+		"phonegapErrorCodeMap" : phonegapErrorCodeMap,
+		"writeFileInPath" : writeFileInPath
 	};
 });
 
@@ -317,7 +338,7 @@ define('webfs/ui',
 	function writeFile (filename, content, container, success, error) {
 		webfs.writefile(filename, getCwd(container), content, function (file) {
 			insertFileDOM(container, file);
-			success && success();
+			success && success(file);
 			
 		}, errorHanlder(error, 'UI:writeFile / FS:writefile'));
 	}

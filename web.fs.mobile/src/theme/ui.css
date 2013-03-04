@@ -1,6 +1,7 @@
 body {padding: 0;margin: 0;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
 .fs-disp-none {display:none!important;}
 .fs-visi-hide {visibility: hidden;}
+.fs-feed-effect{background-color: steelblue!important;}
 .fs-view {
 	position: relative;margin:auto;
 	/*width: 100%;*/

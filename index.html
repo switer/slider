@@ -20,16 +20,25 @@
         <script type="text/javascript" src="js/sandbox.js"></script>
         <link rel="stylesheet" type="text/css" href="web.fs.mobile/src/theme/ui.css">
         <link rel="stylesheet" type="text/css" href="web.fs.mobile/src/sui/sui.css">
+        <style type="text/css">
+            .nav-bar {height: 45px;background-color: black;position: fixed;top: 0px;width: 100%;}
+            .nav-button {height: 100%;width: 80px;border: none;
+                background-image: url(./img/go-home.png);background-position: center;background-size: 40px 40px;background-repeat: no-repeat;background-color: transparent;}
+        </style>
     </head>
     <body >
         <div id="filesystem" class="sui-disp-none">
+            <!-- Navigation Bar -->
+            <div id="fs_nav_bar" class="nav-bar">
+                <button data-feed="true" class="nav-button" id='returnHomeBtn'></button>
+            </div>
             <!-- FIle System Container -->
             <div id="fileView" class="fs-view fs-theme-android"></div>
             <!-- Bottom Menu Bar -->
             <div id="fileBar" class="fs-bar">
                 <a id="addFolder" data-feed='true' class="fs-bar-btn" href="javascript:;">创建目录</a>
                 <a id="showDeleteIcon" data-feed='true' class="fs-bar-icon" href="javascript:;"></a>
-                <a id="addFile" data-feed='true' class="fs-bar-btn" href="javascript:;" >新建文件</a>
+                <a id="addFile" data-feed='true' class="fs-bar-btn" href="javascript:;" >另存为</a>
             </div>
             <!-- Add Folder PopBox -->
             <div class="sui-popbox sui-disp-none" data-vertical='center' data-position='fixed' data-transition=true data-cancel=true id="folderInpBox">
@@ -55,9 +64,6 @@
                             <div class="sui-inp-box">
                                 <input class="sui-inp" type="text" id="fileSufInp" placeholder="输入文件类型" />
                             </div>
-                            <div class="sui-inp-box">
-                                <input class="sui-inp" type="text" id="fileContentInp" placeholder="输入文件内容" />
-                            </div>
                         </div>
                         <input class="sui-btn sui-w-full sui-mg-top sui-btn-primary" id="fileInpBtn" type="button" value="确定">
                     </div>
@@ -73,10 +79,11 @@
                 </div>
             </div>
         </div>
+        <!--
         <div class="header" >
             <div class="header-item user-register">注册</div>
             <div class="header-item user-login  grap-right">登录</div>
-        </div>
+        </div>-->
         <div id="setlink" class="panel1">
             <input type="text" name="link" value="http://" class="middle-input link-value"/>
             <input type="button" value="确定" class="comfirm-link"/>
@@ -325,6 +332,7 @@
         <div id="toolbar" >
             <div id="tool-buttons">
                 <div id="tool-enterPreviewMode" class="tool-app title" data-title="保存"></div>
+                <div id="tool-openFileSystem" class="tool-app title" data-title="打开文件夹"></div>
                 <div id="tool-addimage" class="tool-app title" data-title="添加一张图片">
                     <input type="file" id="addImageInp"/>
                 </div>
