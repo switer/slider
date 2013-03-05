@@ -1187,6 +1187,27 @@ var SandBox = (function() {
                     ctx.restore();
                 }
                 break;
+            case 'message' :
+                canvas.setAttribute('height','130');
+                canvas.setAttribute('width','130');
+                ctx.fillStyle = color
+                ctx.moveTo(75,25);
+                ctx.quadraticCurveTo(25,25,25,62.5);
+                ctx.quadraticCurveTo(25,100,50,100);
+                ctx.quadraticCurveTo(50,120,30,125);
+                ctx.quadraticCurveTo(60,120,65,100);
+                ctx.quadraticCurveTo(125,100,125,62.5);
+                ctx.quadraticCurveTo(125,25,75,25);
+                ctx.fill();
+
+                var img = ctx.getImageData(25,25,110, 100);
+                var copyCnv = document.createElement('canvas');
+                copyCnv.setAttribute('height','100');
+                copyCnv.setAttribute('width','100');
+                var ctx2 = copyCnv.getContext('2d');
+                ctx2.putImageData(img,0,0);
+                canvas = copyCnv;
+                break;
             default : break;
         }
         var url =  canvas.toDataURL();

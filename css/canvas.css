@@ -239,14 +239,13 @@
     height: 30px;
 }
 .close-menu{
-
     position: absolute;
     background-image: url(../img/close.png);
     height: 20px;
     width: 20px;
     top:0px;
     right: 0px;
-     cursor: pointer;
+    cursor: pointer;
 
 }
 /*.close-menu:hover{

@@ -2,9 +2,16 @@ Core.registerModule("toolbar",function(sb){
     var addImageApp=null,addTextApp=null,addSliderApp=null,deleteSlider = null,toolAppItems =null,header=20,toolbarY = 600,viewY = 80,
     insertSlider = null,enterPreviewMode = null,operation = null,appOptTout = -1,tarApp = null,previewApp = null,
     appDetailItems = null,toolAppMenu = null,operationSubMenuItems = null, item;
-    var ecb;
+    var ecb,
+        global;
     return {
         init:function(){
+            global = this;
+
+            this._textMatches = {
+                'foreColor' : '请选择文字颜色',
+                'hiliteColor' : '请选择文字背景颜色'
+            }
 
             ecd = sb.find("#execCommand-detail",document);
             ecb = sb.find("#execCommand-bar",document);
@@ -213,6 +220,12 @@ Core.registerModule("toolbar",function(sb){
                     data:{}
                 });  
             };
+
+            var cb = window.colorboard.create(function (value) {
+                document.execCommand(global._execType,false, value);
+            })
+            document.body.appendChild(cb);
+            global._colorboard = cb;
         },
         destroy:function(){
             addImageApp=null;
@@ -234,11 +247,18 @@ Core.registerModule("toolbar",function(sb){
             link.style.left = (e.clientX-130)+"px";
         },
         showColor:function(data){
-            if(colorSelector.style.display=="block"&&execCType.value != data.type){
-            }else{
+
+            var colorSelector = global._colorboard;
+            window.colorboard.title(colorSelector, global._textMatches[data.type]);
+
+            console.log(colorSelector);
+            if( colorSelector.style.display =="block" && global._execType != data.type ){
+
+            } else {
                 colorSelector.style.display = colorSelector.style.display=="none"?"block":"none";
             }
-            execCType.value = data.type;
+            global._execType = data.type;
+
             if(sb.subPX(ecd.style.top)-170>=0) colorSelector.style.top = (sb.subPX(ecd.style.top)-170)+"px";
             else colorSelector.style.top = (sb.subPX(ecd.style.top)+50)+"px";
             colorSelector.style.left = (data.event.clientX-100)+"px";
