@@ -70,11 +70,9 @@
 }
 .element-container .imgelement:hover{
     -webkit-box-shadow:0px 0px 10px blue;
-    -moz-box-shadow:0px 0px 10px blue;
 }
 .element-container .textboxelement:hover{
     -webkit-box-shadow:0px 0px 10px blue;
-    -moz-box-shadow:0px 0px 10px blue;
 }
 .element-container .element-panel{
 
@@ -83,8 +81,7 @@
 }
 .element-select .imgelement,.element-select .textboxelement{
     /*    border:2px solid gray;*/
-    -webkit-box-shadow:0px 0px 0px 2px gray;
-    -moz-box-shadow:0px 0px 0px 2px gray;
+    -webkit-box-shadow:0px 0px 0px 6px rgba(0,0,0,0.1);
 
 }
 .element-container-apart-move{
@@ -218,6 +215,10 @@
 
 }
 .boxshadowsetting{
+    
+    display: none;
+}
+.transformsetting{
     
     display: none;
 }

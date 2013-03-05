@@ -51,6 +51,7 @@ Core.registerModule("canvas",function(sb){
                 borderBottomRightRadius:"0%",
                 borderTopRightRadius:"0%",
                 boxShadow:"rgb(0, 0, 0) 0px 0px 10px inset",
+                WebkitTransform : "rotate(0deg)",
                 opacity:"1"
             };
             editorContainer = sb.find(".container");
@@ -78,28 +79,28 @@ Core.registerModule("canvas",function(sb){
             bordersettingBut = sb.find(".bordersetting-but",easm);
             boxshadowsettingBut = sb.find(".boxshadowsetting-but",easm);
             sb.bind(bgsettingBut, "click", function(){
-                bgsetting.style.display = "block";
-                bordersetting.style.display = "none";
-                boxshadowsetting.style.display = "none";
-                sb.addClass(bgsettingBut, "text-focus");
-                sb.removeClass(bordersettingBut, "text-focus");
-                sb.removeClass(boxshadowsettingBut, "text-focus");
+                $('.attr-setting-panel').css('display', 'none');
+                $('.setting-tag').removeClass('text-focus');
+                $('.bgsetting').css('display', 'block');
+                $('.bgsetting-but').addClass('text-focus');
             });
             sb.bind(bordersettingBut, "click", function(){
-                bgsetting.style.display = "none";
-                boxshadowsetting.style.display = "none";
-                bordersetting.style.display = "block";
-                sb.addClass(bordersettingBut, "text-focus");
-                sb.removeClass(bgsettingBut, "text-focus");
-                sb.removeClass(boxshadowsettingBut, "text-focus");
+                $('.attr-setting-panel').css('display', 'none')
+                $('.setting-tag').removeClass('text-focus');
+                $('.bordersetting').css('display', 'block');
+                $('.bordersetting-but').addClass('text-focus');
             });
             sb.bind(boxshadowsettingBut, "click", function(){
-                bgsetting.style.display = "none";
-                bordersetting.style.display = "none";
-                boxshadowsetting.style.display = "block";
-                sb.addClass(boxshadowsettingBut, "text-focus");
-                sb.removeClass(bgsettingBut, "text-focus");
-                sb.removeClass(bordersettingBut, "text-focus");
+                $('.attr-setting-panel').css('display', 'none');
+                $('.setting-tag').removeClass('text-focus');
+                $('.boxshadowsetting').css('display', 'block');
+                $('.boxshadowsetting-but').addClass('text-focus');
+            });
+            $('.transformsetting-but').on("click", function(){
+                $('.attr-setting-panel').css('display', 'none');
+                $('.setting-tag').removeClass('text-focus');
+                $('.transformsetting').css('display', 'block');
+                $('.transformsetting-but').addClass('text-focus');
             });
             settingElements = sb.query(".setting-element",easm);
             for (var i = 0,item; item =  settingElements[i]; i++) {
@@ -139,12 +140,16 @@ Core.registerModule("canvas",function(sb){
                             pnumber =  parent.dataset.number;
                             var factor = parent.getAttribute("data-factor"),
                             unit = parent.getAttribute("data-unit");
-                            value = tar.value/parseInt(factor)+unit;
+                            var multi = parent.dataset.multi || '1';
+
+                            value = tar.value/parseInt(factor)*parseInt(multi) + unit;
+
                             if(pnumber) {
                                 var arr = defaultAtt[type].split(" ");
                                 arr[pnumber] = value;
                                 value = arr.join(" ");
                             }
+                            console.log('---------',event, type,value);
                             sb.notify({
                                 type:event,
                                 data:{
@@ -313,6 +318,9 @@ Core.registerModule("canvas",function(sb){
                             darr[1] = varr[1];
                             darr[2] = varr[2];
                             attrValue = darr.join(" ");
+                        }
+                        else if (valueType=="WebkitTransform") {
+                            attrValue = defaultAtt[valueType].replace(/^rotate\(/,'').replace(/edg\)$/,'');
                         }
                         sb.notify({
                             type:event,
@@ -657,11 +665,19 @@ Core.registerModule("canvas",function(sb){
             var preCont = document.createElement('div');
                 editor.appendChild(preCont);
 
+            //粘贴图片
             if(obj["paste"]) {
                 img = new Image();
                 img.src= obj["value"];
                 file = null;
             }
+            //添加图形
+            else if (obj['shape']) {
+                img = new Image();
+                img.src= obj["value"];
+                file = obj["value"];
+            }
+            //添加图片
             else {
                 img = sb.addImage(obj);
                 var img2 = sb.readAsDataURL(obj);
@@ -702,7 +718,10 @@ Core.registerModule("canvas",function(sb){
 
                 sb.move(panel, container);
 
-                if(obj["paste"]) container.setAttribute("style", obj["attr"]);
+                if(obj["paste"]) {
+                    container.setAttribute("style", obj["attr"]);
+                    img.setAttribute('style', obj["elemAttr"]);
+                }
                 else container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
 
                 data_number++;
@@ -857,7 +876,8 @@ Core.registerModule("canvas",function(sb){
                         unit = item.dataset.unit,
                         dvalue = defaultAtt[type];
                         if(pnumber) dvalue = dvalue.split(" ")[pnumber];
-                        inputElem.value = sb.subPX(dvalue,unit.length)*factor;
+                        var multi = item.dataset.multi || '1';
+                        inputElem.value = sb.subPX(dvalue,unit.length)*factor/multi;
                         break;
                     case 'select':
                         type = item.dataset.type;
@@ -885,12 +905,15 @@ Core.registerModule("canvas",function(sb){
                     boxShadow:true,
                     opacity : true
                 };
-                console.log((img = sb.find("img",container)), elemAtt[key], key);
+
                 if((img = sb.find("img",container))&&elemAtt[key]) {
                     sb.find(".element-panel",container).style[key] = value;
                     img.style[key] = value;
+                } 
+                else if (key === 'WebkitTransform') {
+                    container.style[key] = 'rotate(' + value + 'deg)';
                 }
-                if (key !== 'opacity') container.style[key] = value;
+                if (key !== 'opacity' && key !== 'WebkitTransform') container.style[key] = value;
             }else{
                 var compatibleAtt = {
                     backgroundColor:true,

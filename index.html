@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="css/canvas.css" type="text/css" />
         <link rel="stylesheet" href="css/toolbar.css" type="text/css" />
         <link rel="stylesheet" href="css/stylebar.css" type="text/css" />
+        <link rel="stylesheet" href="css/shapebar.css" type="text/css" />
         <link rel="stylesheet" href="css/main.css" type="text/css" />
         <link rel="stylesheet" href="css/view.css" type="text/css" />
         <link rel="stylesheet" href="css/animation.css" type="text/css" />
@@ -184,9 +185,10 @@
                     <div class="bgsetting-but setting-tag text-focus">背景设置</div>
                     <div class="bordersetting-but setting-tag">边框设置</div>
                     <div class="boxshadowsetting-but setting-tag">内阴影</div>
+                    <div class="transformsetting-but setting-tag">变换</div>
                 </div>
                 <div class="close-menu title" data-title="close this menu"></div>
-                <div class="bgsetting" >
+                <div class="bgsetting attr-setting-panel" >
                     <div class="setting-left">
                         <div class="setting-title">背景色</div>
                         <div class="rgbcolor"  data-check="true" data-type="backgroundColor" data-event="setStyleAttr">
@@ -220,7 +222,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bordersetting" >
+                <div class="bordersetting attr-setting-panel" >
                     <div class="setting-left">
                         <div class="setting-title">边框属性</div>
                         <div class="setting-element" data-unit="px" data-factor="5" data-input="range"  data-type="borderWidth" data-event="setStyleAttr">
@@ -280,7 +282,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="boxshadowsetting">
+                <div class="boxshadowsetting attr-setting-panel">
                     <div class="setting-left">
                         <div class="setting-title">阴影颜色</div>
                         <div class="rgbcolor" data-check="false"  data-type="boxShadow" data-event="setStyleAttr">
@@ -310,6 +312,22 @@
                         </div>
                     </div>
                 </div>
+                <div class="transformsetting attr-setting-panel">
+                    <div class="setting-left">
+                        <div class="setting-title">旋转</div>
+                        <div class="setting-element" data-unit="" data-multi='36' data-factor="10" data-input="range"  data-type="WebkitTransform" data-event="setStyleAttr">
+                            <label  class="item-name short">角度</label>
+                            <input type="range"  class="value-input"/>
+                        </div>
+                    </div>
+<!--                     <div class="setting-right">
+                        <div class="setting-title">阴影属性</div>
+                        <div class="setting-element" data-number="5" data-unit="px" data-factor="2" data-input="range"  data-type="boxShadow" data-event="setStyleAttr">
+                            <label  class="item-name normal">内阴影</label>
+                            <input type="range"  class="value-input"/>
+                        </div>
+                    </div> -->
+                </div>
             </div>
             <div id="element-operate-menu" class="panel1">
                 <div class="close-menu title" data-title="close this menu"></div>
@@ -328,6 +346,13 @@
                     <div id="elem-attribute-setting" class="elem-item title" data-event="elemAttrSetting" data-title="attribute-setting">属性</div>
                 </div>
             </div>
+        </div>
+        <div id='shapebar'>
+            <div id='triangle' class='shape-icon' data-type='triangle'></div>
+            <div id='circular' class='shape-icon' data-type='circular'></div>
+            <div id='rectangle' class='shape-icon' data-type='rectangle'></div>
+            <div id='heart' class='shape-icon' data-type='heart'></div>
+            <div id='star' class='shape-icon' data-type='star'></div>
         </div>
         <div id="toolbar" >
             <div id="tool-buttons">
@@ -854,6 +879,7 @@
         <script type="text/javascript" src="js/util/json.js"></script>
         <script type="text/javascript" src="js/module/canvas.js"></script>
         <script type="text/javascript" src="js/module/toolbar.js"></script>
+        <script type="text/javascript" src="js/module/shapebar.js"></script>
         <script type="text/javascript" src="js/module/view.js"></script>
         <script type="text/javascript" src="js/module/preview.js"></script>
         <!--<script type="text/javascript" src="js/module/stylebar.js"></script>-->

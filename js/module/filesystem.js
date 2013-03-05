@@ -140,11 +140,11 @@ Core.registerModule("filesystem", function(sb){
 			$("#filesystem").suiShow();
 			$('body').css('overflow', 'auto')
 			$('#filesystem').show();
+			$('#addFile').css('visibility', 'visible');
 		},
 		openFileSystem : function () {
 			window.location.hash = '!filesystem'
 			this.fileContent = null;
-			$('#addFile').hide();
 			sb.notify({
 				type : 'showFileSystem',
 				data : null
@@ -153,6 +153,7 @@ Core.registerModule("filesystem", function(sb){
 					type : 'enterPreviewMode',
 					data : null
 			})
+			$('#addFile').css('visibility', 'hidden');
 		}
 	}
 });

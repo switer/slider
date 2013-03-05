@@ -1,0 +1,8 @@
+#shapebar {position: absolute;top: 20px;right: 0;height: auto;width: 80px;}
+.shape-icon {background-repeat: no-repeat;background-size: 50px 50px;margin:15px;height: 50px;width: 50px;margin-top: 20px;}
+.shape-icon:hover {box-shadow: 0 0 10px 2px #CCC;cursor: pointer;}
+#triangle {background-image: url(../img/triangle.png);}
+#circular {background-image: url(../img/circle.png);}
+#rectangle {background-image: url(../img/square.png);}
+#heart {background-image: url(../img/heart.png);}
+#star {background-image: url(../img/star.png);}

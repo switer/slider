@@ -1119,6 +1119,80 @@ var SandBox = (function() {
             });
         }
     }
+    SandBox.prototype.drawShape = function (shape, color) {
+        var canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d');
+        switch (shape) {
+            case 'triangle' :   
+                canvas.setAttribute('height', '100');
+                canvas.setAttribute('width', '200');
+                ctx.fillStyle = color;
+                ctx.moveTo(0,0);
+                ctx.lineTo(100,100);
+                ctx.lineTo(200,0);
+                ctx.lineTo(0,0);
+                ctx.fill();
+                break;
+            case 'circular' :
+                canvas.setAttribute('height', '200');
+                canvas.setAttribute('width', '200');
+                ctx.fillStyle = color;
+                ctx.arc(100, 100, 100, 100, 0, Math.PI);
+                ctx.fill();
+                break;
+            case 'rectangle' : 
+                canvas.setAttribute('height','200');
+                canvas.setAttribute('width','200');
+                ctx.fillStyle = color;
+                ctx.fillRect(0, 0, 200, 200);
+                break;
+            case 'heart' :
+                canvas.setAttribute('height','120');
+                canvas.setAttribute('width','150');
+                ctx.fillStyle = color;
+                ctx.moveTo(75,40);
+                ctx.bezierCurveTo(75,37,70,25,50,25);
+                ctx.bezierCurveTo(20,25,20,62.5,20,62.5);
+                ctx.bezierCurveTo(20,80,40,102,75,120);
+                ctx.bezierCurveTo(110,102,130,80,130,62.5);
+                ctx.bezierCurveTo(130,62.5,130,25,100,25);
+                ctx.bezierCurveTo(85,25,75,37,75,40);
+                ctx.fill();
+
+                var img = ctx.getImageData(20,25,110, 100);
+                var copyCnv = document.createElement('canvas');
+                copyCnv.setAttribute('height','95');
+                copyCnv.setAttribute('width','110');
+                var ctx2 = copyCnv.getContext('2d');
+                ctx2.putImageData(img,0,0);
+                canvas = copyCnv;
+                break;
+            case 'star' : 
+                canvas.setAttribute('height','200');
+                canvas.setAttribute('width','200');
+                ctx.fillStyle = color;
+                star(ctx, 100, 100, 100, 5, 0.5);
+                function star(ctx, x, y, r, p, m)
+                {
+                    ctx.translate(x, y);
+                    ctx.moveTo(0,0-r);
+                    for (var i = 0; i < p; i++)
+                    {
+                        ctx.rotate(Math.PI / p);
+                        ctx.lineTo(0, 0 - (r*m));
+                        ctx.rotate(Math.PI / p);
+                        ctx.lineTo(0, 0 - r);
+                    }
+                    ctx.fill();
+                    ctx.restore();
+                }
+                break;
+            default : break;
+        }
+        var url =  canvas.toDataURL();
+        return url;
+    }
+
     SandBox.prototype.create = function(tagName){
         return document.createElement(tagName);
     };
