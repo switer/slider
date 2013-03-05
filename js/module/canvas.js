@@ -51,6 +51,7 @@ Core.registerModule("canvas",function(sb){
                 borderBottomRightRadius:"0%",
                 borderTopRightRadius:"0%",
                 boxShadow:"rgb(0, 0, 0) 0px 0px 10px inset",
+                WebkitAnimation : "none",
                 WebkitTransform : "rotate(0deg)",
                 opacity:"1"
             };
@@ -890,6 +891,7 @@ Core.registerModule("canvas",function(sb){
             }
         },
         setStyleAttr:function(params){
+            console.log('=========', params);
             var key = params.key,value = params.value;
             defaultAtt[key] = value;
 

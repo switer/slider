@@ -40,41 +40,32 @@
 }
 @-webkit-keyframes scale{
     /* 宽会是双倍，而高度保持不变 */ 
-    0%{ -webkit-transform: scale(1, 1); 
-    -moz-transform: scale(1, 1);}
-50%{
-    -webkit-transform: scale(1.4, 1.4); 
-    -moz-transform: scale(1.4, 1.4);
-}
-100%{
-    -webkit-transform: scale(1, 1); 
-    -moz-transform: scale(1, 1);
-}
+    0%{ -webkit-transform: scale(1, 1);}
+    50%{
+        -webkit-transform: scale(1.4, 1.4); 
+    }
+    100%{
+        -webkit-transform: scale(1, 1); 
+    }
 }
 
 @-webkit-keyframes leftRotate{
-    0%{ -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);}
-50%{
-    -webkit-transform: rotate(-180deg);
-    -moz-transform: rotate(-180deg);
-}
-100%{
-    -webkit-transform: rotate(-360deg);
-    -moz-transform: rotate(-360deg);
-}
+    0%{ -webkit-transform: rotate(0deg);}
+    50%{
+        -webkit-transform: rotate(-180deg);
+    }
+    100%{
+        -webkit-transform: rotate(-360deg);
+    }
 }
 
 @-webkit-keyframes rightRotate{
-    0%{ -webkit-transform: rotate(0deg);
-    -moz-transform: rotate(0deg);}
+    0%{ -webkit-transform: rotate(0deg);}
 50%{
     -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
 }
 100%{
     -webkit-transform: rotate(360deg);
-    -moz-transform: rotate(360deg);
 }
 }
 
