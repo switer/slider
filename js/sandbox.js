@@ -1208,6 +1208,15 @@ var SandBox = (function() {
                 ctx2.putImageData(img,0,0);
                 canvas = copyCnv;
                 break;
+            case 'moon' : 
+                canvas.setAttribute('height','50');
+                canvas.setAttribute('width','100');
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(0,0);
+                ctx.bezierCurveTo(0,30,100,30,100,0);
+                ctx.arc(50,0,50,0,Math.PI);
+                ctx.fill();
             default : break;
         }
         var url =  canvas.toDataURL();
