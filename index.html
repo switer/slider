@@ -19,6 +19,7 @@
         <script type="text/javascript" src="js/util/json.js"></script>
         <script type="text/javascript" src="js/util/colorboard.js"></script>
         <script type="text/javascript" src="js/util/util.js"></script>
+        <script type="text/javascript" src="js/util/altbox.js"></script>
         <script type="text/javascript" src="js/core.js"></script>
         <script type="text/javascript" src="js/sandbox.js"></script>
         <link rel="stylesheet" type="text/css" href="web.fs.mobile/src/theme/ui.css">
@@ -329,6 +330,9 @@
                             <select class="value-input middle">
                                 <option value="none">无</option>
                                 <option value="rightRotate infinite 2s">旋转</option>
+                                <option value="scale infinite 2s">缩放</option>
+                                <option value="x-spin infinite 2s">左右翻转</option>
+                                <option value="y-spin infinite 2s">上下翻转</option>
                             </select>
                         </div>
                     </div>
@@ -374,7 +378,7 @@
                 <div id="tool-addtext" class="tool-app title" data-title="添加文本输入框"></div>
                 <div id="tool-addAnimation" class="tool-app ondetail title" data-title="更改动画"></div>
                 <div id="tool-elemOperation" class="tool-app ondetail title" data-title="操作"></div>
-                <div class="tool-app show_execCommandDetail" data-title="显示文本编辑工具"></div>
+                <div class="tool-app show_execCommandDetail title" data-title="打开文本编辑工具"></div>
                 <div id="tool-addslider" class="tool-app title" data-title="添加新的幻灯片"></div>
                 <div id="tool-insertSlider" class="tool-app title" data-title="插入新的幻灯片"></div>
                 <div id="tool-deleteSlider" class="tool-app title" data-title="删除当前幻灯片"></div>

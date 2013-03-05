@@ -192,7 +192,7 @@ Core.registerModule("canvas",function(sb){
             cancelElementOperateMenuFunc = this.cancelElementOperateMenu;
             setPositionFunc = this.setPosition;
             setSettingDefaultAttFunc = this.setSettingDefaultAtt;
-            currentSlider = currentSlider||this.createSlider("append").id;
+            currentSlider = currentSlider || this.createSlider("append").id;
             editor = sliders[currentSlider];
             showAnim = document.createElement("div");
             showAnim.className = "showAnim";
@@ -334,6 +334,25 @@ Core.registerModule("canvas",function(sb){
                 }
             }
         },
+        //以一种非常恶心的hack手段去删除slider列表
+        removeSliderByArray : function (rmArray) {
+            _.each(rmArray , function (item) {
+                var idNum = item.key.replace(/[a-z]*/g, '');
+                sb.notify({
+                    type:"changeSlider",
+                    data:idNum
+                });
+                sb.notify({
+                    type:"changeFrame",
+                    data:'frame' + idNum
+                });
+                sb.notify({
+                    type : 'deleteSlider',
+                    data : null
+                })
+
+            });
+        },
         readData:function (inp) {
 
             var reader = new FileReader();
@@ -351,8 +370,11 @@ Core.registerModule("canvas",function(sb){
             function renderSlider(data) {
 
                 var importData = JSON.parse(data);
-                var sliderArray = readAsArray(importData);
+                var sliderArray = readAsArray(importData),
+                    rmArray = sliders.toArray();
+
                 render(sliderArray);
+                global.removeSliderByArray(rmArray);
                 function readAsArray(data) {
                     var sliders = [], imgCount = 0;
                     for(var s in data){
@@ -374,6 +396,7 @@ Core.registerModule("canvas",function(sb){
                     }
                     return sliders;
                 }
+
                 function render(array) {
                     var slider = array.shift();
                     if (slider) {
@@ -410,6 +433,7 @@ Core.registerModule("canvas",function(sb){
                                 data: {
                                     paste : true,
                                     attr : data.cAttr,
+                                    elemAttr : data.eAttr,
                                     value : data.value
                                 }
                             });
@@ -578,8 +602,9 @@ Core.registerModule("canvas",function(sb){
         insertSlider:function(){
             createSliderFunc("insert");
         },
+        //新添加：sliderId
         deleteSlider:function(){
-            var preSlider = sliders.getSlider("pre",currentSlider,-1)||
+            var preSlider = sliders.getSlider("pre",currentSlider,-1) ||
             sliders.getSlider("next",currentSlider,-1);
             if(currentSlider){
                 //删除slider DOM 元素
