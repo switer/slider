@@ -31,6 +31,13 @@
         </style>
     </head>
     <body >
+        <div id='screen_select_box' class="panel1 screen-box ">
+            <div class='close-menu'></div>
+            <div class='screen-scale' data-value='4:3'>4:3</div>
+            <div class='screen-scale' data-value='16:9'>16:9</div>
+            <div class='screen-scale' data-value='2:1'>2:1</div>
+            <div class='screen-scale' data-value='1:1'>1:1</div>
+        </div>
         <div id="filesystem" class="sui-disp-none">
             <!-- Navigation Bar -->
             <div id="fs_nav_bar" class="nav-bar">
@@ -378,6 +385,7 @@
                 <div id="tool-addtext" class="tool-app title" data-title="添加文本输入框"></div>
                 <div id="tool-addAnimation" class="tool-app ondetail title" data-title="更改动画"></div>
                 <div id="tool-elemOperation" class="tool-app ondetail title" data-title="操作"></div>
+                <div id="tool-screen" class="tool-app title" data-title="更改幻灯片比例"></div>
                 <div class="tool-app show_execCommandDetail title" data-title="打开文本编辑工具"></div>
                 <div id="tool-addslider" class="tool-app title" data-title="添加新的幻灯片"></div>
                 <div id="tool-insertSlider" class="tool-app title" data-title="插入新的幻灯片"></div>
@@ -408,10 +416,10 @@
             </div>
         </div>
         <div id="view">
-            <div id="pre-frame-list" title="previous slider view list">
+            <div id="pre-frame-list" class="dp-none" title="previous slider view list" >
                 <a class="sheet" href="javascript:;"></a>
             </div>
-            <div id="next-frame-list" title="next slider view list">
+            <div id="next-frame-list" class="dp-none" title="next slider view list">
                 <a class="sheet" href="javascript:;"></a>
             </div>
             <div id="frame-list" class="anim-move-left"></div>
