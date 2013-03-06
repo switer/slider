@@ -126,11 +126,8 @@
     top:-62px;
     /*    z-index: 999;*/
     -webkit-transform: scale(1);
-    -moz-transform: scale(1);
     transform: scale(1);
-    -webkit-box-shadow:0px 0px 20px blue;
-    -moz-box-shadow:0px 0px 20px blue;
-    box-shadow:0px 0px 20px blue;
+    -webkit-box-shadow:0px 0px 20px cornflowerblue;
 
 }
 .scale {

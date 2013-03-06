@@ -116,47 +116,62 @@ Core.registerModule("toolbar",function(sb){
                     return false;
                 }
             }
-            //设定操作菜单在鼠标离开时自动隐藏
-            operation.addEventListener("mouseout", function(e){
-                appOptTout = window.setTimeout(function(){
-                    if(tarApp){
-                        var optItem =operation.querySelector("#"+tarApp.id+"-operation");
-                        optItem.style.display = "none";
-                    }
-                    operation.style.display = "none";
-                    appOptTout = -1;
-                }, 3000);
-            }, false);
-            //取消操作菜单在鼠标over时自动隐藏
-            operation.addEventListener("mouseover", function(e){
-                operation.style.display = "block";
-                if(tarApp){
-                    var optItem =operation.querySelector("#"+tarApp.id+"-operation");
-                    optItem.style.display = "block";
-                }
-                window.clearTimeout(appOptTout);
-                appOptTout = -1;
-            }, false);
+            // //设定操作菜单在鼠标离开时自动隐藏
+            // operation.addEventListener("mouseout", function(e){
+            //     appOptTout = window.setTimeout(function(){
+            //         if(tarApp){
+            //             var optItem =operation.querySelector("#"+tarApp.id+"-operation");
+            //             optItem.style.display = "none";
+            //         }
+            //         operation.style.display = "none";
+            //         appOptTout = -1;
+            //     }, 3000);
+            // }, false);
+            // //取消操作菜单在鼠标over时自动隐藏
+            // operation.addEventListener("mouseover", function(e){
+            //     operation.style.display = "block";
+            //     if(tarApp){
+            //         var optItem =operation.querySelector("#"+tarApp.id+"-operation");
+            //         optItem.style.display = "block";
+            //     }
+            //     window.clearTimeout(appOptTout);
+            //     appOptTout = -1;
+            // }, false);
             //初始化工具条工具的子操作菜单
             for (i = 0; item = appDetailItems[i]; i++) {
                 item.addEventListener("click", function(event){
-                    var tar,optItem,offsetY
-                    if(tarApp) operation.querySelector("#"+tarApp.id+"-operation").style.display = "none";
+                    var tar, optItem,offsetY;
                     tar = event.currentTarget;
+
+                    if(tarApp) {
+                        operation.querySelector("#"+tarApp.id+"-operation").style.display = "none";
+                    } else {
+
+                    }
+                    
                     tarApp = tar;
                     optItem =operation.querySelector("#"+tar.id+"-operation");
+
                     operation.style.display = "block";
                     optItem.style.display = "block";
                     operation.style.top = (event.currentTarget.offsetTop-22)+"px";
-                    if(appOptTout!=-1){
-                        window.clearTimeout(appOptTout);
-                    }
-                    appOptTout = window.setTimeout(function(){
-                        operation.style.display = "none";
-                        optItem.style.display = "none";
-                        appOptTout = -1;
-                    }, 3000);
+
+                    // if(appOptTout!=-1){
+                    //     window.clearTimeout(appOptTout);
+                    // }
+                    // appOptTout = window.setTimeout(function(){
+                    //     operation.style.display = "none";
+                    //     optItem.style.display = "none";
+                    //     appOptTout = -1;
+                    // }, 3000);
                 },false);
+            }
+
+            function _showItem (item) {
+
+            }
+            function _hideItem () {
+
             }
             //初始化工具子菜单的点击事件
             for (i = 0; item =  operationSubMenuItems[i]; i++) {
@@ -195,6 +210,11 @@ Core.registerModule("toolbar",function(sb){
                     data: sb.find("#importInp")
                 });
             })
+            $('#tool-screen').on('click', function (e) {
+                var $sb = $(global._screenBoard);
+                $sb.css('top', e.clientY + 'px');
+                screenBoard.toggle(global._screenBoard);
+            })
 
             addTextApp.onclick = function(){
                 sb.notify({
@@ -221,18 +241,28 @@ Core.registerModule("toolbar",function(sb){
                 });  
             };
 
+            //颜色取色板
             var cb = window.colorboard.create(function (value) {
                 document.execCommand(global._execType,false, value);
             })
             document.body.appendChild(cb);
             global._colorboard = cb;
 
+
+            //幻灯片分辨率选择框
             var scrnb = window.screenBoard.create();
+            //初始隐藏
+            screenBoard.hide(scrnb);
+
             window.screenBoard.listen(scrnb, function (value) {
-                alert(value);
+                sb.notify({
+                    type : 'changeScreenScale',
+                    data : value
+                })
             });
             document.body.appendChild(scrnb);
             sb.move(scrnb, scrnb);
+            global._screenBoard = scrnb;
         },
         destroy:function(){
             addImageApp=null;

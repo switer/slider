@@ -16,10 +16,15 @@ Core.registerModule("canvas",function(sb){
         },
         SCREEN_SIZE_MAP = {
             '4:3'   : {x:800,y:600},
-            '16:9'  : {x:1280,y:720},
-            '2:1'   : {x:1200,y:600},
+            '16:9'  : {x:960,y:540},
+            '16:10'  : {x:960,y:600},
+            '2:1'   : {x:1000,y:500},
             '1:1'   : {x:800,y:800}
-        };
+        },
+        DEFAULT_SCREEN = '4:3',
+        canvasX = 1200,
+        canvasY = 600;
+
     var editor = null,newContainerFunc=null,data_number=0,item,viewY = 80,header=20,isEditor = false,
     sliders = new sb.ObjectLink(),currentSlider = null,slider_count = 0,slider_number = 0,editorElem = null,
     createSliderFunc=null,addSliderElementFunc = null,addSliderObjectFunc = null,moveInter = -1,curKeycode = -1,
@@ -31,14 +36,16 @@ Core.registerModule("canvas",function(sb){
     bgsettingBut,bordersettingBut,bgsetting,bordersetting,settingElements;
 
     var global = {},
-        canvasX = 1200,
-        canvasY = 600,
         rightMenuBtn; //右键选中标志
     var DATA = '{"slider1":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data1":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"hello%20%2C%E4%BD%A0%E5%A5%BD%E5%90%97"}}},"slider2":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data2":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"%E6%88%91%E5%BE%88%E5%97%A8"}}}}';
     return {
         init : function() {
 
             global = this;
+            //初始设置幻灯片的长宽
+            var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN];
+            canvasX = sMap.x;
+            canvasY = sMap.y;
 
             document.onselectstart =  function(){
                 return false;
@@ -270,7 +277,8 @@ Core.registerModule("canvas",function(sb){
                 "changeShowAnim":this.changeShowAnim,
                 "changeSliderStyle":this.changeSliderStyle,
                 "windowResize":this.windowResize,
-                "showFileSystem" : this.hideSliderEditor
+                "showFileSystem" : this.hideSliderEditor,
+                "changeScreenScale" : this.changeScreenScale
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
@@ -340,6 +348,19 @@ Core.registerModule("canvas",function(sb){
                     }
                 }
             }
+        },
+        changeScreenScale : function (value) {
+            var sMap = SCREEN_SIZE_MAP[value];
+            if (!sMap) {
+                throw new Error('Unmatched screen size');
+            }
+            canvasX = sMap.x;
+            canvasY = sMap.y;
+            //更新幻灯片size
+            global.refleshScreesSize();
+        },
+        refleshScreesSize : function () {
+            $('.container', sb.container).css('height', canvasY + 'px').css('width', canvasX + 'px')
         },
         //以一种非常恶心的hack手段去删除slider列表
         removeSliderByArray : function (rmArray) {

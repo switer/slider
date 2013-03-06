@@ -5,8 +5,28 @@ Core.registerModule("view",function(sb){
     addSliderFunc = null,showFrameFunc = null,frameContainer = null,addFrameElementFunc = null,
     addFrameObjectFunc = null,changeCurrFrameFunc = null,preFramesButn=null,nextFramesButn = null,
     changeDisplayFrameListFunc = null,getElementDataFunc=null,showFrameElementByDataFunc=null;
+
+    var SCREEN_SIZE_MAP = {
+            '4:3'   : {x:160,y:120},
+            '16:9'  : {x:160,y:90},
+            '16:10'  : {x:160,y:100},
+            '2:1'   : {x:160,y:80},
+            '1:1'   : {x:160,y:160}
+        },
+        MAGIN_TOP_MAP = {
+            '4:3'   : '-15px',
+            '16:9'  : '10px',
+            '16:10'  : '10px',
+            '2:1'   : '18px',
+            '1:1'   : '-50px'
+        },
+        DEFAULT_SCREEN = '4:3',
+        FRAME_X = 160,
+        FRAME_Y = 120,
+        global;
     return {
         init:function(){
+            global = this;
             frameContainer = sb.find("#frame-list");
             preFramesButn = sb.find("#pre-frame-list");
             nextFramesButn = sb.find("#next-frame-list");
@@ -29,7 +49,8 @@ Core.registerModule("view",function(sb){
                 "changeFrame":this.showFrame,
                 "insertSlider":this.insertFrame,
                 "enterEditorMode":this.enterEditorMode,
-                "enterPreviewMode":this.enterPreviewMode
+                "enterPreviewMode":this.enterPreviewMode,
+                "changeScreenScale" : this.changeScreenScale
             });
             preFramesButn.onclick = function(){
                 if(dispFrames.getFirstElement()==frames.getFirstElement()) return;
@@ -48,8 +69,33 @@ Core.registerModule("view",function(sb){
                     frameContainer.className = "anim-move-right";
                 });
             }
+            //初始化窗口大小与margin
+            global.refleshFrameListMargin(SCREEN_SIZE_MAP[DEFAULT_SCREEN]);
+            var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
+            FRAME_Y = sMap.y;
+            FRAME_X = sMap.x;
         },
         destroy:function(){
+        },
+        //更改预览窗口的大小
+        changeScreenScale : function (value) {
+            var sMap = SCREEN_SIZE_MAP[value]
+            if (!sMap) return;
+            FRAME_X = sMap.x;
+            FRAME_Y = sMap.y;
+            global.refleshFrameListMargin(value)
+            global.refleshFrameViewSize();
+        },
+        refleshFrameListMargin : function (value) {
+            $("#frame-list").css('margin-top', MAGIN_TOP_MAP[value])
+        },
+        //更新每个窗口
+        refleshFrameViewSize : function () {
+            
+            frames.forEach(function (item, key) {
+                $(item).css('height', FRAME_Y + 'px').css('width', FRAME_X + 'px')
+            });
+
         },
         insertFrame:function(){
             addSliderFunc("insert");
@@ -358,6 +404,8 @@ Core.registerModule("view",function(sb){
             frame.className = "frame scale";
             framePanel.className = "frame-panel";
             frame.setAttribute("style", "display:block;");
+            $(frame).css('height', FRAME_Y + 'px').css('width', FRAME_X + 'px');
+
             framePanel.setAttribute("style", "position:absolute;width:100%;height:100%;");
             frame_number++;
             frame_count++;

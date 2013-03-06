@@ -99,3 +99,7 @@ input{
 }
 #fileView .fs-icon-back {top: 45px!important;}
 .dp-none {display: none!important;}
+/**清除浮动**/
+.cf:before, .cf:after {content:"";display:table;}
+.cf:after {clear:both;}
+.cf {zoom:1;}
