@@ -828,7 +828,6 @@ Core.registerModule("canvas",function(sb){
         },
         setSettingDefaultAtt:function(){
             var i,type,pnumber;
-            for (i = 0;item =  rgbSettingItems[i];i++) {
                 var  redSetting = sb.find(".red-setting",item),
                 greenSetting = sb.find(".green-setting",item),
                 blueSetting = sb.find(".blue-setting",item),
