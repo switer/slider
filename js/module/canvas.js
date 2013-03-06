@@ -904,35 +904,36 @@ Core.registerModule("canvas",function(sb){
         },
         setSettingDefaultAtt:function(){
             var i,type,pnumber;
-            var redSetting = sb.find(".red-setting",item),
-            greenSetting = sb.find(".green-setting",item),
-            blueSetting = sb.find(".blue-setting",item),
-            preview = sb.find(".color-preview",item),
-            rPreview = sb.find(".preview",redSetting),
-            gPreview = sb.find(".preview",greenSetting),
-            bPreview = sb.find(".preview",blueSetting),
-            rgbArr;
-            type = item.getAttribute("data-type");
-            if(type=="boxShadow") {
-                var splitArr = defaultAtt[type].split(" ");
-                var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
-                rgbArr = sb.subrgb(rgbdivArr.join(" "));
-            }else{
-                rgbArr = sb.subrgb(defaultAtt[type]);
+            for (i = 0;item =  rgbSettingItems[i];i++) {
+                var redSetting = sb.find(".red-setting",item),
+                greenSetting = sb.find(".green-setting",item),
+                blueSetting = sb.find(".blue-setting",item),
+                preview = sb.find(".color-preview",item),
+                rPreview = sb.find(".preview",redSetting),
+                gPreview = sb.find(".preview",greenSetting),
+                bPreview = sb.find(".preview",blueSetting),
+                rgbArr;
+                type = item.getAttribute("data-type");
+                if(type=="boxShadow") {
+                    var splitArr = defaultAtt[type].split(" ");
+                    var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
+                    rgbArr = sb.subrgb(rgbdivArr.join(" "));
+                }else{
+                    rgbArr = sb.subrgb(defaultAtt[type]);
+                }
+                if(rgbArr){
+                    var rv = Math.round(rgbArr[0]*100/255),
+                    gv = Math.round(rgbArr[1]*100/255),
+                    bv = Math.round(rgbArr[2]*100/255);
+                    sb.find(".value-input",redSetting).value = rv;
+                    sb.find(".value-input",greenSetting).value = gv;
+                    sb.find(".value-input",blueSetting).value = bv;
+                    rPreview.style["backgroundColor"]  = "rgb("+rgbArr[0]+","+0+","+0+")";
+                    gPreview.style["backgroundColor"]  = "rgb("+0+","+rgbArr[1]+","+0+")";
+                    bPreview.style["backgroundColor"]  = "rgb("+0+","+0+","+rgbArr[2]+")";
+                    preview.style["backgroundColor"] = "rgb("+rgbArr[0]+","+rgbArr[1]+","+rgbArr[2]+")";
+                }
             }
-            if(rgbArr){
-                var rv = Math.round(rgbArr[0]*100/255),
-                gv = Math.round(rgbArr[1]*100/255),
-                bv = Math.round(rgbArr[2]*100/255);
-                sb.find(".value-input",redSetting).value = rv;
-                sb.find(".value-input",greenSetting).value = gv;
-                sb.find(".value-input",blueSetting).value = bv;
-                rPreview.style["backgroundColor"]  = "rgb("+rgbArr[0]+","+0+","+0+")";
-                gPreview.style["backgroundColor"]  = "rgb("+0+","+rgbArr[1]+","+0+")";
-                bPreview.style["backgroundColor"]  = "rgb("+0+","+0+","+rgbArr[2]+")";
-                preview.style["backgroundColor"] = "rgb("+rgbArr[0]+","+rgbArr[1]+","+rgbArr[2]+")";
-            }
-            // }
             for (i = 0,item; item =  settingElements[i]; i++) {
                 var inputType =  item.dataset.input;
                 var inputElem = sb.find(".value-input",item),
