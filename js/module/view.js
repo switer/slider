@@ -85,7 +85,7 @@ Core.registerModule("view",function(sb){
             //select from display frames
             nearFrame = frames.getSlider("pre",currentFrame,-1)||
             frames.getSlider("next",currentFrame,-1);
-            if(nearFrame==null){
+            if(nearFrame == null){
                 //select from all frames
                 nearFrame = frames.getSlider(method="pre",currentFrame,-1)||
                 frames.getSlider(method="next",currentFrame,-1);
