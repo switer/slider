@@ -8,14 +8,7 @@
 		        color_list = document.createElement("div"),
 		        title = document.createElement("center"),
 		        closeMenu = document.createElement("div");
-	        // execCType = document.createElement("input");
-	        // execCType.type = "hidden";
-	        // execCType.value = "foreColor";
-	        
-	        // general_list.className = "general_list";
-	        // standard_list.className = "standard_list";
-	        // color_list.className = "color_list";
-	        // execCType.className = "execC_type";
+
 	        title.className = 'colorboard_title';
 	        closeMenu.className = 'close-menu';
 	        colorSelector.className = 'colorSelector';

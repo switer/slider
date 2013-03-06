@@ -226,6 +226,13 @@ Core.registerModule("toolbar",function(sb){
             })
             document.body.appendChild(cb);
             global._colorboard = cb;
+
+            var scrnb = window.screenBoard.create();
+            window.screenBoard.listen(scrnb, function (value) {
+                alert(value);
+            });
+            document.body.appendChild(scrnb);
+            sb.move(scrnb, scrnb);
         },
         destroy:function(){
             addImageApp=null;

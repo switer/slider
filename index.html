@@ -18,6 +18,7 @@
         <script type="text/javascript" src="web.fs.mobile/src/lib/zepto.js"></script>
         <script type="text/javascript" src="js/util/json.js"></script>
         <script type="text/javascript" src="js/util/colorboard.js"></script>
+        <script type="text/javascript" src="js/util/screenboard.js"></script>
         <script type="text/javascript" src="js/util/util.js"></script>
         <script type="text/javascript" src="js/util/altbox.js"></script>
         <script type="text/javascript" src="js/core.js"></script>
@@ -31,13 +32,14 @@
         </style>
     </head>
     <body >
+        <!--
         <div id='screen_select_box' class="panel1 screen-box ">
             <div class='close-menu'></div>
             <div class='screen-scale' data-value='4:3'>4:3</div>
             <div class='screen-scale' data-value='16:9'>16:9</div>
             <div class='screen-scale' data-value='2:1'>2:1</div>
             <div class='screen-scale' data-value='1:1'>1:1</div>
-        </div>
+        </div>-->
         <div id="filesystem" class="sui-disp-none">
             <!-- Navigation Bar -->
             <div id="fs_nav_bar" class="nav-bar">
@@ -768,8 +770,6 @@
             #slider-preview{
                 position: relative;
                 margin: auto;
-                width: 800px;
-                height: 600px;
                 -webkit-box-shadow:0px 0px 24px #CCC;
                 background-color: #EEE;
                 overflow: hidden;
@@ -792,13 +792,13 @@
             }
             .slider{
                 position: relative;
-                height: 600px;
-                width: 800px;
+                height: 100%;
+                width: 100%;
             }
         </style>
     </head>
     <body>
-        <div id="slider-preview" style="height: 600px;width: 800px;">
+        <div id="slider-preview">
             <div id="code"></div>
         </div>
 -->
@@ -814,7 +814,12 @@
                 canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
                 var targetSlider = null;
                 var datajson = document.getElementById('datajson').innerHTML,
-                    DATA = JSON.parse(datajson);
+                    datas = JSON.parse(datajson),
+                    DATA = JSON.parse(datas.cntData),
+                    conf = datas.cntConf;
+                var showPenel = document.getElementById('slider-preview');
+                showPenel.style.height = conf.height;
+                showPenel.style.width = conf.width;
                 var module = {
                     init:function(){
                         for(var s in DATA){

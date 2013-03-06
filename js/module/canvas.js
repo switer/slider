@@ -13,8 +13,14 @@ Core.registerModule("canvas",function(sb){
         "anim-xSpin":"上下翻转",
         "anim-rightRotate":"顺时针旋转",
         "anim-leftRotate":"逆时针旋转"
-    };
-    var editor = null,canvasX=800,canvasY=600,newContainerFunc=null,data_number=0,item,viewY = 80,header=20,isEditor = false,
+        },
+        SCREEN_SIZE_MAP = {
+            '4:3'   : {x:800,y:600},
+            '16:9'  : {x:1280,y:720},
+            '2:1'   : {x:1200,y:600},
+            '1:1'   : {x:800,y:800}
+        };
+    var editor = null,newContainerFunc=null,data_number=0,item,viewY = 80,header=20,isEditor = false,
     sliders = new sb.ObjectLink(),currentSlider = null,slider_count = 0,slider_number = 0,editorElem = null,
     createSliderFunc=null,addSliderElementFunc = null,addSliderObjectFunc = null,moveInter = -1,curKeycode = -1,
     SliderDataSet=new sb.ObjectLink(),zIndex_Number = 0,elementSet = new sb.ObjectLink(),editorContainer,
@@ -25,6 +31,8 @@ Core.registerModule("canvas",function(sb){
     bgsettingBut,bordersettingBut,bgsetting,bordersetting,settingElements;
 
     var global = {},
+        canvasX = 1200,
+        canvasY = 600,
         rightMenuBtn; //右键选中标志
     var DATA = '{"slider1":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data1":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"hello%20%2C%E4%BD%A0%E5%A5%BD%E5%90%97"}}},"slider2":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data2":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"%E6%88%91%E5%BE%88%E5%97%A8"}}}}';
     return {
@@ -57,8 +65,8 @@ Core.registerModule("canvas",function(sb){
             };
             editorContainer = sb.find(".container");
             sb.css(editorContainer,{
-                width: "800px",
-                height: "600px"
+                width: canvasX + "px",
+                height: canvasY + "px"
             });
             eom = sb.find("#element-operate-menu");
             eomItems = sb.query(".elem-item", eom);
@@ -150,7 +158,6 @@ Core.registerModule("canvas",function(sb){
                                 arr[pnumber] = value;
                                 value = arr.join(" ");
                             }
-                            console.log('---------',event, type,value);
                             sb.notify({
                                 type:event,
                                 data:{
@@ -369,8 +376,10 @@ Core.registerModule("canvas",function(sb){
             }
             function renderSlider(data) {
 
-                var importData = JSON.parse(data);
-                var sliderArray = readAsArray(importData),
+                var importData = JSON.parse(data),
+                    slidersData = JSON.parse(importData.cntData),
+                    slidersConf = importData.cntConf;
+                var sliderArray = readAsArray(slidersData),
                     rmArray = sliders.toArray();
 
                 render(sliderArray);
@@ -434,6 +443,7 @@ Core.registerModule("canvas",function(sb){
                                     paste : true,
                                     attr : data.cAttr,
                                     elemAttr : data.eAttr,
+                                    pAttr : data.panelAtt,
                                     value : data.value
                                 }
                             });
@@ -527,7 +537,8 @@ Core.registerModule("canvas",function(sb){
 
         enterSaveFile:function(){
             
-            var json = new sb.ObjectLink();
+            var json = new sb.ObjectLink(),
+                datas;
             SliderDataSet.forEach(function(a,m){
                 var data = new sb.ObjectLink();
                 var slider = {};
@@ -548,8 +559,16 @@ Core.registerModule("canvas",function(sb){
                 slider["element"] = data;
                 json[m] = slider;
             });
+            alert(json.length());
+            datas = {
+                cntConf : {
+                    'height' : editorContainer.style.height,
+                    'width' : editorContainer.style.width
+                },
+                cntData : json.toJSONString()
+            }
             // alert('length : ' + json.toJSONString().length);
-            var stream = json.toJSONString();
+            var stream = JSON.stringify(datas);
             var header = document.querySelector('#header').childNodes,
                 footer = document.querySelector('#footer').childNodes,
                 comment;
@@ -718,9 +737,14 @@ Core.registerModule("canvas",function(sb){
                     height:img.height,
                     width:img.width
                 };
-                var partSize = 6,con_obj=null;
-                sizeObj = sb.fixedImgSize(sizeObj,canvasX,canvasY);
-                newContainerFunc(sizeObj,partSize, null, preCont);
+                var partSize = 6,con_obj=null, type = obj.shape ? 'shape' : (obj.paste ? 'paste' : null)
+                    sizeObj = sb.fixedImgSize(sizeObj,canvasX,canvasY);
+
+                newContainerFunc(sizeObj,partSize, null, {
+                    'container' : preCont,
+                    'type' : type,
+                    'isFixedSize' : !obj.paste
+                });
                 img.style.height = '100%';
                 img.style.width = '100%';
                 callback && callback(imgElementId)
@@ -732,14 +756,18 @@ Core.registerModule("canvas",function(sb){
 
                 var panel = document.createElement("div");
                 panel.className = "element-panel";
-                sb.css(panel, {
-                    position:"absolute",
-                    top:"0px",
-                    left:"0px",
-                    width:"100%",
-                    height:"100%"
-                });
-
+                if (obj.pAttr) {
+                    $(panel).attr(obj.pAttr);
+                }
+                else {
+                    sb.css(panel, {
+                        position:"absolute",
+                        top:"0px",
+                        left:"0px",
+                        width:"100%",
+                        height:"100%"
+                    }); 
+                }
                 var partSize = 6,dataID,maxZIndexElem,maxZIndex,cur;
 
                 sb.move(panel, container);
@@ -748,7 +776,9 @@ Core.registerModule("canvas",function(sb){
                     container.setAttribute("style", obj["attr"]);
                     img.setAttribute('style', obj["elemAttr"]);
                 }
-                else container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+                else {
+                    container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+                }
 
                 data_number++;
                 zIndex_Number++;
@@ -853,35 +883,35 @@ Core.registerModule("canvas",function(sb){
         },
         setSettingDefaultAtt:function(){
             var i,type,pnumber;
-                var  redSetting = sb.find(".red-setting",item),
-                greenSetting = sb.find(".green-setting",item),
-                blueSetting = sb.find(".blue-setting",item),
-                preview = sb.find(".color-preview",item),
-                rPreview = sb.find(".preview",redSetting),
-                gPreview = sb.find(".preview",greenSetting),
-                bPreview = sb.find(".preview",blueSetting),
-                rgbArr;
-                type = item.getAttribute("data-type");
-                if(type=="boxShadow") {
-                    var splitArr = defaultAtt[type].split(" ");
-                    var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
-                    rgbArr = sb.subrgb(rgbdivArr.join(" "));
-                }else{
-                    rgbArr = sb.subrgb(defaultAtt[type]);
-                }
-                if(rgbArr){
-                    var rv = Math.round(rgbArr[0]*100/255),
-                    gv = Math.round(rgbArr[1]*100/255),
-                    bv = Math.round(rgbArr[2]*100/255);
-                    sb.find(".value-input",redSetting).value = rv;
-                    sb.find(".value-input",greenSetting).value = gv;
-                    sb.find(".value-input",blueSetting).value = bv;
-                    rPreview.style["backgroundColor"]  = "rgb("+rgbArr[0]+","+0+","+0+")";
-                    gPreview.style["backgroundColor"]  = "rgb("+0+","+rgbArr[1]+","+0+")";
-                    bPreview.style["backgroundColor"]  = "rgb("+0+","+0+","+rgbArr[2]+")";
-                    preview.style["backgroundColor"] = "rgb("+rgbArr[0]+","+rgbArr[1]+","+rgbArr[2]+")";
-                }
+            var redSetting = sb.find(".red-setting",item),
+            greenSetting = sb.find(".green-setting",item),
+            blueSetting = sb.find(".blue-setting",item),
+            preview = sb.find(".color-preview",item),
+            rPreview = sb.find(".preview",redSetting),
+            gPreview = sb.find(".preview",greenSetting),
+            bPreview = sb.find(".preview",blueSetting),
+            rgbArr;
+            type = item.getAttribute("data-type");
+            if(type=="boxShadow") {
+                var splitArr = defaultAtt[type].split(" ");
+                var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
+                rgbArr = sb.subrgb(rgbdivArr.join(" "));
+            }else{
+                rgbArr = sb.subrgb(defaultAtt[type]);
             }
+            if(rgbArr){
+                var rv = Math.round(rgbArr[0]*100/255),
+                gv = Math.round(rgbArr[1]*100/255),
+                bv = Math.round(rgbArr[2]*100/255);
+                sb.find(".value-input",redSetting).value = rv;
+                sb.find(".value-input",greenSetting).value = gv;
+                sb.find(".value-input",blueSetting).value = bv;
+                rPreview.style["backgroundColor"]  = "rgb("+rgbArr[0]+","+0+","+0+")";
+                gPreview.style["backgroundColor"]  = "rgb("+0+","+rgbArr[1]+","+0+")";
+                bPreview.style["backgroundColor"]  = "rgb("+0+","+0+","+rgbArr[2]+")";
+                preview.style["backgroundColor"] = "rgb("+rgbArr[0]+","+rgbArr[1]+","+rgbArr[2]+")";
+            }
+            // }
             for (i = 0,item; item =  settingElements[i]; i++) {
                 var inputType =  item.dataset.input;
                 var inputElem = sb.find(".value-input",item),
@@ -1241,14 +1271,16 @@ Core.registerModule("canvas",function(sb){
             elem.style.left = (event.screenX+offsetX)+"px";
             elem.style.top = (event.screenY+offsetY)+"px";
         },
-        createElementContainer:function(obj,partSize,elem, preCont){
+        createElementContainer:function(sizeObj,partSize,elem, options){
             /*
              * names:con_e container:east
              *      con_w container:west
              *      con_s container:south
              *      con_n container:north
              */
-            var container = preCont || document.createElement("div");
+            options = options || {};
+
+            var container = options.container || document.createElement("div");
             var move_e = document.createElement("div");
             var move_w = document.createElement("div");
             var move_s = document.createElement("div");
@@ -1305,9 +1337,14 @@ Core.registerModule("canvas",function(sb){
                 frag.appendChild(element);
             }
             
-            !preCont && container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
-            container.style.height = obj.height + 'px';
-            container.style.width = obj.width + 'px';
+            if (!options.container) {
+                container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+                //图形库的图形大小为图片本身大小
+            }
+            if (options['isFixedSize']) {
+                container.style.height = sizeObj.height + 'px';
+                container.style.width = sizeObj.width + 'px';
+            }
 
             container.className = "element-container";
             move_e.className = "element-container-apart-move con-move-e";

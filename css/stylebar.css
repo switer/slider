@@ -204,10 +204,10 @@
 .imageProcess{
     background-image: url(../img/ps.png);
 }
-.screen-box {display: -webkit-box;position: absolute;width: auto;z-index: 999;padding: 10px;left: 90px;top:20px;}
+.screen-box {display: -webkit-box;position: absolute;width: auto;z-index: 999;padding: 10px;cursor: move;}
 .screen-scale {width: 80px;height: 50px;vertical-align: middle;text-align: center;line-height: 50px;font-size: 24px;margin: 10px;
 background-color: cornflowerblue;color: white;text-shadow:0 0 2px black;}
-.screen-scale:hover {box-shadow: 0 0 6px 1px black;}
+.screen-scale:hover {box-shadow: 0 0 6px 1px black;cursor: pointer;}
 @-webkit-keyframes move-out
 {
     0%{
