@@ -373,6 +373,7 @@
             <div id='star' class='shape-icon' data-type='star'></div>
             <div id='message' class='shape-icon' data-type='message'></div>
             <div id='moon' class='shape-icon' data-type='moon'></div>
+            <div id='polygon' class='shape-icon' data-type='polygon'></div>
         </div>
         <div id="toolbar" >
             <div id="tool-buttons">
@@ -469,433 +470,182 @@
             }());
         </script>
         <style type="text/css">
-            .anim-scale{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: scale;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-xSpin{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: x-spin;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-ySpin{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: y-spin;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-rightRotate{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: rightRotate;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-leftRotate{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: rightRotate;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            @-webkit-keyframes scale{
-                /* 宽会是双倍，而高度保持不变 */ 
-                0%{ -webkit-transform: scale(1, 1); }
-                50%{
-                    -webkit-transform: scale(1.4, 1.4); 
-                }
-                100%{
-                    -webkit-transform: scale(1, 1); 
-                }
-            }
-            @-webkit-keyframes leftRotate{
-                0%{ -webkit-transform: rotate(0deg);}
-                50%{
-                    -webkit-transform: rotate(-180deg);
-                }
-                100%{
-                    -webkit-transform: rotate(-360deg);
-                }
-            }
-            @-webkit-keyframes rightRotate{
-                0%{ -webkit-transform: rotate(0deg);}
-                50%{
-                    -webkit-transform: rotate(180deg);
-                }
-                100%{
-                    -webkit-transform: rotate(360deg);
-                }
-            }
-            @-webkit-keyframes x-spin {
-                0% { -webkit-transform: rotateX(0deg); } 
-                50% { -webkit-transform: rotateX(180deg); }
-                100% { -webkit-transform: rotateX(360deg); } 
-            }
-            @-webkit-keyframes y-spin { 
-                0% { -webkit-transform: rotateY(0deg); } 
-                50% { -webkit-transform: rotateY(180deg); }
-                100% { -webkit-transform: rotateY(360deg); } 
-            }
-            .anim-move-top{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-top;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-bottom{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-bottom;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-top-left{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-top-left;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-top-right{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-top-right;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-bottom-left{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-bottom-left;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-bottom-right{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-bottom-right;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-scale{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: scale;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-xSpin{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: x-spin;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-ySpin{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: y-spin;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-rightRotate{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: rightRotate;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-leftRotate{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: rightRotate;
-                -webkit-animation-duration: 2s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-left{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-left;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            .anim-move-right{
-                -webkit-transform-style: preserve-3d;
-                /*让整个行使用x-轴旋转、7秒中的动画、无限次播放以及线性 */
-                -webkit-animation-name: anim-move-right;
-                -webkit-animation-duration: 0.5s;
-                -webkit-animation-iteration-count: 1;
-                -webkit-animation-timing-function: linear; 
-            }
-            @-webkit-keyframes anim-move-bottom-right
-            {
-                0%{
-                    -webkit-transform: translate(500px, 500px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-right
-            {
-                0%{
-                    -webkit-transform: translate(500px, 0px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-left
-            {
-                0%{
-                -webkit-transform: translate(-500px, 0px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-top
-            {
-                0%{
-                    -webkit-transform: translate(0px, -500px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-bottom
-            {
-                0%{
-                    -webkit-transform: translate(0px, 500px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-top-left
-            {
-                0%{
-                    -webkit-transform: translate(-500px, -500px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-top-right
-            {
-                0%{
-                    -webkit-transform: translate(500px, -500px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-            @-webkit-keyframes anim-move-bottom-left
-            {
-                0%{
-                    -webkit-transform: translate(-500px, 500px); 
-                } 
-                100%{
-                    -webkit-transform: translate(0px, 0px); 
-                }
-            }
-
-            
-            @-webkit-keyframes scale{
-                /* 宽会是双倍，而高度保持不变 */ 
-                0%{ -webkit-transform: scale(1, 1);}
-                50%{
-                    -webkit-transform: scale(1.4, 1.4); 
-                }
-                100%{
-                    -webkit-transform: scale(1, 1); 
-                }
-            }
-            @-webkit-keyframes leftRotate{
-                0%{ -webkit-transform: rotate(360deg);}
-                25%{
-                    -webkit-transform: rotate(240deg);
-                }
-                75%{
-                    -webkit-transform: rotate(120deg);
-                }
-                100%{
-                    -webkit-transform: rotate(0deg);
-                }
-            }
-            @-webkit-keyframes rightRotate{
-                0%{ -webkit-transform: rotate(0deg);}
-                25%{-webkit-transform: rotate(120deg);}
-                75%{-webkit-transform: rotate(240deg);}
-                100%{-webkit-transform: rotate(360deg);}
-            }
-            @-webkit-keyframes x-spin {
-                0% { -webkit-transform: rotateX(0deg); } 
-                50% { -webkit-transform: rotateX(180deg); }
-                100% { -webkit-transform: rotateX(360deg); } 
-            }
-            @-webkit-keyframes y-spin { 
-                0% { -webkit-transform: rotateY(0deg); } 
-                50% { -webkit-transform: rotateY(180deg); }
-                100% { -webkit-transform: rotateY(360deg); } 
-            }
+ .anim-scale{-webkit-transform-style:preserve-3d;-webkit-animation-name:scale;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-xSpin{-webkit-transform-style:preserve-3d;-webkit-animation-name:x-spin;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-ySpin{-webkit-transform-style:preserve-3d;-webkit-animation-name:y-spin;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-rightRotate{-webkit-transform-style:preserve-3d;-webkit-animation-name:rightRotate;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-leftRotate{-webkit-transform-style:preserve-3d;-webkit-animation-name:rightRotate;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}@-webkit-keyframes scale{0%{-webkit-transform:scale(1,1)}50%{-webkit-transform:scale(1.4,1.4)}100%{-webkit-transform:scale(1,1)}}@-webkit-keyframes leftRotate{0%{-webkit-transform:rotate(0deg)}50%{-webkit-transform:rotate(-180deg)}100%{-webkit-transform:rotate(-360deg)}}@-webkit-keyframes rightRotate{0%{-webkit-transform:rotate(0deg)}50%{-webkit-transform:rotate(180deg)}100%{-webkit-transform:rotate(360deg)}}@-webkit-keyframes x-spin{0%{-webkit-transform:rotateX(0deg)}50%{-webkit-transform:rotateX(180deg)}100%{-webkit-transform:rotateX(360deg)}}@-webkit-keyframes y-spin{0%{-webkit-transform:rotateY(0deg)}50%{-webkit-transform:rotateY(180deg)}100%{-webkit-transform:rotateY(360deg)}}.anim-move-top{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-top;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-bottom{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-bottom;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-top-left{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-top-left;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-top-right{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-top-right;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-bottom-left{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-bottom-left;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-bottom-right{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-bottom-right;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-scale{-webkit-transform-style:preserve-3d;-webkit-animation-name:scale;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-xSpin{-webkit-transform-style:preserve-3d;-webkit-animation-name:x-spin;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-ySpin{-webkit-transform-style:preserve-3d;-webkit-animation-name:y-spin;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-rightRotate{-webkit-transform-style:preserve-3d;-webkit-animation-name:rightRotate;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-leftRotate{-webkit-transform-style:preserve-3d;-webkit-animation-name:rightRotate;-webkit-animation-duration:2s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-left{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-left;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}.anim-move-right{-webkit-transform-style:preserve-3d;-webkit-animation-name:anim-move-right;-webkit-animation-duration:0.5s;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear}@-webkit-keyframes anim-move-bottom-right{0%{-webkit-transform:translate(500px,500px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-right{0%{-webkit-transform:translate(500px,0px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-left{0%{-webkit-transform:translate(-500px,0px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-top{0%{-webkit-transform:translate(0px,-500px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-bottom{0%{-webkit-transform:translate(0px,500px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-top-left{0%{-webkit-transform:translate(-500px,-500px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-top-right{0%{-webkit-transform:translate(500px,-500px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes anim-move-bottom-left{0%{-webkit-transform:translate(-500px,500px)}100%{-webkit-transform:translate(0px,0px)}}@-webkit-keyframes scale{0%{-webkit-transform:scale(1,1)}50%{-webkit-transform:scale(1.4,1.4)}100%{-webkit-transform:scale(1,1)}}@-webkit-keyframes leftRotate{0%{-webkit-transform:rotate(360deg)}25%{-webkit-transform:rotate(240deg)}75%{-webkit-transform:rotate(120deg)}100%{-webkit-transform:rotate(0deg)}}@-webkit-keyframes rightRotate{0%{-webkit-transform:rotate(0deg)}25%{-webkit-transform:rotate(120deg)}75%{-webkit-transform:rotate(240deg)}100%{-webkit-transform:rotate(360deg)}}@-webkit-keyframes x-spin{0%{-webkit-transform:rotateX(0deg)}50%{-webkit-transform:rotateX(180deg)}100%{-webkit-transform:rotateX(360deg)}}@-webkit-keyframes y-spin{0%{-webkit-transform:rotateY(0deg)}50%{-webkit-transform:rotateY(180deg)}100%{-webkit-transform:rotateY(360deg)}}
         </style>
         <style type="text/css">
-            body{
-            }
-            #slider-preview{
-                position: relative;
-                margin: auto;
-                -webkit-box-shadow:0px 0px 24px #CCC;
-                background-color: #EEE;
-                overflow: hidden;
-                -webkit-border-radius:20px;
-            }
-            #code{
-                position: absolute;
-                top: -30px;
-                left: 355px;
-                width: 80px;
-                height: 50px;
-                color: white;
-                font-size: 30px;
-                text-align: center;
-                padding-top: 30px;
-                background-color: #100;
-                opacity:0.8;
-                z-index: 999;
-                -webkit-border-radius:70px;
-            }
-            .slider{
-                position: relative;
-                height: 100%;
-                width: 100%;
-            }
+    body{padding: 0;margin: 0;overflow: auto;}
+    #slider-preview{position: absolute;-webkit-box-shadow: 0px 0px 24px #CCC;overflow: hidden;}
+    #code{width: 80px!important;border-radius: 0!important;}
+    .slider{position: relative;height: 100%;width: 100%;}
+    #operation {display: -webkit-box;opacity: 0.1;position: fixed;margin: auto;width: 230px;bottom: 0;right: 0;z-index: 999;}
+    #operation:hover {opacity: 1;}
+    #operation div:first-child {border-top-right-radius: 0;border-bottom-right-radius: 0;}
+    #operation div:last-child {border-top-left-radius: 0;border-bottom-left-radius: 0;}
+    .btn{cursor: pointer;font-size: 20px;font-weight: 900;border-radius: 5px;height: 30px;width:60px;text-align: center;background-color: cornflowerblue;color: white;line-height: 30px;padding: 5px;}
+    .btn:hover{background-color: steelblue}
+    .increase {}
+    .reduce {}
         </style>
     </head>
     <body>
-        <div id="slider-preview">
-            <div id="code"></div>
-        </div>
+<div id='operation'><div class="increase btn">放大</div><div id="code" class="btn"></div><div class='reduce btn'>缩小</div></div>
+<div id="slider-preview">
+</div>
 -->
         </div>
         <div style='display:none' id='footer'>
             <!--
-        <script type="text/javascript">
-            (function(){
-                var canvas = document.getElementById("slider-preview"),code = document.getElementById("code"),
-                sliders = {};
-                var height = canvas.style.height;
-                var h = parseInt(height.substr(0, height.length-2));
-                canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
-                var targetSlider = null;
-                var datajson = document.getElementById('datajson').innerHTML,
-                    datas = JSON.parse(datajson),
-                    DATA = JSON.parse(datas.cntData),
-                    conf = datas.cntConf;
-                var showPenel = document.getElementById('slider-preview');
-                showPenel.style.height = conf.height;
-                showPenel.style.width = conf.width;
-                var module = {
-                    init:function(){
-                        for(var s in DATA){
-                            if(DATA.hasOwnProperty(s)){
-                                var slider = document.createElement("DIV"),elements = DATA[s].element;
-                                slider.className = "slider "+DATA[s].anim;
-                                sliders[s] = slider;
-                                slider.style.display = "none";
-                                for (var e in elements) {
-                                    if(elements.hasOwnProperty(e)){
-                                        var data = elements[e],elem;
-                                        if(data.type=="DIV"){
-                                            elem = document.createElement("DIV");
-                                            elem.innerHTML = decodeURIComponent(data.value);
-                                            elem.setAttribute("style", data.cAttr+data.eAttr);
-                                            elem.style.zIndex = data.zIndex;
-                                        }
-                                        else if(data.type=="IMG"){
-                                            elem = new Image();
-                                            elem.src = data.value;
-                                            elem.setAttribute("style", data.cAttr);
-                                            elem.style.zIndex = data.zIndex;
-                                        }
-                                        if(elem) slider.appendChild(elem);
-                                    }
+<script type="text/javascript">
+    (function(){
+        var canvas = document.getElementById("slider-preview"),code = document.getElementById("code"),
+        sliders = {};
+        var height = canvas.style.height;
+        var h = parseInt(height.substr(0, height.length-2));
+        canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
+        var targetSlider = null;
+        var datajson = document.getElementById('datajson').innerHTML,
+            datas = JSON.parse(datajson),
+            DATA = JSON.parse(datas.cntData),
+            conf = datas.cntConf;
+        var showPenel = document.getElementById('slider-preview');
+        showPenel.style.height = conf.height;
+        showPenel.style.width = conf.width;
+        var module = {
+            init:function(){
+                for(var s in DATA){
+                    if(DATA.hasOwnProperty(s)){
+                        var slider = document.createElement("DIV"),elements = DATA[s].element;
+                        slider.className = "slider "+DATA[s].anim;
+                        sliders[s] = slider;
+                        slider.style.display = "none";
+                        for (var e in elements) {
+                            if(elements.hasOwnProperty(e)){
+                                var data = elements[e],elem;
+                                if(data.type=="DIV"){
+                                    elem = document.createElement("DIV");
+                                    elem.innerHTML = decodeURIComponent(data.value);
+                                    elem.setAttribute("style", data.cAttr+data.eAttr);
+                                    elem.style.zIndex = data.zIndex;
                                 }
-                                canvas.appendChild(slider);
+                                else if(data.type=="IMG"){
+                                    elem = new Image();
+                                    elem.src = data.value;
+                                    elem.setAttribute("style", data.cAttr);
+                                    elem.style.zIndex = data.zIndex;
+                                }
+                                if(elem) slider.appendChild(elem);
                             }
                         }
-                        module.setTarget(sliders.get(1));
-                    },
-                    start:function(){
-                        module.init();
-                        module.keyOn();
-                    },
-                    setTarget:function(newTar){
-                        var className;
-                        if(targetSlider&&sliders[targetSlider]) {
-                            sliders[targetSlider].style.display = "none";
-                        }
-                        targetSlider = newTar;
-                        code.innerHTML = sliders.findIndex(targetSlider)+"/"+sliders.length();
-                        className = sliders[targetSlider].className;
-                        sliders[targetSlider].style.display = "block";
-                        window.setTimeout(function(){
-                            sliders[targetSlider].className = className;
-                        });
-                    },
-                    keyOn:function(){
-                        window.addEventListener("keyup",function(event){
-                            if(event.keyCode ==37||event.keyCode ==38) module.preSlider(); 
-                            else if(event.keyCode==39||event.keyCode ==40) module.nextSlider(); 
-                        });
-                    },
-                    preSlider:function(){
-                        var index = sliders.findIndex(targetSlider),tar = sliders[targetSlider],newTar;
-                        if(index==1) {
-                            alert("It is the first slider !");
-                            return;
-                        }
-                        newTar = sliders.get(index-1);
-                        module.setTarget(newTar);
-                    },
-                    nextSlider:function(){
-                        var index = sliders.findIndex(targetSlider),length = sliders.length(),newTar;
-                        if(index==length) {
-                            alert("It is the last slider !");
-                            return;
-                        }
-                        newTar = sliders.get(index+1);
-                        module.setTarget(newTar);
+                        canvas.appendChild(slider);
                     }
-                };
-                module.start();
-            }());
-        </script>
+                }
+                module.setTarget(sliders.get(1));
+            },
+            start:function(){
+                module.init();
+                module.keyOn();
+            },
+            setTarget:function(newTar){
+                var className;
+                if(targetSlider&&sliders[targetSlider]) {
+                    sliders[targetSlider].style.display = "none";
+                }
+                targetSlider = newTar;
+                code.innerHTML = sliders.findIndex(targetSlider)+"/"+sliders.length();
+                className = sliders[targetSlider].className;
+                sliders[targetSlider].style.display = "block";
+                window.setTimeout(function(){
+                    sliders[targetSlider].className = className;
+                });
+            },
+            keyOn:function(){
+                window.addEventListener("keyup",function(event){
+                    if(event.keyCode ==37||event.keyCode ==38) module.preSlider(); 
+                    else if(event.keyCode==39||event.keyCode ==40) module.nextSlider(); 
+                });
+                document.querySelector('#slider-preview').onclick = function (e) {
+                    module.nextSlider(); 
+                    return false;
+                }
+            },
+            preSlider:function(){
+                var index = sliders.findIndex(targetSlider),tar = sliders[targetSlider],newTar;
+                if(index==1) {
+                    alert("It is the first slider !");
+                    return;
+                }
+                newTar = sliders.get(index-1);
+                module.setTarget(newTar);
+            },
+            nextSlider:function(){
+                var index = sliders.findIndex(targetSlider),length = sliders.length(),newTar;
+                if(index==length) {
+                    alert("It is the last slider !");
+                    return;
+                }
+                newTar = sliders.get(index+1);
+                module.setTarget(newTar);
+            }
+        };
+        module.start();
+    }());
+</script>
+<script type="text/javascript">
+var tar = document.querySelector('#slider-preview'),
+    defaultScale = 'scale(1)',
+    scaleName = 'WebkitTransform';
+
+var eH,
+    eW,
+    sH,
+    sW,
+    x,
+    y;
+document.onselectstart = function () {
+    return false;
+}
+function getSize () {
+    eH = tar.clientHeight ;
+    eW = tar.clientWidth;
+    sH = document.height;
+    sW =document.width;
+    x = (sW -eW)/2;
+    y = (sH - eH)/2;
+}
+function setPosition () {
+    tar.style.top = y + 'px';
+    tar.style.left = x + 'px';
+}
+
+function init() {
+    tar.style.WebkitTransform = defaultScale;
+}
+
+function transScale(value) {
+
+    var number = parseFloat(value.replace(/^scale\(/, '').replace(/\)$/,''));
+    return number;
+}
+function readScale(e) {
+    return e.style[scaleName] || defaultScale;
+}
+function combScale(number) {
+    return 'scale(' + number + ')';
+}
+document.querySelector('.increase').addEventListener('click', function () {
+    tar.style[scaleName] =  combScale( transScale( readScale(tar) ) + 0.05 );
+})
+document.querySelector('.reduce').addEventListener('click', function () {
+    tar.style[scaleName] =  combScale( transScale( readScale(tar) ) - 0.05 );
+})
+window.addEventListener('resize', function () {
+    getSize();
+    setPosition();
+})
+getSize();
+setPosition();
+init();
+</script>
     </body>
     </html>-->
         </div>

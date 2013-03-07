@@ -580,7 +580,6 @@ Core.registerModule("canvas",function(sb){
                 slider["element"] = data;
                 json[m] = slider;
             });
-            alert(json.length());
             datas = {
                 cntConf : {
                     'height' : editorContainer.style.height,
@@ -588,7 +587,6 @@ Core.registerModule("canvas",function(sb){
                 },
                 cntData : json.toJSONString()
             }
-            // alert('length : ' + json.toJSONString().length);
             var stream = JSON.stringify(datas);
             var header = document.querySelector('#header').childNodes,
                 footer = document.querySelector('#footer').childNodes,
@@ -967,7 +965,6 @@ Core.registerModule("canvas",function(sb){
             }
         },
         setStyleAttr:function(params){
-            console.log('=========', params);
             var key = params.key,value = params.value;
             defaultAtt[key] = value;
 

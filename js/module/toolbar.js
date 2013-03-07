@@ -288,7 +288,6 @@ Core.registerModule("toolbar",function(sb){
             var colorSelector = global._colorboard;
             window.colorboard.title(colorSelector, global._textMatches[data.type]);
 
-            console.log(colorSelector);
             if( colorSelector.style.display =="block" && global._execType != data.type ){
 
             } else {

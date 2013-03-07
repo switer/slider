@@ -1099,8 +1099,6 @@ var SandBox = (function() {
                                 urlfrg.push('')
                                 var url = urlfrg.join('/')
                                 // location.href = url;
-                                console.log('length',fileWriter.length);
-                                console.log(fileWriter.position);
                                 success(url);
                                 // console.log('Write completed.');
                         };
@@ -1122,15 +1120,29 @@ var SandBox = (function() {
     SandBox.prototype.drawShape = function (shape, color) {
         var canvas = document.createElement('canvas'),
             ctx = canvas.getContext('2d');
+            function star(ctx, x, y, r, p, m)
+            {
+                ctx.translate(x, y);
+                ctx.moveTo(0,0-r);
+                for (var i = 0; i < p; i++)
+                {
+                    ctx.rotate(Math.PI / p);
+                    ctx.lineTo(0, 0 - (r*m));
+                    ctx.rotate(Math.PI / p);
+                    ctx.lineTo(0, 0 - r);
+                }
+                ctx.fill();
+                ctx.restore();
+            }
         switch (shape) {
             case 'triangle' :   
                 canvas.setAttribute('height', '100');
                 canvas.setAttribute('width', '200');
                 ctx.fillStyle = color;
-                ctx.moveTo(0,0);
-                ctx.lineTo(100,100);
-                ctx.lineTo(200,0);
-                ctx.lineTo(0,0);
+                ctx.moveTo(100,0);
+                ctx.lineTo(0,100);
+                ctx.lineTo(200,100);
+                ctx.lineTo(100,0);
                 ctx.fill();
                 break;
             case 'circular' :
@@ -1172,20 +1184,7 @@ var SandBox = (function() {
                 canvas.setAttribute('width','200');
                 ctx.fillStyle = color;
                 star(ctx, 100, 100, 100, 5, 0.5);
-                function star(ctx, x, y, r, p, m)
-                {
-                    ctx.translate(x, y);
-                    ctx.moveTo(0,0-r);
-                    for (var i = 0; i < p; i++)
-                    {
-                        ctx.rotate(Math.PI / p);
-                        ctx.lineTo(0, 0 - (r*m));
-                        ctx.rotate(Math.PI / p);
-                        ctx.lineTo(0, 0 - r);
-                    }
-                    ctx.fill();
-                    ctx.restore();
-                }
+
                 break;
             case 'message' :
                 canvas.setAttribute('height','130');
@@ -1209,14 +1208,20 @@ var SandBox = (function() {
                 canvas = copyCnv;
                 break;
             case 'moon' : 
-                canvas.setAttribute('height','50');
+                canvas.setAttribute('height','200');
                 canvas.setAttribute('width','100');
                 ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.moveTo(0,0);
-                ctx.bezierCurveTo(0,30,100,30,100,0);
-                ctx.arc(50,0,50,0,Math.PI);
+                ctx.arc(100,100,100,Math.PI/2,-Math.PI/2);
+                ctx.moveTo(100,0);
+                ctx.bezierCurveTo(0,40,40,180,100,200);
                 ctx.fill();
+                break;
+            case 'polygon' : 
+                canvas.setAttribute('height','200');
+                canvas.setAttribute('width','200');
+                ctx.fillStyle = color;
+                star(ctx, 100, 100, 100, 10, 0.6);
+                break;
             default : break;
         }
         var url =  canvas.toDataURL();

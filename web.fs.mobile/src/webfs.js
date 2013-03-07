@@ -71,7 +71,6 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 	/*Public Method*/
 	//create a file
 	function link (filename, cwd, success, error, options) {
-		console.log(options , options && options.override);
 		var type = config.CREATE_ENTRY_OPTIONS;
 		if (options && options.override) type = config.CREATE_OVERRIDE_ENTRY_OPTIONS;
 		cwd.getFile(filename, type, success, error)
@@ -160,7 +159,6 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 			path = path.match(/.*\/$/) ? path : path + '/';
 			path = path.replace(new RegExp('^' + rootPath), './'); 
 			opendir(path, fs.root, function (directoryEntry) {
-				console.log(directoryEntry);
 				writefile(filename, directoryEntry, content, success, error, options)
 			}, error)
 		}, error);
@@ -272,7 +270,6 @@ define('webfs/ui',
 							// window.open(getCwd(container).toURL()+ '/' + $parent.data('path'),'view:file', 'resize=yes,scrollbar=yes,status=yes')
 							window.open(getCwd(container).toURL()+ '/' + $parent.data('path'),'view:file')
 						} catch (e) {
-							console.log(e);
 							window.open(getCwd(container).toURL()+ '/' + $parent.data('path'),'view:file')
 						}
 						
