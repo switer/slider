@@ -901,17 +901,26 @@ Core.registerModule("canvas",function(sb){
             setSettingDefaultAttFunc();
         },
         setSettingDefaultAtt:function(){
-            var i,type,pnumber;
+
+            var i,
+                type,
+                pnumber,
+                attrValue;
+
             for (i = 0;item =  rgbSettingItems[i];i++) {
                 var redSetting = sb.find(".red-setting",item),
-                greenSetting = sb.find(".green-setting",item),
-                blueSetting = sb.find(".blue-setting",item),
-                preview = sb.find(".color-preview",item),
-                rPreview = sb.find(".preview",redSetting),
-                gPreview = sb.find(".preview",greenSetting),
-                bPreview = sb.find(".preview",blueSetting),
-                rgbArr;
+                    greenSetting = sb.find(".green-setting",item),
+                    blueSetting = sb.find(".blue-setting",item),
+                    preview = sb.find(".color-preview",item),
+                    rPreview = sb.find(".preview",redSetting),
+                    gPreview = sb.find(".preview",greenSetting),
+                    bPreview = sb.find(".preview",blueSetting),
+                    rgbArr;
+
                 type = item.getAttribute("data-type");
+                attrValue =   SliderDataSet[currentSlider][rightMenuBtn].container.style[type] || defaultAtt[type];
+                console.log(attrValue, SliderDataSet[currentSlider][rightMenuBtn].container.style[type]);
+                // console.log(defaultAtt[type],sb.subrgb(defaultAtt[type]));
                 if(type=="boxShadow") {
                     var splitArr = defaultAtt[type].split(" ");
                     var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
@@ -920,6 +929,7 @@ Core.registerModule("canvas",function(sb){
                     rgbArr = sb.subrgb(defaultAtt[type]);
                 }
                 if(rgbArr){
+                    
                     var rv = Math.round(rgbArr[0]*100/255),
                     gv = Math.round(rgbArr[1]*100/255),
                     bv = Math.round(rgbArr[2]*100/255);

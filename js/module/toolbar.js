@@ -143,18 +143,25 @@ Core.registerModule("toolbar",function(sb){
                     var tar, optItem,offsetY;
                     tar = event.currentTarget;
 
-                    if(tarApp) {
-                        operation.querySelector("#"+tarApp.id+"-operation").style.display = "none";
-                    } else {
-
-                    }
+                    if( global._tarAppId ) {
+                        operation.querySelector("#" + global._tarAppId + "-operation").style.display = "none";
+                    } 
                     
-                    tarApp = tar;
-                    optItem =operation.querySelector("#"+tar.id+"-operation");
+                   
+                    optItem =operation.querySelector("#" + tar.id + "-operation");
 
-                    operation.style.display = "block";
-                    optItem.style.display = "block";
-                    operation.style.top = (event.currentTarget.offsetTop-22)+"px";
+                    if (global._tarAppId !== tar.id ||
+                         ( global._tarAppId === tar.id && operation.style.display === 'none' ) ) {
+                        operation.style.display = "block";
+                        optItem.style.display = "block";
+                        operation.style.top = (event.currentTarget.offsetTop-22)+"px";
+                    }
+                    else {
+                        operation.style.display = "none";
+                    }
+
+                    global._tarAppId = tar.id;
+                    
 
                     // if(appOptTout!=-1){
                     //     window.clearTimeout(appOptTout);
@@ -276,6 +283,9 @@ Core.registerModule("toolbar",function(sb){
         },
         enterPreviewMode:function(){
             sb.container.style.display = "none";
+            screenBoard.hide(global._screenBoard);
+            $('.colorSelector').css('display', 'none');
+            
         },
         showLink:function(e){
             link.style.display = link.style.display=="none"?"block":"none";

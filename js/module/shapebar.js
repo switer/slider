@@ -25,8 +25,6 @@ Core.registerModule("shapebar", function(sb){
 	
 			})
 
-
-
 			var cb = window.colorboard.create(function (value) {
                 global._chooseColorCallback && global._chooseColorCallback(value);
                 global._chooseColorCallback = null;
