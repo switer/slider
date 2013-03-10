@@ -29,11 +29,11 @@ Core.registerModule("toolbar",function(sb){
             linkValue = sb.find(".link-value",link);
             sb.css(ecd,{
                 display:'none',
-                width:'680px',
                 height:'30px',
                 top:'580px',
                 left:(window.innerWidth-700)+'px'
             });
+            $('.close-menu', ecd).css('top','-10px').css('right','-10px')
             sb.css(link,{
                 display:"none",
                 width:'240px',
@@ -41,7 +41,7 @@ Core.registerModule("toolbar",function(sb){
                 top:(sb.subPX(ecd.style.top)-50)+"px",
                 left:(sb.subPX(ecd.style.left)-260)+"px"
             });
-            sb.resizeRB(ecdresize, ecd);
+            // sb.resizeRB(ecdresize, ecd);
             sb.move(ecdmove,ecd);
             sb.listen({
                 "showLink":this.showLink,
@@ -116,28 +116,7 @@ Core.registerModule("toolbar",function(sb){
                     return false;
                 }
             }
-            // //设定操作菜单在鼠标离开时自动隐藏
-            // operation.addEventListener("mouseout", function(e){
-            //     appOptTout = window.setTimeout(function(){
-            //         if(tarApp){
-            //             var optItem =operation.querySelector("#"+tarApp.id+"-operation");
-            //             optItem.style.display = "none";
-            //         }
-            //         operation.style.display = "none";
-            //         appOptTout = -1;
-            //     }, 3000);
-            // }, false);
-            // //取消操作菜单在鼠标over时自动隐藏
-            // operation.addEventListener("mouseover", function(e){
-            //     operation.style.display = "block";
-            //     if(tarApp){
-            //         var optItem =operation.querySelector("#"+tarApp.id+"-operation");
-            //         optItem.style.display = "block";
-            //     }
-            //     window.clearTimeout(appOptTout);
-            //     appOptTout = -1;
-            // }, false);
-            //初始化工具条工具的子操作菜单
+
             for (i = 0; item = appDetailItems[i]; i++) {
                 item.addEventListener("click", function(event){
                     var tar, optItem,offsetY;
@@ -162,24 +141,9 @@ Core.registerModule("toolbar",function(sb){
 
                     global._tarAppId = tar.id;
                     
-
-                    // if(appOptTout!=-1){
-                    //     window.clearTimeout(appOptTout);
-                    // }
-                    // appOptTout = window.setTimeout(function(){
-                    //     operation.style.display = "none";
-                    //     optItem.style.display = "none";
-                    //     appOptTout = -1;
-                    // }, 3000);
                 },false);
             }
 
-            function _showItem (item) {
-
-            }
-            function _hideItem () {
-
-            }
             //初始化工具子菜单的点击事件
             for (i = 0; item =  operationSubMenuItems[i]; i++) {
                 item.onclick = function(e){
@@ -189,6 +153,8 @@ Core.registerModule("toolbar",function(sb){
                         type:notify,
                         data:param
                     });
+                    $(e.target).parent().css('display', 'none')
+                    $(e.target).parent().parent().css('display', 'none')
                 }
             }
             enterPreviewMode.onclick = function(){
@@ -204,6 +170,14 @@ Core.registerModule("toolbar",function(sb){
                 });
                 addImageApp.innerHTML = "<input type='file' id='addImageInp'/>";
             };
+            $('#tool-addVideo').on('change', function(){
+                sb.notify({
+                    type:"addVideo",
+                    data:sb.find("#addVideoInp")
+                });
+                $('#tool-addVideo').html( "<input type='file' id='addVideoInp'/>" );
+            });
+            
             $('#tool-import').on('change', function () {
                 sb.notify ({
                     type: "onImportSlider",
@@ -222,6 +196,13 @@ Core.registerModule("toolbar",function(sb){
                 $sb.css('top', e.clientY + 'px');
                 screenBoard.toggle(global._screenBoard);
             })
+
+            $("#tool-addCode").on('click', function () {
+                sb.notify({
+                    type : 'addCode',
+                    data : null
+                });
+            });
 
             addTextApp.onclick = function(){
                 sb.notify({
@@ -251,6 +232,7 @@ Core.registerModule("toolbar",function(sb){
             //颜色取色板
             var cb = window.colorboard.create(function (value) {
                 document.execCommand(global._execType,false, value);
+                $(global._colorboard).css('display', 'none')
             })
             document.body.appendChild(cb);
             global._colorboard = cb;

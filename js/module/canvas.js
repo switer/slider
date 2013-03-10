@@ -26,7 +26,8 @@ Core.registerModule("canvas",function(sb){
         canvasY = 600;
 
     var editor = null,newContainerFunc=null,data_number=0,item,viewY = 80,header=20,isEditor = false,
-    sliders = new sb.ObjectLink(),currentSlider = null,slider_count = 0,slider_number = 0,editorElem = null,
+    sliders = new sb.ObjectLink(),currentSlider = null,slider_count = 0,slider_number = 0,
+    // editorElem = null,
     createSliderFunc=null,addSliderElementFunc = null,addSliderObjectFunc = null,moveInter = -1,curKeycode = -1,
     SliderDataSet=new sb.ObjectLink(),zIndex_Number = 0,elementSet = new sb.ObjectLink(),editorContainer,
     eom=null,easm = null,eomTout=-1,target = null,elementOpertateFunc = null,cancelElementOperateMenuFunc =null,
@@ -258,7 +259,9 @@ Core.registerModule("canvas",function(sb){
                 "enterEditorMode":this.enterEditorMode,
                 "enterSaveFile":this.enterSaveFile,
                 "addImage":this.addImage,
+                "addVideo" : this.addVideo,
                 "addText":this.addText,
+                "addCode":this.addCode,
                 "addSlider":this.createSlider,
                 "changeSlider":this.changeSlider,
                 "deleteSlider":this.deleteSlider,
@@ -468,6 +471,14 @@ Core.registerModule("canvas",function(sb){
                                     value : data.value
                                 }
                             });
+                        } 
+                        else if (data.type === "VIDEO") {
+                            global._addVideElement(data.value, {
+                                isPaste : true,
+                                eAttr : data.eAttr,
+                                cAttr : data.cAttr,
+                                value : data.value
+                            })
                         }
                     }
                     if (slider.imgCount === 0) {
@@ -569,9 +580,17 @@ Core.registerModule("canvas",function(sb){
                     e.cAttr = b["container"].getAttribute("style");
                     e.eAttr = b["data"].getAttribute("style");
                     e.zIndex = b["zIndex"];
-                    e.value = b["data"].src|| encodeURIComponent(b["data"].innerHTML);
+                    //img.src||video-srouce.src||textbox.src
+                    e.value = b["data"].src || $(b["data"]).find('.video-source').attr('src') || encodeURIComponent(b["data"].innerHTML);
                     if(e.type=="IMG"){
                         e.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
+                    }
+                    if (e.type === 'CODE') {
+                        //code mirror
+                        var doc =  b['file'].getDoc();
+                        e.value = doc.getValue();
+                        e.codeType = doc.getMode().name
+                        console.log('++++++++++++++++' ,e.mode);
                     }
                     data[n] = e;
                 });
@@ -590,6 +609,8 @@ Core.registerModule("canvas",function(sb){
             var stream = JSON.stringify(datas);
             var header = document.querySelector('#header').childNodes,
                 footer = document.querySelector('#footer').childNodes,
+                scripts = '<script type="text/javascript">' + $("#scripts").html() + '</script>',
+                cmTheme = '<script type="text/javascript">' + $("#cmTheme").html() + '</script>',
                 comment;
             for(var i = header.length-1; i >= 0; i--) {
                 if(header[i].nodeType == 8){
@@ -607,7 +628,7 @@ Core.registerModule("canvas",function(sb){
 
             sb.notify({
                 type : "preSave",
-                data : headerHtml.data + dataHtml + footerHtml.data
+                data : headerHtml.data + dataHtml + scripts + cmTheme + footerHtml.data
             });
 
             // //一般localstorage容量不会超过5M
@@ -724,6 +745,57 @@ Core.registerModule("canvas",function(sb){
             else if(method=="append") container.appendChild(elem);
             else Core.log("wrong insert slider-Element method!");
         },
+        _addVideoConfig : function  (container, video, options) {
+                video.setAttribute("draggable", false);
+                $(video).addClass('normalelement');
+                var partSize = 6,
+                    dataID;
+                // sb.move(container, container);
+
+                if (options && options.isPaste) { //元素粘贴
+                    $(container).attr('style', options.cAttr);
+                } 
+                else 
+                    $(container).attr("style", "position:absolute;z-index:1;left:0px;top:0px;");
+                container.appendChild(video);
+                editor.appendChild(container);
+                var dataID = global._insetIntoDataset(container, video, null);
+                elementOpertateFunc(dataID, container, container);
+                return dataID;
+        },
+        _addVideElement : function (dataUrl, options) {
+            var video = document.createElement('video');
+                src = document.createElement('source');
+                preCont = document.createElement('div'),
+                isPaste = options && options.isPaste;
+            $(video).attr('controls', true).append(src);
+            $(src).attr('type','video/mp4').attr('src', dataUrl).addClass('video-source');
+            
+            var dataId = global._addVideoConfig(preCont, video, options);
+            $(video).on('loadedmetadata', function () {
+                var sizeObj = {
+                    height  : video.clientHeight,
+                    width   : video.clientWidth
+                    }
+                    , partSize = 6
+                    , con_obj=null
+                    , type = null;
+                
+                sizeObj = sb.fixedImgSize(sizeObj,canvasX,canvasY);
+
+                newContainerFunc(sizeObj, partSize, null, {
+                    'container' : preCont,
+                    'type' : type,
+                    'isFixedSize' : !isPaste
+                });
+                video.style.height = '100%';
+                video.style.width = '100%';
+                options && options.callback && options.callback.call(global, dataId);
+            })
+        },
+        addVideo : function (fileInp) {
+            sb.readFileData(fileInp, global._addVideElement);
+        },
         addImage:function(obj, callback){
             var img = null,file;
             var preCont = document.createElement('div');
@@ -744,7 +816,6 @@ Core.registerModule("canvas",function(sb){
             //添加图片
             else {
                 img = sb.addImage(obj);
-                var img2 = sb.readAsDataURL(obj);
                 file = obj.files.item(0);
             }
             if(!img) {
@@ -776,7 +847,7 @@ Core.registerModule("canvas",function(sb){
                 var panel = document.createElement("div");
                 panel.className = "element-panel";
                 if (obj.pAttr) {
-                    $(panel).attr(obj.pAttr);
+                    $(panel).attr('style', obj.pAttr);
                 }
                 else {
                     sb.css(panel, {
@@ -799,27 +870,12 @@ Core.registerModule("canvas",function(sb){
                     container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
                 }
 
-                data_number++;
-                zIndex_Number++;
-                cur = SliderDataSet[currentSlider];
-                maxZIndexElem =cur.getLastElement();
-                maxZIndex = maxZIndexElem==null?1:cur[maxZIndexElem]["zIndex"]+1;
-                
-                container.style.zIndex = maxZIndex;
                 container.appendChild(img);
                 container.appendChild(panel);
-
                 editor.appendChild(container);
-                dataID = "data"+data_number;
-                elementSet[dataID] = {
-                    container:container,
-                    data:img,
-                    zIndex:maxZIndex,
-                    file:file
-                }
-                SliderDataSet[currentSlider][dataID] = elementSet[dataID];
-                SliderDataSet[currentSlider].sortBy("zIndex");
-                elementOpertateFunc(dataID,container, container);
+
+                var dataID = global._insetIntoDataset(container, img, file);
+                elementOpertateFunc(dataID, container, container);
                 return dataID;
             }
 
@@ -830,13 +886,12 @@ Core.registerModule("canvas",function(sb){
                 height:200,
                 width:500
             };
-            var partSize = 6,dataID,maxZIndexElemID,maxZIndex;
+            var partSize = 6,dataID;
             var textBox = document.createElement("div");
             textBox.className = "textboxelement";
             var con_obj = newContainerFunc(obj, partSize,textBox);
-            var container = con_obj.container,cur;
-            data_number++;
-            zIndex_Number++;
+            var container = con_obj.container;
+
             if(textObj["paste"]){
                 container.setAttribute("style", textObj["attr"]);
                 textBox.setAttribute("style", textObj["elemAttr"]);
@@ -845,12 +900,16 @@ Core.registerModule("canvas",function(sb){
                 container.setAttribute("style", "position:absolute;left:"+((canvasX-obj.width)/2)+"px;top:"+((canvasY-obj.height)/2)+"px;");
                 textBox.setAttribute("style", "height:"+obj.height+"px;width:"+obj.width+"px;overflow:hidden;");
             }
+            container.style.zIndex = global._getMaxZIndex(currentSlider);
+
             textBox.setAttribute("contenteditable", "true");
             container.appendChild(textBox);
             editor.appendChild(container);
             textBox.focus();
             isEditor = true;
-            editorElem = textBox;
+            // editorElem = textBox;
+
+
             document.onselectstart = function(){
                 return true;
             }
@@ -860,26 +919,90 @@ Core.registerModule("canvas",function(sb){
                 }
                 if(!isEditor) isEditor = true;
             }
-            textBox.onblur = function(e){
+            $(textBox).on('blur', function(e){
                 document.onselectstart = function(){
                     return false;
                 }
                 isEditor = false;
-            }
-            dataID = "data"+data_number;
-            cur = SliderDataSet[currentSlider];
+            });
+            dataID = global._insetIntoDataset(container, textBox)
+            elementOpertateFunc(dataID,con_obj.container,con_obj.container);
+            return dataID;
+        },
+
+        addCode : function () {
+            var textArea = document.createElement('code'),
+                codeWrap = document.createElement('code'),
+                partSize = 6,
+                containerDatas = newContainerFunc({
+                    "height"  : 400,
+                    "width"   : 500
+                }, partSize, null, {
+                    "isFixedSize" : true
+                });
+            $(textArea).attr("contenteditable", "true").css({
+                height : "100%",
+                width : "100%",
+                position : 'relative'
+            })
+            $(codeWrap).css({
+                height  : '100%',
+                width   : '100%',
+                position : 'absolute'
+            }).addClass('normalelement');
+
+            codeWrap.appendChild(textArea)
+            containerDatas.container.appendChild(codeWrap);
+            containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
+            editor.appendChild(containerDatas.container)
+            
+
+            var codeMirror = CodeMirror(textArea, {
+                                  value: 'function () {}',
+                                  mode:  "javascript",
+                                  lineNumbers  : true,
+                                  lineWrapping  : true //长行换行，不滚动
+                                });
+
+            codeMirror.on('focus', function () {
+                if(!isEditor) isEditor = true;
+            });
+            codeMirror.on('blur', function () {
+                isEditor = false;
+            });
+            console.log(codeMirror.getDoc().getMode())
+            var dataId = global._insetIntoDataset(containerDatas.container, codeWrap, codeMirror);
+            elementOpertateFunc(dataId, containerDatas.container, containerDatas.container);
+        },
+
+        _getMaxZIndex : function (curSlider) {
+            var cur = SliderDataSet[currentSlider];
             maxZIndexElemID = cur.getLastElement();
-            maxZIndex = maxZIndexElemID==null?1:cur[maxZIndexElemID]["zIndex"]+1;
+            return (maxZIndexElemID == null ? 1 : cur[maxZIndexElemID]["zIndex"] + 1);
+        },
+        _insetIntoDataset : function (container, subElem, file) {
+            var dataID,
+                maxZIndex;
+
+            data_number ++;
+            zIndex_Number ++;
+
+            dataID = "data" + data_number; ///当前元素的序号
+
+            maxZIndex = global._getMaxZIndex(currentSlider);
+
             container.style.zIndex = maxZIndex;
+
             elementSet[dataID] = {
-                container:container,
-                data:textBox,
-                zIndex:maxZIndex,
-                file:null
-            };
+                "container" : container,
+                "data"      : subElem,
+                "zIndex"    : maxZIndex,
+                "file"      : file
+            }
+
             SliderDataSet[currentSlider][dataID] = elementSet[dataID];
             SliderDataSet[currentSlider].sortBy("zIndex");
-            elementOpertateFunc(dataID,con_obj.container,con_obj.container);
+            
             return dataID;
         },
         elemAttrSetting:function(e){
@@ -919,7 +1042,6 @@ Core.registerModule("canvas",function(sb){
 
                 type = item.getAttribute("data-type");
                 attrValue =   SliderDataSet[currentSlider][rightMenuBtn].container.style[type] || defaultAtt[type];
-                console.log(attrValue, SliderDataSet[currentSlider][rightMenuBtn].container.style[type]);
                 // console.log(defaultAtt[type],sb.subrgb(defaultAtt[type]));
                 if(type=="boxShadow") {
                     var splitArr = defaultAtt[type].split(" ");
@@ -1106,13 +1228,14 @@ Core.registerModule("canvas",function(sb){
             if(copyElem&&elementSet[copyElem]){
                 var pasteElem = elementSet[copyElem];
                 var container = pasteElem.container,data = pasteElem.data,
-                value = data.src||data.innerHTML;
+                value = data.src || data.innerHTML;
+                data.tagName === 'VIDEO' && ( value = $('.video-source', data).attr('src') );
                 copyParams = {
-                    paste:true,
-                    type:data.tagName,
-                    value:value,
-                    attr:container.getAttribute("style"),
-                    elemAttr:data.getAttribute("style")
+                    paste   : true,
+                    type    : data.tagName,
+                    value   : value,
+                    attr    : container.getAttribute("style"),
+                    elemAttr: data.getAttribute("style")
                 };
             }
         },
@@ -1128,6 +1251,17 @@ Core.registerModule("canvas",function(sb){
                 else if(copyParams["type"]=="DIV") {
                     var textElementId = addTextFunc(copyParams);
                     global.setSelect(textElementId);
+                }
+                else if (copyParams["type"] === 'VIDEO') {
+                    global._addVideElement (copyParams.value, {
+                        eAttr   : copyParams.elemAttr,
+                        cAttr   : copyParams.attr,
+                        isPaste : true,
+                        type    : copyParams.type,
+                        callback : function (dataId) {
+                            global.setSelect(dataId);
+                        }
+                    });
                 }
                 
             }
@@ -1193,7 +1327,6 @@ Core.registerModule("canvas",function(sb){
                 return;
             }
             target = elemID;
-
             var container = elementSet[target].container;
             sb.addClass(container, "element-select");
             var elements = sb.query(".element-container-apart", elementSet[target].container);
@@ -1300,7 +1433,7 @@ Core.registerModule("canvas",function(sb){
             elem.style.left = (event.screenX+offsetX)+"px";
             elem.style.top = (event.screenY+offsetY)+"px";
         },
-        createElementContainer:function(sizeObj,partSize,elem, options){
+        createElementContainer:function(sizeObj, partSize, elem, options){
             /*
              * names:con_e container:east
              *      con_w container:west

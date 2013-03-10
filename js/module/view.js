@@ -297,6 +297,7 @@ Core.registerModule("view",function(sb){
                         elem.style.borderWidth = parseInt(parseInt(borderWidth.substr(0,borderWidth.length-2))/VIEWSCALE+0.5)+"px";
                     }
                     elem.style.zIndex = data[a].zIndex;
+                    console.log('preview data : ' + data[a].type);
                     if(data[a].type=="IMG"){
                         var img = new Image();
                         var panel = sb.create("div");
@@ -325,8 +326,13 @@ Core.registerModule("view",function(sb){
                         elem.className = "textCon";
                         elem.appendChild(text);
                         elem.style.overflow = "hidden";
-                    }else{
-                        Core.log("unsupport type :"+data[a].type);
+                    } 
+                    else if (data[a].type === 'VIDEO') {
+                        $(elem).css('backgroundColor', 'black').addClass('video-play'); 
+                    }
+                    else{
+
+                        console.log("unsupport type :" + data[a].type);
                     }
                     frames[frame].appendChild(elem);
                 }

@@ -31,13 +31,12 @@
     -moz-animation-timing-function: linear; 
 }*/
 #execCommand-detail{
-    
     display: none;
     position: absolute;
     padding: 5px 0px;
     z-index: 999;
-    overflow: hidden;
-
+    width:  auto;
+    padding: 10px;
 }
 
 #stylebar .show_execCommandDetail{
@@ -53,14 +52,19 @@
     cursor: se-resize;
 }
 #execCommand-detail .move{
-    float: left;
-    margin-left: 5px;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
     background-image: url("../img/move.png");
     background-repeat: no-repeat;
     background-position: center;
     cursor: move;
+    position: absolute;
+    top: -10px;
+    left: -15px;
+    border: 1px solid black;
+    border-radius: 50%;
+    background-size: 20px;
+    background-color: white;
 }
 .execCommand-item{
 
@@ -78,7 +82,9 @@
     background-repeat: no-repeat;
     -webkit-box-shadow:0px 0px 4px blue;
     display: block;
+
 }
+select.execC-but {-webkit-appearance:button;width: auto!important;}
 .execC-but:hover{
     -webkit-box-shadow:0px 0px 8px black;
 }

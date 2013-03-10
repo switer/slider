@@ -103,3 +103,4 @@ input{
 .cf:before, .cf:after {content:"";display:table;}
 .cf:after {clear:both;}
 .cf {zoom:1;}
+.video-play {background-image: url(../img/video_play.png);background-repeat: no-repeat;background-size: 50%;background-position: center;}

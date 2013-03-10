@@ -407,6 +407,19 @@ var SandBox = (function() {
         }
         return null;
     };
+    SandBox.prototype.readFileData = function(obj, callback){
+        var _this =this;
+        if(obj && obj.files){
+            var reader = new FileReader();
+            reader.onerror = function(e){
+                Core.log(e.message);
+            }
+            reader.readAsDataURL(obj.files.item(0));
+            reader.onload = function(){
+                callback && callback.call(_this, reader.result) ;
+            };
+        }
+    };
     SandBox.prototype.subrgb = function(rgb){
         var indexA,indexB,numstr,numStrArr,numArr = [],item;
         indexA = rgb.indexOf("(");

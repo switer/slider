@@ -74,20 +74,24 @@
 .element-container .textboxelement:hover{
     -webkit-box-shadow:0px 0px 10px blue;
 }
+.element-container .textboxelement {
+    word-break: break-all;
+}
 .element-container .element-panel{
 
     cursor:move;
 
 }
-.element-select .imgelement,.element-select .textboxelement{
+.element-select .imgelement,.element-select .textboxelement,.element-select .normalelement{
     /*    border:2px solid gray;*/
     -webkit-box-shadow:0px 0px 0px 6px rgba(0,0,0,0.1);
 
 }
-.element-container-apart-move{
+.element-container-apart-move {
     position: absolute;
     cursor: move;
     opacity: 0;
+    z-index: 10;
 }
 /*.element-select:hover{
 
@@ -104,6 +108,7 @@
 
 .element-container-apart{
     position:absolute;
+    z-index: 11;
     /*    opacity:0;*/
 }
 /*.element-container-apart:hover{

@@ -69,8 +69,8 @@
 }
 .tool-app{
     position: relative;
-    width: 45px;
-    height: 45px;
+    width: 44px;
+    height: 44px;
     -webkit-border-radius:10px;
     -webkit-box-shadow:2px 2px 2px #BBB;
     background-color: #CCC;
@@ -78,9 +78,9 @@
     margin-top: 10px;
     cursor: pointer;
     background-position: center;
+    background-size: 52px 52px;
 }
 .tool-app:hover{
-
     -webkit-box-shadow:0px 0px 10px black;
 }
 .tool-app input{
@@ -90,13 +90,13 @@
     cursor: pointer;
 }
 #tool-enterPreviewMode{
-    background-image: url(../img/play.png);
+    background-image: url(../img/saving.png);
 }
 #tool-addimage{
     background-image: url(../img/addImage.png);
 }
 #tool-addtext{
-    background-image: url(../img/notes.png);
+    background-image: url(../img/text-editor.png);
 }
 #tool-elemOperation{
     background-image: url(../img/settings.png);
@@ -105,23 +105,23 @@
     background-image: url(../img/addAnim.png);
 }
 #tool-addslider{
-    background-image: url(../img/add.png);
+    background-image: url(../img/addSlider.png);
 }
 #tool-insertSlider{
-    background-image: url(../img/insert.png);
+    background-image: url(../img/insertSlider.png);
 }
 #tool-deleteSlider{
-    background-image: url(../img/delete.png);
+    background-image: url(../img/delSlider.png);
 }
 #tool-import {
     background-image: url(../img/downloader.png);
     background-size: 50px 50px;
 }
 #tool-openFileSystem {
-    background-image: url(../img/cloud.png);
-    background-size: 50px 50px;
+    background-image: url(../img/folder.png);
 }
 .show_execCommandDetail{
     background-image: url(../img/text-edit.png);
 }
-#tool-screen {background-image: url(../img/screen.png);background-size: 50px 50px;}
+#tool-screen {background-image: url(../img/screen.png);}
+#tool-addVideo {background-image: url(../img/video.png);}

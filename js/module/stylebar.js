@@ -19,11 +19,12 @@ Core.registerModule("stylebar",function(sb){
             linkValue = sb.find(".link-value",link);
             sb.css(ecd,{
                 display:'none',
-                width:'680px',
+                width:'auto',
                 height:'30px',
                 top:'580px',
                 left:(window.innerWidth-700)+'px'
             });
+            $('.close-menu', ecd).css('top','-10px').css('right','-10px')
             sb.css(link,{
                 display:"none",
                 width:'240px',
