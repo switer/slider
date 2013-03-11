@@ -255,20 +255,20 @@ Core.registerModule("view",function(sb){
                     container = dataSet[o].container;
                     elem = dataSet[o].data;
                     type = elem.tagName;
-                    value = elem.src||elem.innerHTML;
+                    value = elem.src || elem.innerHTML;
                     zIndex = dataSet[o].zIndex;
                     height = container.style.height||elem.style.height;
                     width = container.style.width||elem.style.width;
                     data = {
-                        type:type,
-                        value:value,
-                        attr:container.getAttribute("style"),
-                        panelAttr:type=="IMG"?sb.find(".element-panel",container).getAttribute("style"):"",
-                        left:container.style.left,
-                        top:container.style.top,
-                        height:height,
-                        width:width,
-                        zIndex:zIndex
+                        "type"    :type,
+                        "value"   :value,
+                        "attr"    :container.getAttribute("style"),
+                        "panelAttr"   :type === "IMG" ? $(".element-panel",container).attr("style") : "",
+                        "left"    :container.style.left,
+                        "top"     :container.style.top,
+                        "height"  :height,
+                        "width"   :width,
+                        "zIndex"  :zIndex
                     };
                     datas[o] = data;
                 }
@@ -278,7 +278,7 @@ Core.registerModule("view",function(sb){
         showFrameElementByData:function(data,frame){
             var elem = null,borderWidth;
             var frameEelem = frames[frame];
-            var framePanel = sb.find(".frame-panel",frameEelem);
+            var framePanel = sb.find(".frame-panel", frameEelem);
             frameEelem.innerHTML = "";
             if(framePanel){
                 frameEelem.appendChild(framePanel);
@@ -312,7 +312,8 @@ Core.registerModule("view",function(sb){
                         elem.appendChild(img);
                         elem.appendChild(panel);
                     }
-                    else if(data[a].type=="DIV"){
+                    else if(data[a].type=="DIV" || data[a].type === 'CODE'){
+                        console.log(data[a]);
                         var text = document.createElement("div");
                         text.innerHTML = data[a].value;
                         text.className = "text";

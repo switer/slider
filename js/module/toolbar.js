@@ -49,6 +49,7 @@ Core.registerModule("toolbar",function(sb){
                 "showEcd":this.showEcd,
                 "hiddenStyleBar":this.hiddenStyleBar,
                 "showStyleBar":this.showStyleBar
+                
             });
             comfirmLink.addEventListener("click", function(){
                 document.execCommand("createLink", false, linkValue.value);
@@ -252,6 +253,7 @@ Core.registerModule("toolbar",function(sb){
             document.body.appendChild(scrnb);
             sb.move(scrnb, scrnb);
             global._screenBoard = scrnb;
+
         },
         destroy:function(){
             addImageApp=null;

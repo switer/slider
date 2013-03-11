@@ -230,27 +230,28 @@ Core.registerModule("canvas",function(sb){
                     data:null
                 });
             },false);
-            eom.addEventListener("mouseout", function(){
-                eomTout = window.setTimeout(function(){
-                    cancelElementOperateMenuFunc();
-                    eomTout = -1;
-                }, 3000);
-            }, false);
-            eom.addEventListener("mouseover", function(){
-                if(eomTout!=-1){
-                    window.clearTimeout(eomTout);
-                    eomTout = -1;
-                }
-            },false);
+            // eom.addEventListener("mouseout", function(){
+            //     eomTout = window.setTimeout(function(){
+            //         cancelElementOperateMenuFunc();
+            //         eomTout = -1;
+            //     }, 3000);
+            // }, false);
+            // eom.addEventListener("mouseover", function(){
+            //     if(eomTout!=-1){
+            //         window.clearTimeout(eomTout);
+            //         eomTout = -1;
+            //     }
+            // },false);
             closeButton.addEventListener("click", function(){
-                if(eomTout!=-1){
-                    window.clearTimeout(eomTout);
-                    eomTout = -1;
-                }
+                // if(eomTout!=-1){
+                //     window.clearTimeout(eomTout);
+                //     eomTout = -1;
+                // }
                 cancelElementOperateMenuFunc();
             }, false);
             easmCloseButton.addEventListener("click", function(){
                 easm.style.display = "none";
+                
             }, false);
 
             sb.data("sliderDataSet",SliderDataSet);
@@ -281,7 +282,9 @@ Core.registerModule("canvas",function(sb){
                 "changeSliderStyle":this.changeSliderStyle,
                 "windowResize":this.windowResize,
                 "showFileSystem" : this.hideSliderEditor,
-                "changeScreenScale" : this.changeScreenScale
+                "changeScreenScale" : this.changeScreenScale,
+                'changeElemBackground' : this.changeElemBackground,
+                "backgroundSetting" : this.backgroundSetting
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
@@ -351,7 +354,43 @@ Core.registerModule("canvas",function(sb){
                     }
                 }
             }
+
+            global._imgSelector = ImageSelector.create(sb, function (dataUrl) {
+                sb.notify({
+                    type : "changeElemBackground",
+                    data : dataUrl
+                });
+                // $(global._imgSelector).boxHide();
+            }, function () {
+                sb.notify({
+                    type : "changeElemBackground",
+                    data : 'initial'
+                });
+            })
+            
+            $(document.body).append(global._imgSelector);
+            sb.move(global._imgSelector, global._imgSelector);
+            $(global._imgSelector).boxHide();
         },
+        backgroundSetting : function () {
+            $(global._imgSelector).boxShow();
+        },
+        changeElemBackground : function (dataUrl) {
+            if (!rightMenuBtn || !dataUrl) return;
+            if (rightMenuBtn === 'panel') {
+                // $('.panel', sliders[currentSlider]).css('backgroundImage', dataUrl);
+                sb.notify({
+                    type : "changeSliderStyle",
+                    data : {
+                        key : 'backgroundImage',
+                        value : dataUrl
+                    }
+                });
+            }
+            var tar = SliderDataSet[currentSlider][rightMenuBtn];
+            tar && $(tar.container).css('backgroundImage', dataUrl);
+        },
+
         changeScreenScale : function (value) {
             var sMap = SCREEN_SIZE_MAP[value];
             if (!sMap) {
@@ -360,9 +399,9 @@ Core.registerModule("canvas",function(sb){
             canvasX = sMap.x;
             canvasY = sMap.y;
             //更新幻灯片size
-            global.refleshScreesSize();
+            global.refreshScreesSize();
         },
-        refleshScreesSize : function () {
+        refreshScreesSize : function () {
             $('.container', sb.container).css('height', canvasY + 'px').css('width', canvasX + 'px')
         },
         //以一种非常恶心的hack手段去删除slider列表
@@ -590,12 +629,11 @@ Core.registerModule("canvas",function(sb){
                         var doc =  b['file'].getDoc();
                         e.value = doc.getValue();
                         e.codeType = doc.getMode().name
-                        console.log('++++++++++++++++' ,e.mode);
                     }
                     data[n] = e;
                 });
                 slider["anim"] = sliders[m].getAttribute("data-anim");
-                slider["panelAttr"] = sb.find(".panel",sliders[m]).getAttribute("style");
+                slider["panelAttr"] = sb.find(".panel", sliders[m]).getAttribute("style");
                 slider["element"] = data;
                 json[m] = slider;
             });
@@ -611,6 +649,7 @@ Core.registerModule("canvas",function(sb){
                 footer = document.querySelector('#footer').childNodes,
                 scripts = '<script type="text/javascript">' + $("#scripts").html() + '</script>',
                 cmTheme = '<script type="text/javascript">' + $("#cmTheme").html() + '</script>',
+                cmCss   = '<style type="text/css">' + $("#cmCss").html() + '</style>',
                 comment;
             for(var i = header.length-1; i >= 0; i--) {
                 if(header[i].nodeType == 8){
@@ -628,7 +667,7 @@ Core.registerModule("canvas",function(sb){
 
             sb.notify({
                 type : "preSave",
-                data : headerHtml.data + dataHtml + scripts + cmTheme + footerHtml.data
+                data : headerHtml.data + cmCss + dataHtml + scripts + cmTheme + footerHtml.data
             });
 
             // //一般localstorage容量不会超过5M
@@ -653,6 +692,7 @@ Core.registerModule("canvas",function(sb){
         hideSliderEditor : function () {
             sb.unbind(window, "keyup", keyOperate);
             sb.container.style.display = "none";
+            $(global._imgSelector).boxHide();
             sb.notify({
                 type:"hiddenStyleBar",
                 data:null
@@ -688,7 +728,7 @@ Core.registerModule("canvas",function(sb){
                 panel.setAttribute("style", pasteObj.attr);
                 newSlider.setAttribute("data-anim", pasteObj.anim);
             } else {
-                panel.setAttribute("style", "width:100%;height:100%;position:absolute;left:0;top:0;");
+                panel.setAttribute("style", "width:100%;height:100%;position:absolute;left:0;top:0;background-size:99.99% 100%;background-position:center;");
                 newSlider.setAttribute("data-anim", "anim-move-right");
             }
             
@@ -930,10 +970,13 @@ Core.registerModule("canvas",function(sb){
             return dataID;
         },
 
-        addCode : function () {
+        addCode : function (pasteParam) {
+            pasteParam || (pasteParam = {});
+
             var textArea = document.createElement('code'),
                 codeWrap = document.createElement('code'),
                 partSize = 6,
+                defaultValue = '',
                 containerDatas = newContainerFunc({
                     "height"  : 400,
                     "width"   : 500
@@ -951,6 +994,13 @@ Core.registerModule("canvas",function(sb){
                 position : 'absolute'
             }).addClass('normalelement');
 
+            /*paste code*/
+            if(pasteParam["paste"]){
+                containerDatas.container.setAttribute("style", pasteParam["attr"]);
+                codeWrap.setAttribute("style", pasteParam["elemAttr"]);
+                defaultValue = pasteParam["value"];
+            }
+            /**********/
             codeWrap.appendChild(textArea)
             containerDatas.container.appendChild(codeWrap);
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
@@ -958,9 +1008,10 @@ Core.registerModule("canvas",function(sb){
             
 
             var codeMirror = CodeMirror(textArea, {
-                                  value: 'function () {}',
+                                  value: defaultValue,
                                   mode:  "javascript",
                                   lineNumbers  : true,
+                                  // cursorHeight : 1,
                                   lineWrapping  : true //长行换行，不滚动
                                 });
 
@@ -1007,7 +1058,8 @@ Core.registerModule("canvas",function(sb){
         },
         elemAttrSetting:function(e){
             var tar;
-            eom.style.display = "none";
+            // eom.style.display = "none";
+            global.cancelElementOperateMenu();
             easm.style.display = "block";
             setPositionFunc(e,easm,-100,-100,-300,-200);
             if(target&&( tar = elementSet[target])){
@@ -1230,6 +1282,7 @@ Core.registerModule("canvas",function(sb){
                 var container = pasteElem.container,data = pasteElem.data,
                 value = data.src || data.innerHTML;
                 data.tagName === 'VIDEO' && ( value = $('.video-source', data).attr('src') );
+                data.tagName === 'CODE' && (value = pasteElem.file.getDoc().getValue());
                 copyParams = {
                     paste   : true,
                     type    : data.tagName,
@@ -1242,16 +1295,19 @@ Core.registerModule("canvas",function(sb){
         pasteElement:function(){
 
             if(copyParams){
+                //image
                 if(copyParams["type"]=="IMG") {
                     addImageFunc(copyParams, function (imgElementId) {
                         global.setSelect(imgElementId);
                     });
                     
                 }
+                //textArea
                 else if(copyParams["type"]=="DIV") {
                     var textElementId = addTextFunc(copyParams);
                     global.setSelect(textElementId);
                 }
+                //video
                 else if (copyParams["type"] === 'VIDEO') {
                     global._addVideElement (copyParams.value, {
                         eAttr   : copyParams.elemAttr,
@@ -1262,6 +1318,11 @@ Core.registerModule("canvas",function(sb){
                             global.setSelect(dataId);
                         }
                     });
+                }
+                //code textarea inputbox
+                else if (copyParams["type"]=="CODE") {
+                    var textElementId = global.addCode(copyParams);
+                    global.setSelect(textElementId);
                 }
                 
             }
@@ -1299,8 +1360,10 @@ Core.registerModule("canvas",function(sb){
                 target = null;
             }
         },
+        //取消显示右键菜单
         cancelElementOperateMenu:function(){
             eom.style.display = "none";
+            $(global._imgSelector).boxHide();
         },
         changeSliderAnim:function(newAnim){
             sliders[currentSlider].setAttribute("data-anim", newAnim);
@@ -1364,6 +1427,7 @@ Core.registerModule("canvas",function(sb){
             function cancelRightMenu () {
                 cancelElementOperateMenuFunc();
                 easm.style.display = "none";
+                
             }
             sb.bind(etar,"mousedown",function(e){
                 //监听鼠标右键
@@ -1388,7 +1452,7 @@ Core.registerModule("canvas",function(sb){
                     //elemID==canvas时为面板触发右键
 
                     rightMenuBtn = elemID;
-                    if(elemID=='panel'){
+                    if(elemID == 'panel'){
                         //如果上次为面板触发右键，隐藏菜单
                         if(eom.style.display == "block"){
                             cancelElementOperateMenuFunc();
@@ -1399,10 +1463,10 @@ Core.registerModule("canvas",function(sb){
                         target=null;
                         eom.style.display = "block";
                         setPositionFunc(e,eom,-50,-50,-100,-200);
-                        eomTout = window.setTimeout(function(){
-                            eom.style.display = "none";
-                            eomTout =  -1;
-                        }, 3000); 
+                        // eomTout = window.setTimeout(function(){
+                        //     eom.style.display = "none";
+                        //     eomTout =  -1;
+                        // }, 3000); 
                         return;
                     }
                     //再点击就取消选中
