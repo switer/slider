@@ -975,6 +975,7 @@ Core.registerModule("canvas",function(sb){
 
             var textArea = document.createElement('code'),
                 codeWrap = document.createElement('code'),
+                settingBtn = document.createElement('div'),
                 partSize = 6,
                 defaultValue = '',
                 containerDatas = newContainerFunc({
@@ -983,6 +984,7 @@ Core.registerModule("canvas",function(sb){
                 }, partSize, null, {
                     "isFixedSize" : true
                 });
+            $(settingBtn).addClass('code-setting');
             $(textArea).attr("contenteditable", "true").css({
                 height : "100%",
                 width : "100%",
@@ -1002,7 +1004,8 @@ Core.registerModule("canvas",function(sb){
             }
             /**********/
             codeWrap.appendChild(textArea)
-            containerDatas.container.appendChild(codeWrap);
+            $(containerDatas.container).append(codeWrap).append(settingBtn);
+
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
             editor.appendChild(containerDatas.container)
             
@@ -1024,6 +1027,7 @@ Core.registerModule("canvas",function(sb){
             console.log(codeMirror.getDoc().getMode())
             var dataId = global._insetIntoDataset(containerDatas.container, codeWrap, codeMirror);
             elementOpertateFunc(dataId, containerDatas.container, containerDatas.container);
+            sb.move(settingBtn, containerDatas.container)
         },
 
         _getMaxZIndex : function (curSlider) {
@@ -1564,7 +1568,7 @@ Core.registerModule("canvas",function(sb){
             }
             
             if (!options.container) {
-                container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+                container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;background-position:center;background-size:99.99% 100%;");
                 //图形库的图形大小为图片本身大小
             }
             if (options['isFixedSize']) {

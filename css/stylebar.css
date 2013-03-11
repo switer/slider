@@ -229,7 +229,12 @@ background-color: cornflowerblue;color: white;text-shadow:0 0 2px black;}
 .image-select-box .image-empty {
     cursor: pointer;background-image: url(../img/empty.png);width: 50px;height: 50px;border-radius: 5px;
     background-size: 50px 50px;}
-
+/*代码输入框的设置按钮*/
+.code-setting {background: url(../img/setting.png) center;background-size: 40px 40px;
+    position: absolute;top:-25px;left: -25px;height: 40px;width: 40px;opacity: 1;z-index: 100;
+    border-radius: 50%;
+}
+.code-setting:hover {-webkit-box-shadow:0 0 5px 1px black;cursor: pointer;}
 @-webkit-keyframes move-out
 {
     0%{
