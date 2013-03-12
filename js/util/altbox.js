@@ -3,8 +3,13 @@
     window.altbox.start = function () {
         var abH = 100,abW = 300;
         var alertBox = document.querySelector("#alert-box");
-        alertBox.style["marginTop"] = (window.innerHeight-abH)/2+"px";
-        alertBox.style["marginLeft"] = (window.innerWidth-abW)/2+"px";
+        // alertBox.style["marginTop"] = (window.innerHeight-abH)/2+"px";
+        // alertBox.style["marginLeft"] = (window.innerWidth-abW)/2+"px";
+        $(alertBox).css({
+            zIndex : 9999,
+            marginTop : (window.innerHeight-abH)/2+"px",
+            marginLeft : (window.innerWidth-abW)/2+"px"
+        })
         var titles = (document.querySelectorAll(".title")),elem;
         var messageBox = document.querySelector("#message-box");
         var messageContent =messageBox.querySelector(".message-content");

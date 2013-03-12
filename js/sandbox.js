@@ -1059,6 +1059,19 @@ var SandBox = (function() {
             }
         }, false);
         window.addEventListener("mousemove",handle,false);
+
+        elem.addEventListener("touchstart", function(e){
+            if(e.button==0){
+                flag.isDown = true;
+            }
+        }, false);
+        window.addEventListener("touchend", function(e){
+            if(e.button==0){
+                flag.isDown = false;
+                flag.isInit = false;
+            }
+        }, false);
+        window.addEventListener("touchmove",handle,false);
     };
     SandBox.prototype.click =function(elem,flag,handle){
         elem.addEventListener("mousedown", function (e){

@@ -78,7 +78,7 @@ Core.registerModule("canvas",function(sb){
             });
             eom = sb.find("#element-operate-menu");
             eomItems = sb.query(".elem-item", eom);
-            sb.move(eom,eom);
+            sb.move(eom, eom);
             easm = sb.find("#element-attrSetting-menu");
             easmMove = sb.query(".move", easm)[0];
             sb.css(easmMove,{
@@ -975,7 +975,6 @@ Core.registerModule("canvas",function(sb){
 
             var textArea = document.createElement('code'),
                 codeWrap = document.createElement('code'),
-                settingBtn = document.createElement('div'),
                 partSize = 6,
                 defaultValue = '',
                 containerDatas = newContainerFunc({
@@ -984,7 +983,6 @@ Core.registerModule("canvas",function(sb){
                 }, partSize, null, {
                     "isFixedSize" : true
                 });
-            $(settingBtn).addClass('code-setting');
             $(textArea).attr("contenteditable", "true").css({
                 height : "100%",
                 width : "100%",
@@ -1004,7 +1002,7 @@ Core.registerModule("canvas",function(sb){
             }
             /**********/
             codeWrap.appendChild(textArea)
-            $(containerDatas.container).append(codeWrap).append(settingBtn);
+            $(containerDatas.container).append(codeWrap);
 
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
             editor.appendChild(containerDatas.container)
@@ -1440,11 +1438,13 @@ Core.registerModule("canvas",function(sb){
                     etar.oncontextmenu = function(){
                         return false;
                     }
+                    //选择性显示菜单项
+                    global._chooseMenuItem(elemID);
                     //清除上次setimeout
-                    if(eomTout!=-1){
-                        window.clearTimeout(eomTout);
-                        eomTout = -1;
-                    }
+                    // if(eomTout!=-1){
+                    //     window.clearTimeout(eomTout);
+                    //     eomTout = -1;
+                    // }
                     // //取消现有目标的效果
                     // if(target&&elementSet[target]) {
                     //     sb.removeClass(elementSet[target].container,"element-select");
@@ -1487,13 +1487,24 @@ Core.registerModule("canvas",function(sb){
                     //     sb.addClass(elements[i],"show-container-apart");
                     // }
                     eom.style.display = "block";
-                    setPositionFunc(e,eom,-50,-50,-100,-200);
-                    eomTout = window.setTimeout(function(){
-                        eom.style.display = "none";
-                        eomTout =  -1;
-                    }, 3000); 
+                    setPositionFunc(e, eom, -50, -50, -100, -200);
+                    
+                    // eomTout = window.setTimeout(function(){
+                    //     eom.style.display = "none";
+                    //     eomTout =  -1;
+                    // }, 3000); 
                 }
             });
+        },
+        _chooseMenuItem : function (elemId) {
+            var $codeboxItem = $(".codebox-setting-item", eom);
+            console.log(SliderDataSet[currentSlider][elemId])
+            if (elemId !== 'panel' 
+                && SliderDataSet[currentSlider][elemId].data.tagName === 'CODE') {
+                $codeboxItem.removeClass('dp-none');
+            } else {
+                $codeboxItem.addClass('dp-none');
+            }
         },
         setPosition:function(event,elem,x1,y1,x2,y2,show){
             var offsetX = event.screenX>(window.innerWidth+x2)?x2:x1,

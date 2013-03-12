@@ -151,8 +151,9 @@
 
     display: none;
     padding: 10px 0px;
-    z-index: 999;
+    z-index: 900;
 }
+#element-operate-menu .close-menu {top: -10px;right: -10px;}
 #element-attrSetting-menu{
 
     position: absolute;
@@ -191,6 +192,7 @@
     border-bottom: 1px solid #CCC;
     padding: 10px 0;    
 }
+.elem-operation:last-child{border-bottom: 0;}
 .setting-right,.setting-left{
     float: left;
     width: 220px;
