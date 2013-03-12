@@ -1,18 +1,19 @@
 Core.registerModule("canvas",function(sb){
     var anim_name = {
-        "anim-move-left":"从左闪入",
-        "anim-move-right":"从右闪入",
-        "anim-move-top":"从上闪入",
-        "anim-move-bottom":"从下闪入",
+        'none'              : '无效果'
+        "anim-move-left"    :"从左闪入",
+        "anim-move-right"   :"从右闪入",
+        "anim-move-top"     :"从上闪入",
+        "anim-move-bottom"  :"从下闪入",
         "anim-move-top-left":"从左上闪入",
-        "anim-move-top-right":"从右上闪入",
-        "anim-move-bottom-left":"从左下闪入",
+        "anim-move-top-right"   :"从右上闪入",
+        "anim-move-bottom-left" :"从左下闪入",
         "anim-move-bottom-right":"从右下闪入",
         "anim-scale":"放大",
         "anim-ySpin":"左右翻转",
         "anim-xSpin":"上下翻转",
         "anim-rightRotate":"顺时针旋转",
-        "anim-leftRotate":"逆时针旋转"
+        "anim-leftRotate"   :"逆时针旋转"
         },
         SCREEN_SIZE_MAP = {
             '4:3'   : {x:800,y:600},
@@ -823,7 +824,7 @@ Core.registerModule("canvas",function(sb){
                 newSlider.setAttribute("data-anim", pasteObj.anim);
             } else {
                 panel.setAttribute("style", "width:100%;height:100%;position:absolute;left:0;top:0;background-size:99.99% 100%;background-position:center;");
-                newSlider.setAttribute("data-anim", "anim-move-right");
+                newSlider.setAttribute("data-anim", "none");
             }
             
             panel.className = "panel";
