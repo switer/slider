@@ -301,7 +301,9 @@ Core.registerModule("view",function(sb){
                     if(data[a].type=="IMG"){
                         var img = new Image();
                         var panel = sb.create("div");
-                        panel.setAttribute("style",  data[a].panelAttr);
+
+                        panel.setAttribute("style", data[a].panelAttr);
+                        $(img).attr('style', data[a].panelAttr);
                         img.src = data[a].value;
                         img.style["height"] = "100%";
                         img.style["width"]= "100%";

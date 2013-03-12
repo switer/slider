@@ -209,19 +209,20 @@ Core.registerModule("canvas",function(sb){
             setSettingDefaultAttFunc = this.setSettingDefaultAtt;
             currentSlider = currentSlider || this.createSlider("append").id;
             editor = sliders[currentSlider];
+            
             showAnim = document.createElement("div");
-            showAnim.className = "showAnim";
-            showAnim.innerHTML = anim_name[editor.getAttribute("data-anim")];
-            sb.css(showAnim,{
-                position:"absolute",
-                display:"block",
-                width:"120px",
-                height:"30px",
-                zIndex:"999",
-                left:(editorContainer.offsetLeft+520)+"px",
-                top:(editorContainer.offsetTop)+"px"
+            $(showAnim).addClass("showAnim").html(anim_name[$(editor).data("anim")])
+            .css({
+                position    : "absolute",
+                display     : "block",
+                width       : "120px",
+                height      : "30px",
+                zIndex      : "999",
+                left        : (editorContainer.offsetLeft + 520) + "px",
+                top         : (editorContainer.offsetTop) + "px"
             });
-            sb.move(showAnim,showAnim);
+            sb.move(showAnim, showAnim);
+
             editorContainer.appendChild(showAnim);
             sb.bind(window, "keydown",this.keyOperate);
             window.addEventListener("resize", function(){
@@ -284,7 +285,10 @@ Core.registerModule("canvas",function(sb){
                 "showFileSystem" : this.hideSliderEditor,
                 "changeScreenScale" : this.changeScreenScale,
                 'changeElemBackground' : this.changeElemBackground,
-                "backgroundSetting" : this.backgroundSetting
+                "backgroundSetting" : this.backgroundSetting,
+                "codeboxSetting" : this.codeboxSetting,
+                "changeCodeType" : this.changeCodeType,
+                "codeboxThemeSetting" : this.codeboxThemeSetting
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
@@ -371,9 +375,91 @@ Core.registerModule("canvas",function(sb){
             $(document.body).append(global._imgSelector);
             sb.move(global._imgSelector, global._imgSelector);
             $(global._imgSelector).boxHide();
+
+            //代码输入框的代码高亮类型
+            var choosebox = window.ChooseBox.create([
+                    {key : 'C',         value : 'text/x-csrc'},
+                    {key : 'C++',       value : 'text/x-c++src'},
+                    {key : 'C#',        value : 'text/x-csharp'},
+                    {key : 'Clojure',   value : 'text/x-clojure'},
+                    {key : 'CSS',       value : 'text/css'},
+                    {key : 'Java',      value : 'text/x-java'},
+                    {key : 'Javascript',value : 'text/javascript'},
+                    {key : 'XML/HTML',  value : 'text/html'},
+                    {key : 'Shell',     value : 'text/x-sh'},
+                    {key : 'SQL',       value : 'text/x-sql'},
+                    {key : 'Python',    value : 'text/x-python'},
+                    {key : 'Ruby',      value : 'text/x-ruby'},
+                    {key : 'PHP',       value : 'application/x-httpd-php'},
+                    {key : 'Erlang',    value : 'text/x-erlang'},
+                    {key : 'Velocity',  value : 'text/velocity'},
+                    {key : 'VB',        value : 'text/vbscript'}
+                ]);
+            //初始隐藏
+            window.ChooseBox.hide(choosebox);
+            window.ChooseBox.listen(choosebox, function (value) {
+                sb.notify({
+                    type : 'changeCodeType',
+                    data : {
+                        key : 'mode',
+                        value : value
+                    }
+                })
+            });
+            $(document.body).append(choosebox);
+            sb.move(choosebox, choosebox);
+            global._choosebox = choosebox;
+
+            //代码输入框主题
+            var chooseThemebox = window.ChooseBox.create([
+                    {key : 'default',         value : 'default'},
+                    {key : 'blackboard',         value : 'blackboard'},
+                    {key : 'cobalt',         value : 'cobalt'},
+                    {key : 'eclipse',         value : 'eclipse'},
+                    {key : 'elegant',         value : 'elegant'},
+                    {key : 'erlang-dark',         value : 'erlang-dark'},
+                    {key : 'monokai',         value : 'monokai'},
+                    {key : 'lesser-dark',         value : 'lesser-dark'},
+                    {key : 'neat',         value : 'neat'},
+                    {key : 'night',         value : 'night'},
+                    {key : 'rubyblue',         value : 'rubyblue'},
+                    {key : 'xq-dark',         value : 'xq-dark'},
+                    {key : 'twilight',         value : 'twilight'},
+                    {key : 'vibrant-ink',         value : 'vibrant-ink'},
+
+                ]);
+            //初始隐藏
+            window.ChooseBox.hide(chooseThemebox);
+            window.ChooseBox.listen(chooseThemebox, function (value) {
+                sb.notify({
+                    type : 'changeCodeType',
+                    data : {
+                        key : 'theme',
+                        value : value
+                    }
+                })
+            });
+            $(document.body).append(chooseThemebox);
+            sb.move(chooseThemebox, chooseThemebox);
+            global._chooseThemebox = chooseThemebox;
+        },
+        _hideChooseBox : function () {
+            window.ChooseBox.hide(global._choosebox);
+            window.ChooseBox.hide(global._chooseThemebox);
         },
         backgroundSetting : function () {
             $(global._imgSelector).boxShow();
+        },
+        /**
+        *   显示编码语言选择框
+        **/
+        codeboxSetting : function () {
+            global.cancelElementOperateMenu();
+            ChooseBox.show(global._choosebox);
+        },
+        codeboxThemeSetting : function () {
+            global.cancelElementOperateMenu();
+            ChooseBox.show(global._chooseThemebox);
         },
         changeElemBackground : function (dataUrl) {
             if (!rightMenuBtn || !dataUrl) return;
@@ -390,7 +476,14 @@ Core.registerModule("canvas",function(sb){
             var tar = SliderDataSet[currentSlider][rightMenuBtn];
             tar && $(tar.container).css('backgroundImage', dataUrl);
         },
+        changeCodeType : function (param) {
+            if (!rightMenuBtn || rightMenuBtn === 'panel') return;
+            var tarData = SliderDataSet[currentSlider][rightMenuBtn];
+            if (tarData.data.tagName !== 'CODE') return;
+            var codeMirror = tarData.file;
+            codeMirror.setOption(param.key, param.value)
 
+        },
         changeScreenScale : function (value) {
             var sMap = SCREEN_SIZE_MAP[value];
             if (!sMap) {
@@ -628,7 +721,8 @@ Core.registerModule("canvas",function(sb){
                         //code mirror
                         var doc =  b['file'].getDoc();
                         e.value = doc.getValue();
-                        e.codeType = doc.getMode().name
+                        e.codeType = doc.getMode().name;
+                        e.theme = b['file'].getOption('theme');
                     }
                     data[n] = e;
                 });
@@ -907,7 +1001,7 @@ Core.registerModule("canvas",function(sb){
                     img.setAttribute('style', obj["elemAttr"]);
                 }
                 else {
-                    container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;");
+                    container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;background-position:center;background-size:99.99% 100%;");
                 }
 
                 container.appendChild(img);
@@ -1010,7 +1104,8 @@ Core.registerModule("canvas",function(sb){
 
             var codeMirror = CodeMirror(textArea, {
                                   value: defaultValue,
-                                  mode:  "javascript",
+                                  mode:  "",
+                                  theme : "blackboard",
                                   lineNumbers  : true,
                                   // cursorHeight : 1,
                                   lineWrapping  : true //长行换行，不滚动
@@ -1022,10 +1117,8 @@ Core.registerModule("canvas",function(sb){
             codeMirror.on('blur', function () {
                 isEditor = false;
             });
-            console.log(codeMirror.getDoc().getMode())
             var dataId = global._insetIntoDataset(containerDatas.container, codeWrap, codeMirror);
             elementOpertateFunc(dataId, containerDatas.container, containerDatas.container);
-            sb.move(settingBtn, containerDatas.container)
         },
 
         _getMaxZIndex : function (curSlider) {
@@ -1366,6 +1459,8 @@ Core.registerModule("canvas",function(sb){
         cancelElementOperateMenu:function(){
             eom.style.display = "none";
             $(global._imgSelector).boxHide();
+            global._hideChooseBox()
+            // ChooseBox.hide(global._choosebox);
         },
         changeSliderAnim:function(newAnim){
             sliders[currentSlider].setAttribute("data-anim", newAnim);
@@ -1498,7 +1593,6 @@ Core.registerModule("canvas",function(sb){
         },
         _chooseMenuItem : function (elemId) {
             var $codeboxItem = $(".codebox-setting-item", eom);
-            console.log(SliderDataSet[currentSlider][elemId])
             if (elemId !== 'panel' 
                 && SliderDataSet[currentSlider][elemId].data.tagName === 'CODE') {
                 $codeboxItem.removeClass('dp-none');
@@ -1577,8 +1671,9 @@ Core.registerModule("canvas",function(sb){
                 parts[item].resizeHandle([element,container,elem]);
                 frag.appendChild(element);
             }
-            
+            console.log(options.container);
             if (!options.container) {
+
                 container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;background-position:center;background-size:99.99% 100%;");
                 //图形库的图形大小为图片本身大小
             }

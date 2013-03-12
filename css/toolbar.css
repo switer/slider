@@ -64,7 +64,7 @@
 .operation-item:hover{
     background-color: white;
     color:black;
-    box-shadow: inset 0px 0px 10px blue;
+    /*box-shadow: inset 0px 0px 10px cornflowerblue;*/
     /*    -webkit-box-shadow:0px 0px 10px white;*/
 }
 .tool-app{
@@ -102,7 +102,7 @@
     background-image: url(../img/settings.png);
 }
 #tool-addAnimation{
-    background-image: url(../img/addAnim.png);
+    background-image: url(../img/animate.png);
 }
 #tool-addslider{
     background-image: url(../img/addSlider.png);
@@ -125,4 +125,4 @@
 }
 #tool-screen {background-image: url(../img/screen.png);}
 #tool-addVideo {background-image: url(../img/video.png);}
-#tool-addCode {background-image: url(../img/code.jpg)}
+#tool-addCode {background-image: url(../img/code.png)}

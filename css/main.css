@@ -52,18 +52,14 @@ input{
 #message-box{
 
     position: absolute;
-    background-color: black;
+    background-color: cornflowerblue;
     display: none;
-    opacity:0.9;
+    opacity:0.8;
     min-height: 30px;
     min-width: 60px;
     color: white;
     line-height: 30px;
-    -webkit-border-radius:6px;
-    -moz-border-radius:6px;
-    border: 1px solid #CCC;
-    -webkit-box-shadow:0px 0px 10px black;
-    -moz-box-shadow:0px 0px 10px black;
+    border-radius:6px;
     z-index: 999;
 }
 #message-box .message-content{
@@ -97,7 +93,7 @@ input{
     padding: 0px 10px;
 
 }
-#fileView .fs-icon-back {top: 45px!important;}
+#fileView .fs-icon-back {top: 45px;}
 .dp-none {display: none!important;}
 /**清除浮动**/
 .cf:before, .cf:after {content:"";display:table;}
