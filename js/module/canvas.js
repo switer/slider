@@ -1,6 +1,6 @@
 Core.registerModule("canvas",function(sb){
     var anim_name = {
-        'none'              : '无效果'
+        'none'              : '无效果',
         "anim-move-left"    :"从左闪入",
         "anim-move-right"   :"从右闪入",
         "anim-move-top"     :"从上闪入",
