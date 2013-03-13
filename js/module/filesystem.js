@@ -65,7 +65,7 @@ Core.registerModule("filesystem", function(sb){
 						var $target = $(e.target)
 						$('#fileInpBox').showPopbox();
 					}, errHandler);
-					//确定输入文件内容
+					//确定输入目录名
 					$(document.body).on('click', '#folderInpBtn', function () {
 
 						var folderName = $('#folderInp').val();
@@ -74,7 +74,7 @@ Core.registerModule("filesystem", function(sb){
 							$('#folderInpBox').suiHide();
 						}, errHandler); 
 					})
-					//确定输入目录名
+					//确定输入文件内容
 					$(document.body).on('click', '#fileInpBtn', function () {
 
 						var fileName = $('#fileNameInp').val(),

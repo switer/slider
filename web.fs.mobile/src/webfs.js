@@ -159,7 +159,10 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 			path = path.match(/.*\/$/) ? path : path + '/';
 			path = path.replace(new RegExp('^' + rootPath), './'); 
 			opendir(path, fs.root, function (directoryEntry) {
-				writefile(filename, directoryEntry, content, success, error, options)
+				//先把旧文件删除
+				unlink (filename, directoryEntry, function () {
+					writefile(filename, directoryEntry, content, success, error, options)
+				}, error) 
 			}, error)
 		}, error);
 	}
