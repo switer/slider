@@ -17,7 +17,7 @@ Core.registerModule("toolbar",function(sb){
             ecb = sb.find("#execCommand-bar",document);
             showEcdBut = sb.find(".show_execCommandDetail",document);
             ecdresize = sb.find(".resize",ecd);
-            ecdmove = sb.find(".move",ecd);
+            // ecdmove = sb.find(".move",ecd);
             closeEcd = sb.find(".close-menu",ecd);
             colorSelector = sb.find("#colorSelector",document);
             execCType = sb.find(".execC_type",colorSelector);
@@ -42,7 +42,7 @@ Core.registerModule("toolbar",function(sb){
                 left:(sb.subPX(ecd.style.left)-260)+"px"
             });
             // sb.resizeRB(ecdresize, ecd);
-            sb.move(ecdmove,ecd);
+            sb.move(ecd,ecd);
             sb.listen({
                 "showLink":this.showLink,
                 "showColor":this.showColor,

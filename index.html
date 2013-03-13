@@ -103,15 +103,15 @@
         <div class="colorSelector" id="colorSelector"></div>
         <div id="execCommand-detail" class="panel1">
             <div class="close-menu title" data-title="关闭"></div>
-            <div class="resize"></div>
-            <div class="move"></div>
+            <!-- <div class="resize"></div> -->
+            <!-- <div class="move"></div> -->
             <div class="execCommand-item font-family">
                 <select class="execC-but" onchange="if(this.value!=-1) document.execCommand('fontName',false,this.value);">
                     <option value="-1">选择字体</option>
                     <option value="宋体">宋体</option>
                     <option value="黑体">黑体</option>
-                    <option value="楷体_GB2312">楷体_GB2312</option>
-                    <option value="仿宋_GB2312">仿宋_GB2312</option>
+                    <option value="楷体_GB2312">楷体</option>
+                    <option value="仿宋_GB2312">仿宋</option>
                     <option value="隶书">隶书</option>
                     <option value="微软雅黑">微软雅黑</option>
                     <option value="幼圆">幼圆</option>
@@ -120,7 +120,7 @@
             </div>
             <div class="execCommand-item font-size">
                 <select class="execC-but" onchange="if(this.value!=-1) document.execCommand('fontSize',false,this.value);">
-                    <option value="-1">选择大小</option>
+                    <option value="-1">字体大小</option>
                     <option value="1">1(10px)</option>
                     <option value="2">2(12px)</option>
                     <option value="3">3(14px)</option>

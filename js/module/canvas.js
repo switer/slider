@@ -597,6 +597,19 @@ Core.registerModule("canvas",function(sb){
                                 value : data.value
                             })
                         }
+                        if(data.type === "CODE"){
+                            sb.notify({
+                                type:"addCode",
+                                data: {
+                                    paste : true,
+                                    attr : data.cAttr,
+                                    elemAttr : data.eAttr,
+                                    value : data.value,
+                                    theme : data.theme,
+                                    codeType : data.codeType
+                                }
+                            });
+                        }
                     }
                     if (slider.imgCount === 0) {
                         callback && callback();
@@ -1056,6 +1069,8 @@ Core.registerModule("canvas",function(sb){
                 codeWrap = document.createElement('code'),
                 partSize = 6,
                 defaultValue = '',
+                defaultTheme = 'blackboard',
+                defaultMode = '',
                 containerDatas = newContainerFunc({
                     "height"  : 400,
                     "width"   : 500
@@ -1078,6 +1093,8 @@ Core.registerModule("canvas",function(sb){
                 containerDatas.container.setAttribute("style", pasteParam["attr"]);
                 codeWrap.setAttribute("style", pasteParam["elemAttr"]);
                 defaultValue = pasteParam["value"];
+                defaultTheme = pasteParam['theme'];
+                defaultMode = pasteParam['codeType'];
             }
             /**********/
             codeWrap.appendChild(textArea)
@@ -1089,10 +1106,9 @@ Core.registerModule("canvas",function(sb){
 
             var codeMirror = CodeMirror(textArea, {
                                   value: defaultValue,
-                                  mode:  "",
-                                  theme : "blackboard",
+                                  mode:  defaultMode,
+                                  theme : defaultTheme,
                                   lineNumbers  : true,
-                                  // cursorHeight : 1,
                                   lineWrapping  : true //长行换行，不滚动
                                 });
 
