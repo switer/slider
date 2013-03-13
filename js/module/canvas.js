@@ -232,23 +232,8 @@ Core.registerModule("canvas",function(sb){
                     data:null
                 });
             },false);
-            // eom.addEventListener("mouseout", function(){
-            //     eomTout = window.setTimeout(function(){
-            //         cancelElementOperateMenuFunc();
-            //         eomTout = -1;
-            //     }, 3000);
-            // }, false);
-            // eom.addEventListener("mouseover", function(){
-            //     if(eomTout!=-1){
-            //         window.clearTimeout(eomTout);
-            //         eomTout = -1;
-            //     }
-            // },false);
+
             closeButton.addEventListener("click", function(){
-                // if(eomTout!=-1){
-                //     window.clearTimeout(eomTout);
-                //     eomTout = -1;
-                // }
                 cancelElementOperateMenuFunc();
             }, false);
             easmCloseButton.addEventListener("click", function(){
@@ -465,7 +450,6 @@ Core.registerModule("canvas",function(sb){
         changeElemBackground : function (dataUrl) {
             if (!rightMenuBtn || !dataUrl) return;
             if (rightMenuBtn === 'panel') {
-                // $('.panel', sliders[currentSlider]).css('backgroundImage', dataUrl);
                 sb.notify({
                     type : "changeSliderStyle",
                     data : {
@@ -759,7 +743,7 @@ Core.registerModule("canvas",function(sb){
                 }
             }
             var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
-
+            console.log(footerHtml.data);
             sb.notify({
                 type : "preSave",
                 data : headerHtml.data + cmCss + dataHtml + scripts + cmTheme + footerHtml.data
@@ -1358,21 +1342,29 @@ Core.registerModule("canvas",function(sb){
             }
         },
         deleteElement:function(){
-            var target = rightMenuBtn;
-            
-            if(!target) return;
-            var elemNum = target;
+
+            var globalTar = target;
+            delTarget = rightMenuBtn;
+
+            if(!delTarget) return;
+
+            var elemNum = delTarget;
             if(elementSet[elemNum].container) sliders[currentSlider].removeChild(elementSet[elemNum].container);
             delete elementSet[elemNum];
             delete SliderDataSet[currentSlider][elemNum];
             eom.style.display = "none";
-            if(target==elemNum) target = null;
+
+            //将左键选中的目标也删除
+            if(globalTar == rightMenuBtn) {
+                target = null;
+            }
         },
         copyElement:function(){
-            var target = rightMenuBtn;
             
-            if(!target) return;
-            copyElem = target;
+            if(!rightMenuBtn) return;
+            //右键选中复制目标
+            copyElem = rightMenuBtn;
+
             if(copyElem&&elementSet[copyElem]){
                 var pasteElem = elementSet[copyElem];
                 var container = pasteElem.container,data = pasteElem.data,
@@ -1424,26 +1416,20 @@ Core.registerModule("canvas",function(sb){
             }
         },
         changeSlider:function(snum){
-            var sliderID = "slider"+snum;
+            var sliderID = "slider" + snum;
             if(!sliders[sliderID]) {
                 Core.log("Slider is not exist!");
                 return;
             }
             if(currentSlider&&sliders[currentSlider]){
                 sliders[currentSlider].style.display = "none";
-            //                            sb.removeClass(sliders[currentSlider], sliders[currentSlider].getAttribute("data-anim"));
             }
             sliders[sliderID].style.display = "block";
-            //            setTimeout(function(){
-            //                
-            //                sb.addClass(sliders[sliderID], sliders[sliderID].getAttribute("data-anim"));
-            //                     
-            //            });
             currentSlider = sliderID;
             editor = sliders[currentSlider];
             sb.notify({
-                type:"changeShowAnim",
-                data:editor.getAttribute("data-anim")
+                type : "changeShowAnim",
+                data : editor.getAttribute("data-anim")
             });
             cancelElementOperateMenuFunc();
             easm.style.display = "none";
@@ -1502,7 +1488,7 @@ Core.registerModule("canvas",function(sb){
                     cancelRightMenu();
                     if (elemID === "panel") return;
                     //取消现有目标的效果
-                    if(target&&elementSet[target]) {
+                    if(target && elementSet[target]) {
                         sb.removeClass(elementSet[target].container,"element-select");
                         var parts = sb.query(".element-container-apart", elementSet[target].container);
                         for (i = 0; i < parts.length; i++) {
@@ -1519,7 +1505,6 @@ Core.registerModule("canvas",function(sb){
                     for (i = 0; i < elements.length; i++) {
                         sb.addClass(elements[i],"show-container-apart");
                     }
-                    
             })
 
             function cancelRightMenu () {
@@ -1529,27 +1514,13 @@ Core.registerModule("canvas",function(sb){
             }
             sb.bind(etar,"mousedown",function(e){
                 //监听鼠标右键
-                if(e.button==2){
+                if(e.button == 2){
                     //取消默认右键菜单
                     etar.oncontextmenu = function(){
                         return false;
                     }
                     //选择性显示菜单项
                     global._chooseMenuItem(elemID);
-                    //清除上次setimeout
-                    // if(eomTout!=-1){
-                    //     window.clearTimeout(eomTout);
-                    //     eomTout = -1;
-                    // }
-                    // //取消现有目标的效果
-                    // if(target&&elementSet[target]) {
-                    //     sb.removeClass(elementSet[target].container,"element-select");
-                    //     var parts = sb.query(".element-container-apart", elementSet[target].container);
-                    //     for (i = 0; i < parts.length; i++) {
-                    //         sb.removeClass(parts[i],"show-container-apart");
-                    //     }
-                    // }
-                    //elemID==canvas时为面板触发右键
 
                     rightMenuBtn = elemID;
                     if(elemID == 'panel'){
@@ -1563,32 +1534,11 @@ Core.registerModule("canvas",function(sb){
                         target=null;
                         eom.style.display = "block";
                         setPositionFunc(e,eom,-50,-50,-100,-200);
-                        // eomTout = window.setTimeout(function(){
-                        //     eom.style.display = "none";
-                        //     eomTout =  -1;
-                        // }, 3000); 
                         return;
                     }
-                    //再点击就取消选中
-                    // if(target==elemID){
-                    //     cancelElementOperateMenuFunc();
-                    //     easm.style.display = "none";
-                    //     target = null;
-                    //     return;
-                    // }
-                    // target = elemID;
-                    // sb.addClass(container, "element-select");
-                    // var elements = sb.query(".element-container-apart", elementSet[target].container);
-                    // for (i = 0; i < elements.length; i++) {
-                    //     sb.addClass(elements[i],"show-container-apart");
-                    // }
                     eom.style.display = "block";
                     setPositionFunc(e, eom, -50, -50, -100, -200);
                     
-                    // eomTout = window.setTimeout(function(){
-                    //     eom.style.display = "none";
-                    //     eomTout =  -1;
-                    // }, 3000); 
                 }
             });
         },
