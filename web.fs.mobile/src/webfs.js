@@ -136,13 +136,18 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 	/**
 	*	Open a file
 	**/
-	function readfile (file, encoding, success, error) {
+	function readfile (fileEntry, encoding, success, error) {
 
 		var reader = new FileReader();
-		if (file.isFile) {
-			reader.readAsText(file, encoding);
-			reader.onload = success;
-  			reader.onerror = error;
+		if (fileEntry.isFile) {
+			fileEntry.file(function (file) {
+
+				reader.readAsText(file, encoding);
+
+				reader.onload = success;
+	  			reader.onerror = error;
+			}, error);
+
 		}
 		else {
 			error && error("Not a File entry !");
@@ -226,6 +231,7 @@ define('webfs/ui',
 					+ "<div data-event='icon-event' class='fs-icon-img @{iconClass}'></div>"
 				 	+ "<a data-event='icon-event' class='fs-icon-name'>@{name}</a>"
 				 	+ "<a class='fs-icon-opt fs-icon-opt-download @{downloadVisibleClass}' download='@{name}' href='@{fullPath}' ></a>"
+				 	+ "<a class='fs-icon-opt fs-icon-opt-upload @{downloadVisibleClass}' data-file='@{path}' ></a>"
 				 	+ "<button data-event='icon-del' class='fs-icon-opt fs-icon-opt-del @{visibleClass}'></button>"
 				 	+ "</div>";
 
@@ -459,7 +465,9 @@ define('webfs/ui',
 		//method
 		"mkdir" 				: mkdir,
 		"writeFile" 			: writeFile,
-		"showDelStatus" 		: showDelStatus
+		"showDelStatus" 		: showDelStatus,
+		//cache
+		"getCwd"				: getCwd
 	}
 });
 /**
