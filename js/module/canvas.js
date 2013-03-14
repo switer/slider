@@ -1391,7 +1391,7 @@ Core.registerModule("canvas",function(sb){
                 var container = pasteElem.container,data = pasteElem.data,
                 value = data.src || data.innerHTML;
                 data.tagName === 'VIDEO' && ( value = $('.video-source', data).attr('src') );
-                data.tagName === 'CODE' && (value = pasteElem.file.getDoc().getValue());
+                // data.tagName === 'CODE' && (value = pasteElem.file.getDoc().getValue());
                 copyParams = {
                     paste   : true,
                     type    : data.tagName,
@@ -1399,7 +1399,10 @@ Core.registerModule("canvas",function(sb){
                     attr    : container.getAttribute("style"),
                     elemAttr: data.getAttribute("style"),
                 };
-
+                if ( data.tagName === 'CODE' ) {
+                    copyParams.value = pasteElem.file.getDoc().getValue();
+                    copyParams.theme = pasteElem.file.getOption('theme');
+                }
             }
         },
         pasteElement:function(){

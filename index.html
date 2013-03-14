@@ -620,16 +620,18 @@
                                             var text = document.createElement("div");
                                             text.setAttribute("style", data.eAttr);
                                             elem.appendChild(text);
-                                            setTimeout(function () {
-                                                var codeMirror = CodeMirror(text, {
-                                                  value: data.value,
-                                                  mode:  data.codeType,
-                                                  theme:  data.theme,
-                                                  lineNumbers  : true,
-                                                  lineWrapping  : true,
-                                                  readOnly : false
-                                                });
-                                            }, 0);
+                                            (function (eData) {
+                                                setTimeout(function () {
+                                                    var codeMirror = CodeMirror(text, {
+                                                      value: eData.value,
+                                                      mode:  eData.codeType,
+                                                      theme:  eData.theme,
+                                                      lineNumbers  : true,
+                                                      lineWrapping  : true,
+                                                      readOnly : false
+                                                    });
+                                                }, 0);
+                                            })(data)
             
                                         }
                                         if(elem) slider.appendChild(elem);
