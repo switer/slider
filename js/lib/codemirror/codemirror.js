@@ -243,6 +243,7 @@ window.CodeMirror = (function() {
   }
 
   function themeChanged(cm) {
+    console.log(cm.options.theme);
     cm.display.wrapper.className = cm.display.wrapper.className.replace(/\s*cm-s-\S+/g, "") +
       cm.options.theme.replace(/(^|\s)\s*/g, " cm-s-");
     clearCaches(cm);
