@@ -105,7 +105,6 @@ Core.registerModule("filesystem", function(sb){
 					})
 					$(_this._container).on('click .fs-icon-opt-upload', function (e) {
 						var cwd = webui.getCwd(_this._container);
-						console.log($(e.target).data('file'), cwd.toURL());
 						webfs.openfile($(e.target).data('file'), cwd, function (file) {
 							webfs.readfile(file, 'UTF-8', function (evt) {
 								var content = evt.target.result;
