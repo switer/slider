@@ -526,7 +526,8 @@ Core.registerModule("canvas",function(sb){
                 render(sliderArray);
                 global.removeSliderByArray(rmArray);
                 function readAsArray(data) {
-                    var sliders = [], imgCount = 0;
+                    var sliders = [];
+                        // imgCount = 0;
                     for(var s in data){
                         if ( data.hasOwnProperty(s) ) {
                             var elementArray = [];
@@ -534,13 +535,13 @@ Core.registerModule("canvas",function(sb){
                             for (var e in elements) {
                                 if(elements.hasOwnProperty(e)){
                                     elementArray.push(elements[e]);
-                                    if (elements[e].type === 'IMG') imgCount ++;
+                                    // if (elements[e].type === 'IMG') imgCount ++;
                                 }
                             }
                             sliders.push({
                                 data : data[s],
-                                elements : elementArray,
-                                imgCount : imgCount
+                                elements : elementArray
+                                // imgCount : imgCount
                             });
                         }
                     }
@@ -558,7 +559,11 @@ Core.registerModule("canvas",function(sb){
                 function renderElements (slider, callback) {
                     var elements = slider.elements;
 
-                    createSliderFunc('append', {attr:slider.data['panelAttr'], anim:slider.data['anim']});
+                    createSliderFunc('append', {
+                        attr : slider.data['panelAttr'], 
+                        anim:slider.data['anim']
+                    });
+
                     sb.notify({
                         type:"importSlider",
                         data: 'append'
@@ -611,9 +616,9 @@ Core.registerModule("canvas",function(sb){
                             });
                         }
                     }
-                    if (slider.imgCount === 0) {
-                        callback && callback();
-                    }
+                    // if (slider.imgCount === 0) {
+                    //     callback && callback();
+                    // }
                 }//renderElements
             }
         },
@@ -831,14 +836,19 @@ Core.registerModule("canvas",function(sb){
             
 
             if(currentSlider) sliders[currentSlider].style.display = "none";
+            
             slider_number++;
             slider_count++;
+
             var sliderID = "slider"+slider_number; 
+
             if(method=="insert"){
+
                 addSliderObjectFunc({
                     key:sliderID,
                     value:newSlider
                 },method,currentSlider);
+
                 addSliderElementFunc(newSlider,method,sliders[currentSlider],editorContainer);
             }else if(method=="append"){
                 addSliderObjectFunc({
@@ -1104,7 +1114,6 @@ Core.registerModule("canvas",function(sb){
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
             editor.appendChild(containerDatas.container)
             
-            alert(defaultTheme);
             var codeMirror = CodeMirror(textArea, {
                                   value: defaultValue,
                                   mode:  defaultMode,
