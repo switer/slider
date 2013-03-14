@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="css/cm.theme.css" type="text/css" />
         <script type="text/javascript" src="web.fs.mobile/src/lib/underscore.js"></script>
         <script type="text/javascript" src="web.fs.mobile/src/lib/zepto.js"></script>
-        <script type="text/javascript" src="js/lib/codemirror/codemirror.min.js"></script>
+        <script type="text/javascript" src="js/lib/codemirror/codemirror.js"></script>
         <script type="text/javascript" src="js/lib/codemirror/cm.theme.js"></script>
         <script type="text/javascript" src="js/util/json.js"></script>
         <script type="text/javascript" src="js/util/colorboard.js"></script>
@@ -592,7 +592,7 @@
                                 for (var e in elements) {
                                     if(elements.hasOwnProperty(e)){
                                         var data = elements[e],elem;
-                                        if(data.type=="DIV"){
+                                        if(data.type === "DIV"){
                                             elem = document.createElement("DIV");
                                             elem.innerHTML = decodeURIComponent(data.value);
                                             elem.setAttribute("style", data.cAttr + data.eAttr);

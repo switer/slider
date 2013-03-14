@@ -1094,6 +1094,7 @@ Core.registerModule("canvas",function(sb){
                 codeWrap.setAttribute("style", pasteParam["elemAttr"]);
                 defaultValue = pasteParam["value"];
                 defaultTheme = pasteParam['theme'];
+                console.log(pasteParam);
                 defaultMode = pasteParam['codeType'];
             }
             /**********/
@@ -1103,7 +1104,7 @@ Core.registerModule("canvas",function(sb){
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
             editor.appendChild(containerDatas.container)
             
-
+            alert(defaultTheme);
             var codeMirror = CodeMirror(textArea, {
                                   value: defaultValue,
                                   mode:  defaultMode,
@@ -1118,6 +1119,7 @@ Core.registerModule("canvas",function(sb){
             codeMirror.on('blur', function () {
                 isEditor = false;
             });
+    
             var dataId = global._insetIntoDataset(containerDatas.container, codeWrap, codeMirror);
             elementOpertateFunc(dataId, containerDatas.container, containerDatas.container);
         },
@@ -1250,7 +1252,7 @@ Core.registerModule("canvas",function(sb){
 
             var target = rightMenuBtn;
 
-            if(target&&elementSet[target]){
+            if(target && elementSet[target]){
                 var container = elementSet[target].container;
                 var img,elemAtt = {
                     borderTopLeftRadius:true,
@@ -1267,6 +1269,9 @@ Core.registerModule("canvas",function(sb){
                 } 
                 else if (key === 'WebkitTransform') {
                     container.style[key] = 'rotate(' + value + 'deg)';
+                }
+                if (key === 'fontSize' && elementSet[target].data.tagName === 'CODE') {
+                    elementSet[target].file.refresh();
                 }
                 if (key !== 'opacity' && key !== 'WebkitTransform') container.style[key] = value;
             }else{
@@ -1392,8 +1397,9 @@ Core.registerModule("canvas",function(sb){
                     type    : data.tagName,
                     value   : value,
                     attr    : container.getAttribute("style"),
-                    elemAttr: data.getAttribute("style")
+                    elemAttr: data.getAttribute("style"),
                 };
+
             }
         },
         pasteElement:function(){
