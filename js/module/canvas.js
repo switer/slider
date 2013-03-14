@@ -1232,7 +1232,8 @@ Core.registerModule("canvas",function(sb){
                         dvalue = defaultAtt[type];
                         if(pnumber) dvalue = dvalue.split(" ")[pnumber];
                         var multi = item.dataset.multi || '1';
-                        inputElem.value = sb.subPX(dvalue,unit.length)*factor/multi;
+                        console.log('dvalue', dvalue);
+                        inputElem.value = parseInt(dvalue)*factor/multi;
                         break;
                     case 'select':
                         type = item.dataset.type;
