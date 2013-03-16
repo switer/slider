@@ -742,49 +742,30 @@ Core.registerModule("canvas",function(sb){
                 cntData : json.toJSONString()
             }
             var stream = JSON.stringify(datas);
-            var header = document.querySelector('#header').childNodes,
-                footer = document.querySelector('#footer').childNodes,
-                scripts = '<script type="text/javascript">' + $("#scripts").html() + '</script>',
-                cmTheme = '<script type="text/javascript">' + $("#cmTheme").html() + '</script>',
-                cmCss   = '<style type="text/css">' + $("#cmCss").html() + '</style>',
+            var header = window._sourceMap.header,
+                footer = window._sourceMap.footer,
+                cmThemeJS   = '<script type="text/javascript">' + window._sourceMap.cmThemeJS + '</script>',
+                cmJS        = '<script type="text/javascript">' + window._sourceMap.cmJS + '</script>',
+                cmCss       = '<style type="text/css">' + window._sourceMap.cmCSS + '</style>',
+                cmThemeCSS       = '<style type="text/css">' + window._sourceMap.cmThemeCSS + '</style>',
                 comment;
-            for(var i = header.length-1; i >= 0; i--) {
-                if(header[i].nodeType == 8){
-                  headerHtml = header[i]; 
-                  break;
-                }
-            }
-            for(var i = footer.length-1; i >= 0; i--) {
-                if(footer[i].nodeType == 8){
-                  footerHtml = footer[i];  
-                  break;
-                }
-            }
+            // for(var i = header.length-1; i >= 0; i--) {
+            //     if(header[i].nodeType == 8){
+            //       headerHtml = header[i]; 
+            //       break;
+            //     }
+            // }
+            // for(var i = footer.length-1; i >= 0; i--) {
+            //     if(footer[i].nodeType == 8){
+            //       footerHtml = footer[i];  
+            //       break;
+            //     }
+            // }
             var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
-            console.log(footerHtml.data);
             sb.notify({
                 type : "preSave",
-                data : headerHtml.data + cmCss + dataHtml + scripts + cmTheme + footerHtml.data
+                data : header + cmCss + cmThemeCSS + dataHtml + cmJS + cmThemeJS + footer
             });
-
-            // //一般localstorage容量不会超过5M
-            // if (stream.length < 5*1024*1024/2) window.localStorage.setItem('data',html);
-            // else alert('所存储的内容大于5M，请选择文件存储'); 
-            // sb.File.save('slider10.html', headerHtml.data + dataHtml + footerHtml.data,
-            //     function (url) {
-            //         window.location.href = url;
-            //     }
-            // );   
-            // sb.notify({
-            //     type:"previewModeStart",
-            //     data:json
-            // });
-        //            var jsonenc = window.encodeURIComponent(json.toJSONString());
-        //            sb.ajaxPost(base+"/save"+suf,function(){
-        //                
-        //                alert("finish");
-        //                
-        //            },"username=guan&userdata="+jsonenc);
         },
         hideSliderEditor : function () {
             sb.unbind(window, "keyup", keyOperate);
