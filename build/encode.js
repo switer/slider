@@ -7,7 +7,8 @@ var fs 		= require('fs'),
 		'cmThemeJS' 	: 'cm.theme.js',
 		'cmThemeCSS' 	: 'codeMirrorThemes.css',
 		'cmJS' 			: 'codeMirrorJS.js',
-		'cmCSS' 		: 'codeMirrorCSS.css'
+		'cmCSS' 		: 'codeMirrorCSS.css',
+		'animationCSS'	: 'animation.css'
 	}
 
 var ctn,

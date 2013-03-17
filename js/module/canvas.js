@@ -741,30 +741,27 @@ Core.registerModule("canvas",function(sb){
                 },
                 cntData : json.toJSONString()
             }
-            var stream = JSON.stringify(datas);
-            var header = window._sourceMap.header,
-                footer = window._sourceMap.footer,
-                cmThemeJS   = '<script type="text/javascript">' + window._sourceMap.cmThemeJS + '</script>',
-                cmJS        = '<script type="text/javascript">' + window._sourceMap.cmJS + '</script>',
-                cmCss       = '<style type="text/css">' + window._sourceMap.cmCSS + '</style>',
-                cmThemeCSS       = '<style type="text/css">' + window._sourceMap.cmThemeCSS + '</style>',
-                comment;
-            // for(var i = header.length-1; i >= 0; i--) {
-            //     if(header[i].nodeType == 8){
-            //       headerHtml = header[i]; 
-            //       break;
-            //     }
-            // }
-            // for(var i = footer.length-1; i >= 0; i--) {
-            //     if(footer[i].nodeType == 8){
-            //       footerHtml = footer[i];  
-            //       break;
-            //     }
-            // }
+            var scriptBegin = '<script type="text/javascript">',
+                scriptEnd   = '</script>',
+                styleBegin  = '<style type="text/css">',
+                styleEnd    = '</style>',
+                stream      = JSON.stringify(datas),
+                header      = window._sourceMap.header,
+                footer      = window._sourceMap.footer,
+                cmJS        = window._sourceMap.cmJS,
+                cmThemeJS   = window._sourceMap.cmThemeJS,
+                cmCss       = window._sourceMap.cmCSS,
+                cmThemeCSS  = window._sourceMap.cmThemeCSS,
+                animation   = window._sourceMap.animationCSS;
+
             var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
             sb.notify({
                 type : "preSave",
-                data : header + cmCss + cmThemeCSS + dataHtml + cmJS + cmThemeJS + footer
+                data :  header +
+                        styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
+                        dataHtml +
+                        scriptBegin + cmJS + cmThemeJS + scriptEnd +
+                        footer
             });
         },
         hideSliderEditor : function () {

@@ -82,7 +82,7 @@
                 module.init();
                 module.keyOn();
             },
-            setTarget:function(newTar){
+            setTarget : function(newTar) {
                 var className;
                 if(targetSlider&&sliders[targetSlider]) {
                     sliders[targetSlider].style.display = "none";
@@ -136,16 +136,22 @@
             document.onselectstart = function () {
                 return false;
             }
-            function getSize () {
-                eH = tar.clientHeight ;
-                eW = tar.clientWidth;
+            function getSize (scaleNumber) {
+                ( scaleNumber !== undefined ) || (scaleNumber = 1);
+                eH = tar.clientHeight;
+                eSH = eH * scaleNumber;
+                eW = tar.clientWidth ;
                 sH = document.height;
-                sW =document.width;
-                x = (sW -eW)/2;
+                sW = document.width;
+                x = (sW - eW)/2;
                 y = (sH - eH)/2;
+                sy = (sH - eSH)/2;
             }
-            function setPosition () {
-                tar.style.top = y + 'px';
+            function setPosition (scaleNumber) {
+                getSize(scaleNumber)
+                console.log(y, sy);
+                if (sy < 0) tar.style.top = y + Math.abs(sy) + 'px';
+                else tar.style.top = y + 'px';
                 tar.style.left = x + 'px';
             }
 
@@ -165,16 +171,22 @@
                 return 'scale(' + number + ')';
             }
             document.querySelector('.increase').addEventListener('click', function () {
-                tar.style[scaleName] =  combScale( transScale( readScale(tar) ) + 0.05 );
+                var scaleValue  = transScale( readScale(tar) ) + 0.05;
+                var scaleNumber = combScale( scaleValue );
+                tar.style[scaleName] =  scaleNumber;
+                setPosition(scaleValue)
+                document.querySelector('#scale').innerHTML = parseInt(scaleValue * 100) + '%'
             })
             document.querySelector('.reduce').addEventListener('click', function () {
-                tar.style[scaleName] =  combScale( transScale( readScale(tar) ) - 0.05 );
+                var scaleValue  = transScale( readScale(tar) ) - 0.05;
+                var scaleNumber = combScale( scaleValue );
+                tar.style[scaleName] =  scaleNumber;
+                setPosition(scaleValue)
+                document.querySelector('#scale').innerHTML = parseInt(scaleValue * 100)  + '%'
             })
             window.addEventListener('resize', function () {
-                getSize();
                 setPosition();
             })
-            getSize();
             setPosition();
             init();
     })()
