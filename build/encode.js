@@ -4,6 +4,8 @@ var fs 		= require('fs'),
 	source  =  {
 		'footer' 		: 'footer.html',
 		'header' 		: 'header.html',
+		'blogHeader' 	: 'blogHeader.html',
+		'blogFooter' 	: 'blogFooter.html',
 		'cmThemeJS' 	: 'cm.theme.js',
 		'cmThemeCSS' 	: 'codeMirrorThemes.css',
 		'cmJS' 			: 'codeMirrorJS.js',

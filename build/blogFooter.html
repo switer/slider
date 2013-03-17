@@ -1,18 +1,20 @@
 <script type="text/javascript">
     (function(){
-        var canvas = document.getElementById("slider-preview"),code = document.getElementById("code"),
-        sliders = {};
-        var height = canvas.style.height;
-        var h = parseInt(height.substr(0, height.length-2));
-        canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
+        var canvas = document.getElementById("slider-preview"),
+            code = document.getElementById("code"),
+            sliders = {};
+        // var height = canvas.style.height;
+        // var h = parseInt(height.substr(0, height.length-2));
+        // canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
+        // canvas.style["marginTop"] = 100 + "px";
         var targetSlider = null;
         var datajson = document.getElementById('datajson').innerHTML,
             datas = JSON.parse(datajson),
             DATA = JSON.parse(datas.cntData),
             conf = datas.cntConf;
-        var showPenel = document.getElementById('slider-preview');
-        showPenel.style.height = conf.height;
-        showPenel.style.width = conf.width;
+        // var showPenel = document.getElementById('slider-preview');
+        // showPenel.style.height = conf.height;
+        canvas.style.width = conf.width;
         var module = {
             init:function(){
                 for(var s in DATA){
@@ -23,8 +25,10 @@
                         slider.appendChild(panel);
                         panel.setAttribute('style', DATA[s].panelAttr);
                         slider.className = "slider " + DATA[s].anim;
+                        slider.style.height = conf.height;
+                        slider.style.width  = conf.width;
                         sliders[s] = slider;
-                        slider.style.display = "none";
+                        // slider.style.display = "none";
                         for (var e in elements) {
                             if(elements.hasOwnProperty(e)){
                                 var data = elements[e],elem;
@@ -150,8 +154,8 @@
             function setPosition (scaleNumber) {
                 getSize(scaleNumber)
                 console.log(y, sy);
-                if (sy < 0) tar.style.top = (y + Math.abs(sy) + 100) + 'px';
-                else tar.style.top = (y + 100) 'px';
+                if (sy < 0) tar.style.top = y + Math.abs(sy) + 'px';
+                else tar.style.top = y + 'px';
                 tar.style.left = x + 'px';
             }
 
