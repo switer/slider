@@ -1084,7 +1084,6 @@ Core.registerModule("canvas",function(sb){
                 codeWrap.setAttribute("style", pasteParam["elemAttr"]);
                 defaultValue = pasteParam["value"];
                 defaultTheme = pasteParam['theme'];
-                console.log(pasteParam);
                 defaultMode = pasteParam['codeType'];
             }
             /**********/
@@ -1111,6 +1110,7 @@ Core.registerModule("canvas",function(sb){
     
             var dataId = global._insetIntoDataset(containerDatas.container, codeWrap, codeMirror);
             elementOpertateFunc(dataId, containerDatas.container, containerDatas.container);
+            return dataId;
         },
 
         _getMaxZIndex : function (curSlider) {
@@ -1181,7 +1181,6 @@ Core.registerModule("canvas",function(sb){
 
                 type = item.getAttribute("data-type");
                 attrValue =   SliderDataSet[currentSlider][rightMenuBtn].container.style[type] || defaultAtt[type];
-                // console.log(defaultAtt[type],sb.subrgb(defaultAtt[type]));
                 if(type=="boxShadow") {
                     var splitArr = defaultAtt[type].split(" ");
                     var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
@@ -1223,7 +1222,6 @@ Core.registerModule("canvas",function(sb){
                         dvalue = defaultAtt[type];
                         if(pnumber) dvalue = dvalue.split(" ")[pnumber];
                         var multi = item.dataset.multi || '1';
-                        console.log('dvalue', dvalue);
                         inputElem.value = parseInt(dvalue)*factor/multi;
                         break;
                     case 'select':
@@ -1475,7 +1473,7 @@ Core.registerModule("canvas",function(sb){
             showAnim.innerHTML = anim_name[anim];
         },
         setSelect : function (elemID) {
-            if (elemID === "panel") return;
+            if (!elemID || elemID === "panel" ) return;
             //取消现有目标的效果
             if(target&&elementSet[target]) {
                 sb.removeClass(elementSet[target].container,"element-select");
@@ -1637,7 +1635,6 @@ Core.registerModule("canvas",function(sb){
                 parts[item].resizeHandle([element,container,elem]);
                 frag.appendChild(element);
             }
-            console.log(options.container);
             if (!options.container) {
 
                 container.setAttribute("style", "position:absolute;z-index:1;left:0px;top:0px;background-position:center;background-size:99.99% 100%;");
