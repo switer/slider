@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="css/preview.css" type="text/css" />
         <link rel="stylesheet" href="css/codemirror.css" type="text/css" />
         <link rel="stylesheet" href="css/cm.theme.css" type="text/css" />
+        <link rel="stylesheet" href="css/introjs.css" type="text/css" />
         <script type="text/javascript" src="web.fs.mobile/src/lib/underscore.js"></script>
         <script type="text/javascript" src="web.fs.mobile/src/lib/zepto.js"></script>
         <script type="text/javascript" src="js/lib/codemirror/codemirror.js"></script>
@@ -29,6 +30,7 @@
         <script type="text/javascript" src="js/util/altbox.js"></script>
         <script type="text/javascript" src="js/core.js"></script>
         <script type="text/javascript" src="js/sandbox.js"></script>
+        <script type="text/javascript" src="js/intro.js"></script>
         <link rel="stylesheet" type="text/css" href="web.fs.mobile/src/theme/ui.css">
         <link rel="stylesheet" type="text/css" href="web.fs.mobile/src/sui/sui.css">
         <style type="text/css">
@@ -187,8 +189,8 @@
         <div id="slider-preview">
             <div id="code"></div>
         </div>
-        <div id="canvas" >
-            <div class="container"></div>
+        <div id="canvas">
+            <div class="container" data-intro='编辑框' data-step='1'></div>
             <div id="element-attrSetting-menu" class="panel1">
                 <div class="move"></div>
                 <div class="setting-menu-head">
@@ -379,7 +381,7 @@
 
             </div>
         </div>
-        <div id='shapebar'>
+        <div id='shapebar' data-intro='图形工具栏' data-step='2'>
             <div id='triangle' class='shape-icon' data-type='triangle'></div>
             <div id='circular' class='shape-icon' data-type='circular'></div>
             <div id='rectangle' class='shape-icon' data-type='rectangle'></div>
@@ -389,8 +391,8 @@
             <div id='moon' class='shape-icon' data-type='moon'></div>
             <div id='polygon' class='shape-icon' data-type='polygon'></div>
         </div>
-        <div id="toolbar" >
-            <div id="tool-buttons">
+        <div id="toolbar">
+            <div id="tool-buttons"  data-intro='功能工具栏' data-step='3'>
                 <div id="tool-enterPreviewMode" class="tool-app title" data-title="保存"></div>
                 <div id="tool-openFileSystem" class="tool-app title" data-title="打开文件夹"></div>
                 <div id="tool-addAnimation" class="tool-app ondetail title" data-title="更改幻灯片过渡动画"></div>
@@ -444,7 +446,7 @@
             <div id="next-frame-list" class="dp-none" title="next slider view list">
                 <a class="sheet" href="javascript:;"></a>
             </div>
-            <div id="frame-list" class="anim-move-left cf"></div>
+            <div id="frame-list" class="anim-move-left cf"  data-intro='幻灯片缩略图' data-step='4'></div>
         </div>
         <!--footer-->
         <div style='display:none' id='header'>
