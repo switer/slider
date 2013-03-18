@@ -104,20 +104,19 @@ Core.registerModule("filesystem", function(sb){
 						else $(".fs-icon-back.fs-icon-root").css('top', '45px');
 					})
 					$(_this._container).on('click', '.fs-icon-opt-upload', function (e) {
-						alert('click');
 						var cwd = webui.getCwd(_this._container);
 						webfs.openfile($(e.target).data('file'), cwd, function (file) {
 							webfs.readfile(file, 'UTF-8', function (evt) {
 								var content = evt.target.result;
 								$.ajax({
 								  type: 'POST',
-								  url: 'http://172.26.14.221:3000/s/upload',
+								  url: '/s/upload',
 								  data: JSON.stringify({
 								  	fileName : $(e.target).data('file'),
 								  	content : content,
 								  	type : 'text/html'
 								  }),
-								  contentType: 'text/html'
+								  contentType: 'application/json'
 								})
 							}, function () {
 								alert('error');
