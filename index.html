@@ -104,7 +104,7 @@
         <div class="colorSelector"></div>
         <div class="colorSelector" id="colorSelector"></div>
         <div id="execCommand-detail" class="panel1">
-            <div class="close-menu title" data-title="关闭"></div>
+            <div class="close-menu" data-title="关闭"></div>
             <!-- <div class="resize"></div> -->
             <!-- <div class="move"></div> -->
             <div class="execCommand-item font-family">
@@ -191,7 +191,7 @@
                     <div class="boxshadowsetting-but setting-tag">内阴影</div>
                     <div class="transformsetting-but setting-tag">变换</div>
                 </div>
-                <div class="close-menu title" data-title="关闭"></div>
+                <div class="close-menu" data-title="关闭"></div>
                 <div class="bgsetting attr-setting-panel" >
                     <div class="setting-left">
                         <div class="setting-title">背景色</div>
@@ -350,30 +350,30 @@
                 </div>
             </div>
             <div id="element-operate-menu" class="panel1">
-                <div class="close-menu title" data-title="关闭"></div>
+                <div class="close-menu" data-title="关闭"></div>
                 <div class="elem-operation">
-                    <div id="elem-delete" class="elem-item title" data-event="deleteElement" data-title="删除该元素">删除</div>
-                    <div id="elem-copy" class="elem-item title" data-event="copyElement" data-title="复制该元素">复制</div>
-                    <div id="elem-paste" class="elem-item title" data-event="pasteElement" data-title="粘贴当前幻灯片">粘贴</div>
+                    <div id="elem-delete" class="elem-item" data-event="deleteElement" data-title="删除该元素">删除</div>
+                    <div id="elem-copy" class="elem-item" data-event="copyElement" data-title="复制该元素">复制</div>
+                    <div id="elem-paste" class="elem-item" data-event="pasteElement" data-title="粘贴当前幻灯片">粘贴</div>
                 </div>
                 <div class="elem-operation">
-                    <div id="elem-zIndex-upward" class="elem-item title" data-event="moveUpward" data-title="往上移动一层">往上移</div>
-                    <div id="elem-zIndex-downward" class="elem-item title" data-event="moveDownward" data-title="往下移动一层">往下移</div>
-                    <div id="elem-zIndex-toTop" class="elem-item title" data-event="moveToTop" data-title="置于最顶层">置顶</div>
-                    <div id="elem-zIndex-toBottom" class="elem-item title" data-event="moveToBottom" data-title="置于最底层">置底</div>
+                    <div id="elem-zIndex-upward" class="elem-item" data-event="moveUpward" data-title="往上移动一层">往上移</div>
+                    <div id="elem-zIndex-downward" class="elem-item" data-event="moveDownward" data-title="往下移动一层">往下移</div>
+                    <div id="elem-zIndex-toTop" class="elem-item" data-event="moveToTop" data-title="置于最顶层">置顶</div>
+                    <div id="elem-zIndex-toBottom" class="elem-item" data-event="moveToBottom" data-title="置于最底层">置底</div>
                 </div>
                 <div class="elem-operation dp-none codebox-setting-item">
-                    <div id="elem-attribute-setting" class="elem-item title" data-event="codeboxSetting" data-title="设置编辑框的编程语言">编程语言</div>
-                    <div id="elem-attribute-setting" class="elem-item title" data-event="codeboxThemeSetting" data-title="编辑框主题">主题</div>
+                    <div id="elem-attribute-setting" class="elem-item" data-event="codeboxSetting" data-title="设置编辑框的编程语言">编程语言</div>
+                    <div id="elem-attribute-setting" class="elem-item" data-event="codeboxThemeSetting" data-title="编辑框主题">主题</div>
                 </div>
                 <div class="elem-operation">
-                    <div id="elem-attribute-setting" class="elem-item title" data-event="backgroundSetting" data-title="设置背景">背景</div>
-                    <div id="elem-attribute-setting" class="elem-item title" data-event="elemAttrSetting" data-title="属性设置">属性</div>
+                    <div id="elem-attribute-setting" class="elem-item" data-event="backgroundSetting" data-title="设置背景">背景</div>
+                    <div id="elem-attribute-setting" class="elem-item" data-event="elemAttrSetting" data-title="属性设置">属性</div>
                 </div>
 
             </div>
         </div>
-        <div id='shapebar' data-intro='图形工具栏' data-step='5'>
+        <div id='shapebar' data-intro='图形工具栏' data-step='2'>
             <div id='triangle' class='shape-icon' data-type='triangle'></div>
             <div id='circular' class='shape-icon' data-type='circular'></div>
             <div id='rectangle' class='shape-icon' data-type='rectangle'></div>
@@ -385,26 +385,27 @@
         </div>
         <div id="toolbar">
             <div id="tool-buttons"  data-intro='功能工具栏' data-step='3'>
-                <div id="tool-enterPreviewMode" class="tool-app title" data-title="保存" data-intro='保存' data-step='3'></div>
-                <div id="tool-openFileSystem" class="tool-app title" data-title="打开文件夹" data-intro='打开文件夹' data-step='4'></div>
-                <div id="tool-addAnimation" class="tool-app ondetail title" data-title="更改幻灯片过渡动画"></div>
-                <div id="tool-addVideo" class="tool-app title" data-title="添加视频">
+                <div id="tool-enterPreviewMode" class="tool-app" data-title="保存" data-intro='保存' data-step='4'></div>
+                <div id="tool-openFileSystem" class="tool-app " data-title="打开文件夹" data-intro='打开文件夹' data-step='5'></div>
+                <div id="tool-addAnimation" class="tool-app ondetail" data-title="更改幻灯片过渡动画" data-intro='更改幻灯片过渡动画' data-step='6'></div>
+                <div id="tool-addVideo" class="tool-app" data-title="添加视频" data-intro='添加视频' data-step='7'>
                     <input type="file" id="addVideoInp"/>
                 </div>
-                <div id="tool-addimage" class="tool-app title" data-title="添加一张图片">
+                <div id="tool-addimage" class="tool-app" data-title="添加一张图片" data-intro='添加一张图片' data-step='8'>
                     <input type="file" id="addImageInp"/>
                 </div>
-                <div id="tool-addtext" class="tool-app title" data-title="添加文本输入框"></div>
-                <div id="tool-addCode" class="tool-app title" data-title="添加代码编辑框"></div>
+                <div id="tool-addtext" class="tool-app" data-title="添加文本输入框" data-intro='添加文本输入框' data-step='9'></div>
+                <div id="tool-addCode" class="tool-app" data-title="添加代码编辑框" data-intro='添加代码编辑框' data-step='10'></div>
                 <!--<div id="tool-elemOperation" class="tool-app ondetail title" data-title="操作"></div>-->
-                <div id="tool-screen" class="tool-app title" data-title="更改幻灯片比例"></div>
-                <div class="tool-app show_execCommandDetail title" data-title="打开文本编辑工具"></div>
-                <div id="tool-import" class="tool-app title" data-title="导入幻灯片">
+                <div id="tool-screen" class="tool-app" data-title="更改幻灯片比例" data-intro='更改幻灯片比例' data-step='11'></div>
+                <div class="tool-app show_execCommandDetail" data-title="打开文本编辑工具" data-intro='打开文本编辑工具' data-step='12'></div>
+                <div id="tool-import" class="tool-app" data-title="导入幻灯片" data-intro='导入幻灯片' data-step='13'>
                     <input type="file" id="importInp"/>
                 </div>
-                <div id="tool-addslider" class="tool-app title" data-title="添加新的幻灯片"></div>
-                <div id="tool-insertSlider" class="tool-app title" data-title="往当前位置插入新的幻灯片"></div>
-                <div id="tool-deleteSlider" class="tool-app title" data-title="删除当前幻灯片"></div>
+                <div id="tool-addslider" class="tool-app" data-title="添加新的幻灯片" data-intro='添加新的幻灯片' data-step='14'></div>
+                <div id="tool-insertSlider" class="tool-app" data-title="往当前位置插入新的幻灯片" data-intro='往当前位置插入新的幻灯片' data-step='15'></div>
+                <div id="tool-deleteSlider" class="tool-app" data-title="删除当前幻灯片" data-intro='删除当前幻灯片' data-step='16'></div>
+                <div id="tool-help" class="tool-app" data-title="帮助" data-intro='帮助' data-step='17'></div>
             </div>
             <!--工具栏详细操作菜单-->
             <div id="tool-operation" >

@@ -221,7 +221,8 @@ Core.registerModule("canvas",function(sb){
                 zIndex      : "999",
                 left        : (editorContainer.offsetLeft + 520) + "px",
                 top         : (editorContainer.offsetTop) + "px"
-            });
+            })
+            .attr('title', '当前幻灯片的过度动画')
             sb.move(showAnim, showAnim);
 
             editorContainer.appendChild(showAnim);
