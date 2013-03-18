@@ -103,7 +103,8 @@ Core.registerModule("filesystem", function(sb){
 						if (window.scrollY >= 45) $(".fs-icon-back.fs-icon-root").css('top', '0px');
 						else $(".fs-icon-back.fs-icon-root").css('top', '45px');
 					})
-					$(_this._container).on('click .fs-icon-opt-upload', function (e) {
+					$(_this._container).on('click', '.fs-icon-opt-upload', function (e) {
+						alert('click');
 						var cwd = webui.getCwd(_this._container);
 						webfs.openfile($(e.target).data('file'), cwd, function (file) {
 							webfs.readfile(file, 'UTF-8', function (evt) {
