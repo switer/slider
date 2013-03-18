@@ -3,7 +3,7 @@ Core.registerModule("view",function(sb){
     frames = new sb.ObjectLink(),dispFrames = new sb.ObjectLink(),hidFrames = new sb.ObjectLink(),
     currentFrame = null,frameContainer = null,
     changeCurrFrameFunc = null,preFramesButn=null,nextFramesButn = null,
-    changeDisplayFrameListFunc = null,getElementDataFunc=null,showFrameElementByDataFunc=null;
+    getElementDataFunc=null,showFrameElementByDataFunc=null;
 
     var SCREEN_SIZE_MAP = {
             '4:3'   : {x:160,y:120},
@@ -117,7 +117,7 @@ Core.registerModule("view",function(sb){
             var frame = global.createFrame(method);
             if(method=="append") global.addFrameElement(frame.frame,method,null,frameContainer);
             else if(method=="insert") global.addFrameElement(frame.frame,method,frames[currentFrame],frameContainer);
-            changeDisplayFrameListFunc(frame.id,method);
+            global.changeDisplayFrameList(frame.id,method);
         },
         deleteFrame:function(){
             //nearFrame:当前frame的邻近frame,
@@ -141,7 +141,7 @@ Core.registerModule("view",function(sb){
                 if(dispFrames[oldCurr]) delete dispFrames[oldCurr];
                 if(hidFrames[oldCurr]) delete hidFrames[oldCurr];  
             }
-            changeDisplayFrameListFunc(currentFrame,"delete");
+            global.changeDisplayFrameList(currentFrame,"delete");
         },
         /*
          *get a appropriate hidden frame and display it
@@ -197,7 +197,7 @@ Core.registerModule("view",function(sb){
                 //若为第一个帧，显示该帧所在的组
                 if(frameID==dispFrames.getFirstElement()){
                     curr = currentFrame;
-                    changeDisplayFrameListFunc(frameID,"showPre");
+                    global.changeDisplayFrameList(frameID,"showPre");
                     window.setTimeout(function(){
                         frameContainer.className = "anim-move-left";
                     });
@@ -206,7 +206,7 @@ Core.registerModule("view",function(sb){
                 //若为最后一个帧，显示该帧所在的组
                 else if(frameID == dispFrames.getLastElement()&&dispFrames.length()>=MAX_FRAME_NUMBER){
                     curr = currentFrame;
-                    changeDisplayFrameListFunc(frameID,"showNext");
+                    global.changeDisplayFrameList(frameID,"showNext");
                     window.setTimeout(function(){
                         frameContainer.className = "anim-move-right";
                     });

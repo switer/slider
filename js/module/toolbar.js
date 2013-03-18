@@ -204,7 +204,9 @@ Core.registerModule("toolbar",function(sb){
                     data : null
                 });
             });
-
+            $("#tool-help").on('click', function () {
+                introJs().start();
+            })
             addTextApp.onclick = function(){
                 sb.notify({
                     type:"addText",

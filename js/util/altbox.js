@@ -10,7 +10,7 @@
             marginTop : (window.innerHeight-abH)/2+"px",
             marginLeft : (window.innerWidth-abW)/2+"px"
         })
-        var titles = (document.querySelectorAll(".title")),elem;
+        var titles = (document.querySelectorAll("[data-title]")),elem;
         var messageBox = document.querySelector("#message-box");
         var messageContent =messageBox.querySelector(".message-content");
         for (i = 0; elem = titles[i]; i++) {
