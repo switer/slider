@@ -32,24 +32,24 @@
     position: absolute;
     top: 20px;
 }
-#pre-frame-list{
+/*#pre-frame-list{
     position: absolute;
     left: 10px;
     top:-8px
-}
-#next-frame-list{
+}*/
+/*#next-frame-list{
     position: absolute;
     left: 50px;
     top:4px;
-}
-#next-frame-list .sheet:before{
+}*/
+/*#next-frame-list .sheet:before{
     background-image: url(../img/right_arrow.png);
 
 }
 #pre-frame-list .sheet:before{
     background-image: url(../img/left_arrow.png);
 
-}
+}*/
 .sheet:before{
     background-color: #2591B4;
     background-repeat: no-repeat;

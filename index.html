@@ -373,7 +373,7 @@
 
             </div>
         </div>
-        <div id='shapebar' data-intro='图形工具栏' data-step='2'>
+        <div id='shapebar' data-intro='图形工具栏' data-step='5'>
             <div id='triangle' class='shape-icon' data-type='triangle'></div>
             <div id='circular' class='shape-icon' data-type='circular'></div>
             <div id='rectangle' class='shape-icon' data-type='rectangle'></div>
@@ -385,8 +385,8 @@
         </div>
         <div id="toolbar">
             <div id="tool-buttons"  data-intro='功能工具栏' data-step='3'>
-                <div id="tool-enterPreviewMode" class="tool-app title" data-title="保存"></div>
-                <div id="tool-openFileSystem" class="tool-app title" data-title="打开文件夹"></div>
+                <div id="tool-enterPreviewMode" class="tool-app title" data-title="保存" data-intro='保存' data-step='3'></div>
+                <div id="tool-openFileSystem" class="tool-app title" data-title="打开文件夹" data-intro='打开文件夹' data-step='4'></div>
                 <div id="tool-addAnimation" class="tool-app ondetail title" data-title="更改幻灯片过渡动画"></div>
                 <div id="tool-addVideo" class="tool-app title" data-title="添加视频">
                     <input type="file" id="addVideoInp"/>
@@ -438,7 +438,7 @@
             <div id="next-frame-list" class="dp-none" title="next slider view list">
                 <a class="sheet" href="javascript:;"></a>
             </div>
-            <div id="frame-list" class="anim-move-left cf"  data-intro='幻灯片缩略图' data-step='4'></div>
+            <div id="frame-list" class="anim-move-left cf"></div>
         </div>
         <!--footer-->
         <div style='display:none' id='header'></div>
@@ -460,5 +460,6 @@
         <!-- Modular By RequireJS -->
         <script data-main="js/loader.js" src="web.fs.mobile/src/lib/require.js"></script>
         <script type="text/javascript" src='sourceMap.js'></script>
+        <script type="text/javascript" src="js/html2canvas.min.js"></script>
     </body>
 </html>

@@ -267,6 +267,7 @@
     setTimeout(function() {
       styleText += "opacity: .5;";
       overlayLayer.setAttribute("style", styleText);
+      //hack by guankaishe
       overlayLayer.style.height = document.height + 'px';
     }, 10);
     return true;

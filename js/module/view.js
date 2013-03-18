@@ -1,9 +1,8 @@
 Core.registerModule("view",function(sb){
-    var createFrameFunc = null,frame_count = 0,VIEWSCALE=5, 
-    frame_number = 0,MAX_FRAME_NUMBER=10,frames = new sb.ObjectLink(),
-    dispFrames = new sb.ObjectLink(),hidFrames = new sb.ObjectLink(),currentFrame = null,
-    addSliderFunc = null,showFrameFunc = null,frameContainer = null,addFrameElementFunc = null,
-    addFrameObjectFunc = null,changeCurrFrameFunc = null,preFramesButn=null,nextFramesButn = null,
+    var frame_count = 0,frame_number = 0,VIEWSCALE=5, MAX_FRAME_NUMBER=10,
+    frames = new sb.ObjectLink(),dispFrames = new sb.ObjectLink(),hidFrames = new sb.ObjectLink(),
+    currentFrame = null,frameContainer = null,
+    changeCurrFrameFunc = null,preFramesButn=null,nextFramesButn = null,
     changeDisplayFrameListFunc = null,getElementDataFunc=null,showFrameElementByDataFunc=null;
 
     var SCREEN_SIZE_MAP = {
@@ -28,13 +27,9 @@ Core.registerModule("view",function(sb){
         init:function(){
             global = this;
             frameContainer = sb.find("#frame-list");
-            preFramesButn = sb.find("#pre-frame-list");
-            nextFramesButn = sb.find("#next-frame-list");
-            createFrameFunc = this.createFrame;
-            addSliderFunc = this.addSlider;
-            showFrameFunc = this.showFrame;
-            addFrameElementFunc = this.addFrameElement;
-            addFrameObjectFunc = this.addFrameObject;
+            // preFramesButn = sb.find("#pre-frame-list");
+            // nextFramesButn = sb.find("#next-frame-list");
+            // addFrameElementFunc = this.addFrameElement;
             changeCurrFrameFunc = this.changeCurrFrame;
             changeDisplayFrameListFunc = this.changeDisplayFrameList;
             getElementDataFunc = this.getElementData;
@@ -52,23 +47,23 @@ Core.registerModule("view",function(sb){
                 "enterPreviewMode":this.enterPreviewMode,
                 "changeScreenScale" : this.changeScreenScale
             });
-            preFramesButn.onclick = function(){
-                if(dispFrames.getFirstElement()==frames.getFirstElement()) return;
-                frameContainer.className = "";
-                changeDisplayFrameListFunc(dispFrames.getFirstElement(),"showPre");
-                window.setTimeout(function(){
-                    frameContainer.className = "anim-move-left";
-                });
-            };
-            nextFramesButn.onclick = function(){
-                if(dispFrames.getLastElement()==frames.getLastElement()) return;
-                if(dispFrames.findIndex(dispFrames.getLastElement())<MAX_FRAME_NUMBER) return;
-                frameContainer.className = "";
-                changeDisplayFrameListFunc(dispFrames.getLastElement(),"showNext");
-                window.setTimeout(function(){
-                    frameContainer.className = "anim-move-right";
-                });
-            }
+            // preFramesButn.onclick = function(){
+            //     if(dispFrames.getFirstElement()==frames.getFirstElement()) return;
+            //     frameContainer.className = "";
+            //     changeDisplayFrameListFunc(dispFrames.getFirstElement(),"showPre");
+            //     window.setTimeout(function(){
+            //         frameContainer.className = "anim-move-left";
+            //     });
+            // };
+            // nextFramesButn.onclick = function(){
+            //     if(dispFrames.getLastElement()==frames.getLastElement()) return;
+            //     if(dispFrames.findIndex(dispFrames.getLastElement())<MAX_FRAME_NUMBER) return;
+            //     frameContainer.className = "";
+            //     changeDisplayFrameListFunc(dispFrames.getLastElement(),"showNext");
+            //     window.setTimeout(function(){
+            //         frameContainer.className = "anim-move-right";
+            //     });
+            // }
             //初始化窗口大小与margin
             global.refleshFrameListMargin(SCREEN_SIZE_MAP[DEFAULT_SCREEN]);
             var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
@@ -98,7 +93,7 @@ Core.registerModule("view",function(sb){
 
         },
         insertFrame:function(){
-            addSliderFunc("insert");
+            global.addSlider("insert");
         },
         addFrameObject:function(frame,method,pos){
             if(method=="insert") {
@@ -119,9 +114,9 @@ Core.registerModule("view",function(sb){
             else Core.log("wrong insert slider-Element method!");
         },
         addSlider:function(method){
-            var frame = createFrameFunc(method);
-            if(method=="append") addFrameElementFunc(frame.frame,method,null,frameContainer);
-            else if(method=="insert") addFrameElementFunc(frame.frame,method,frames[currentFrame],frameContainer);
+            var frame = global.createFrame(method);
+            if(method=="append") global.addFrameElement(frame.frame,method,null,frameContainer);
+            else if(method=="insert") global.addFrameElement(frame.frame,method,frames[currentFrame],frameContainer);
             changeDisplayFrameListFunc(frame.id,method);
         },
         deleteFrame:function(){
@@ -137,7 +132,7 @@ Core.registerModule("view",function(sb){
                 frames.getSlider(method="next",currentFrame,-1);
             }
             //显示新的预览列表
-            var oldCurr = showFrameFunc(nearFrame,method=="pre"?"before":"after");
+            var oldCurr = global.showFrame(nearFrame,method=="pre"?"before":"after");
             //删除预览frame
             if(oldCurr){
                 frameContainer.removeChild(frames[oldCurr]);
@@ -187,6 +182,17 @@ Core.registerModule("view",function(sb){
         showFrame:function(frameID){
             var curr;
             if(frameID&&frames[frameID]){
+
+                // html2canvas( [ document.querySelector('#canvas .container') ], {
+                //     onrendered: function(canvas) {
+                //         console.log('html to canvas');
+                //         $(canvas).css({
+                //             'height': '160px',
+                //             'width' : '120px'
+                //         })
+                //         document.body.appendChild(canvas);
+                //     }
+                // });
                 //currentFrame = frameID;
                 //若为第一个帧，显示该帧所在的组
                 if(frameID==dispFrames.getFirstElement()){
@@ -209,7 +215,7 @@ Core.registerModule("view",function(sb){
                 return changeCurrFrameFunc(frameID);
             }else{
                 curr = currentFrame;
-                addSliderFunc("append");
+                global.addSlider("append");
                 return curr;
             }
         },
@@ -420,11 +426,11 @@ Core.registerModule("view",function(sb){
             frame_count++;
             var frameID = "frame"+frame_number;
             //            frames[frameID] = frame;
-            if(method=="append") addFrameObjectFunc({
+            if(method=="append") global.addFrameObject({
                 key:frameID,
                 value:frame
             },method,null);
-            else if(method=="insert") addFrameObjectFunc({
+            else if(method=="insert") global.addFrameObject({
                 key:frameID,
                 value:frame
             },method,currentFrame);
