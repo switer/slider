@@ -831,8 +831,8 @@ Core.registerModule("canvas",function(sb){
             }
             
             panel.className = "panel";
-            //左键点击选中
-            // elementOpertateFunc("panel",panel);
+            //左键点击取消选中
+            elementOpertateFunc("panel",panel);
             newSlider.appendChild(panel);
             newSlider.className = "editor";
             
@@ -1072,6 +1072,8 @@ Core.registerModule("canvas",function(sb){
                 }
                 isEditor = false;
             });
+            //选中
+            global.setSelect(dataID);
             return dataID;
         },
 
@@ -1134,6 +1136,10 @@ Core.registerModule("canvas",function(sb){
             var dataId = global._insetIntoDataset(containerDatas.container, codeWrap, codeMirror);
             elementOpertateFunc(dataId, containerDatas.container, containerDatas.container);
             return dataId;
+        },
+        //添加svg矢量图
+        addSvg : function () {
+            //TODO
         },
 
         _getMaxZIndex : function (curSlider) {
@@ -1523,9 +1529,7 @@ Core.registerModule("canvas",function(sb){
             var i;
             sb.click(etar, {isDown : false}, function (e) {
                     cancelRightMenu();
-                    console.log(target , elemID);
-                    if (elemID === "panel" || target === elemID) return;
-
+                    if ( target === elemID) return;
                     //取消现有目标的效果
                     if(target && elementSet[target]) {
                         sb.removeClass(elementSet[target].container,"element-select");
@@ -1534,10 +1538,10 @@ Core.registerModule("canvas",function(sb){
                             sb.removeClass(parts[i],"show-container-apart");
                         }
                     }
-                    // if (target === elemID) {
-                    //     target = null;
-                    //     return;
-                    // }
+                    if (elemID === 'panel') {
+                        target = null;
+                        return;
+                    }
                     target = elemID;
                     sb.addClass(container, "element-select");
                     var elements = sb.query(".element-container-apart", elementSet[target].container);

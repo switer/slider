@@ -800,6 +800,7 @@ var SandBox = (function() {
                     }
                     flag.isInit = true;
                 }
+
                 if(other) other.style.width = (pInitW+clientX-initX)+"px";
                 else tar.style.width = (pInitW+clientX-initX)+"px";
             }
@@ -904,8 +905,16 @@ var SandBox = (function() {
                     }
                     flag.isInit = true;
                 }
-                if(other) other.style.width = (pInitW+clientX-initX)+"px";
-                else tar.style.width = (pInitW+clientX-initX)+"px";
+                // var transform = $(tar).css('WebkitTransform');
+                var diffResize = clientX-initX;
+                // if (transform && transform.match('rotate')) {
+                //     var rotate = transform.match(/rotate\(.*\)/)[0].replace(/^rotate\(/, '').replace(/deg\)$/, ''),
+                //         rotateValue = parseFloat(rotate);
+                //     diffResize = diffResize*Math.cos(Math.PI*rotateValue/180);
+                // }
+
+                if(other) other.style.width = pInitW+diffResize + "px";
+                else tar.style.width = pInitW+diffResize+"px";
             }
         });
     };
