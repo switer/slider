@@ -71,11 +71,14 @@
 .element-container .imgelement:hover{
     -webkit-box-shadow:0px 0px 10px blue;
 }
-.element-container .textboxelement:hover{
+/*.element-container .textboxelement:hover{
     -webkit-box-shadow:0px 0px 10px blue;
-}
+}*/
 .element-container .textboxelement {
     word-break: break-all;
+}
+.element-container .textboxelement:hover {
+    box-shadow: 0 0 30px 6px #CCC;
 }
 .element-container .element-panel{
 
@@ -101,10 +104,14 @@
 }*/
 .show-container-apart{
 
-    border: 1px solid black;
+    /*border: 1px solid black;*/
+    box-shadow: 0 0 0 1px black;
     background-color: white;
+    opacity: 0.9;border-radius: 50%;
+
 
 }
+.show-container-apart:hover {background-color: cornflowerblue;}
 
 .element-container-apart{
     position:absolute;

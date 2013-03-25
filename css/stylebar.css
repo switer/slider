@@ -133,6 +133,8 @@ select.execC-but {-webkit-appearance:button;width: auto!important;}
 .font-eraser .execC-but{
     background-image: url("../img/eraser.png");
 }
+.font-list {background-image: url("../img/num_list.png");background-size: 25px;background-repeat: no-repeat;background-position: center;}
+.font-unOrderList {background-image: url("../img/unorder_list.png");background-size: 25px;background-repeat: no-repeat;background-position: center;}
 .execCommand-item select{
     width: 80px;
     height: 30px;

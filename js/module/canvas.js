@@ -811,7 +811,8 @@ Core.registerModule("canvas",function(sb){
             }
             
             panel.className = "panel";
-            elementOpertateFunc("panel",panel);
+            //左键点击选中
+            // elementOpertateFunc("panel",panel);
             newSlider.appendChild(panel);
             newSlider.className = "editor";
             
@@ -950,7 +951,7 @@ Core.registerModule("canvas",function(sb){
                     height:img.height,
                     width:img.width
                 };
-                var partSize = 6,con_obj=null, type = obj.shape ? 'shape' : (obj.paste ? 'paste' : null)
+                var partSize = 8,con_obj=null, type = obj.shape ? 'shape' : (obj.paste ? 'paste' : null)
                     sizeObj = sb.fixedImgSize(sizeObj,canvasX,canvasY);
 
                 newContainerFunc(sizeObj,partSize, null, {
@@ -981,7 +982,7 @@ Core.registerModule("canvas",function(sb){
                         height:"100%"
                     }); 
                 }
-                var partSize = 6,dataID,maxZIndexElem,maxZIndex,cur;
+                var partSize = 8,dataID,maxZIndexElem,maxZIndex,cur;
 
                 sb.move(panel, container);
 
@@ -1009,7 +1010,7 @@ Core.registerModule("canvas",function(sb){
                 height:200,
                 width:500
             };
-            var partSize = 6,dataID;
+            var partSize = 8,dataID;
             var textBox = document.createElement("div");
             textBox.className = "textboxelement";
             var con_obj = newContainerFunc(obj, partSize,textBox);
@@ -1021,7 +1022,7 @@ Core.registerModule("canvas",function(sb){
                 textBox.innerHTML = textObj["value"];
             }else{
                 container.setAttribute("style", "position:absolute;left:"+((canvasX-obj.width)/2)+"px;top:"+((canvasY-obj.height)/2)+"px;");
-                textBox.setAttribute("style", "height:"+obj.height+"px;width:"+obj.width+"px;overflow:hidden;");
+                textBox.setAttribute("style", "height:"+obj.height+"px;width:"+obj.width+"px;overflow:hidden;outline: none;");
             }
             container.style.zIndex = global._getMaxZIndex(currentSlider);
 
@@ -1030,9 +1031,11 @@ Core.registerModule("canvas",function(sb){
             editor.appendChild(container);
             textBox.focus();
             isEditor = true;
+
+            dataID = global._insetIntoDataset(container, textBox)
+            elementOpertateFunc(dataID,con_obj.container,con_obj.container);
+
             // editorElem = textBox;
-
-
             document.onselectstart = function(){
                 return true;
             }
@@ -1040,6 +1043,7 @@ Core.registerModule("canvas",function(sb){
                 document.onselectstart = function(){
                     return true;
                 }
+                global.setSelect(dataID);
                 if(!isEditor) isEditor = true;
             }
             $(textBox).on('blur', function(e){
@@ -1048,8 +1052,6 @@ Core.registerModule("canvas",function(sb){
                 }
                 isEditor = false;
             });
-            dataID = global._insetIntoDataset(container, textBox)
-            elementOpertateFunc(dataID,con_obj.container,con_obj.container);
             return dataID;
         },
 
@@ -1058,7 +1060,7 @@ Core.registerModule("canvas",function(sb){
 
             var textArea = document.createElement('code'),
                 codeWrap = document.createElement('code'),
-                partSize = 6,
+                partSize = 8,
                 defaultValue = '',
                 defaultTheme = 'blackboard',
                 defaultMode = '',
@@ -1150,7 +1152,7 @@ Core.registerModule("canvas",function(sb){
             global.cancelElementOperateMenu();
             easm.style.display = "block";
             setPositionFunc(e,easm,-100,-100,-300,-200);
-            if(target&&( tar = elementSet[target])){
+            if(target && ( tar = elementSet[target])){
                 tar = elementSet[target].container;
             }else{
                 /*设置slider的属性*/
@@ -1474,7 +1476,8 @@ Core.registerModule("canvas",function(sb){
             showAnim.innerHTML = anim_name[anim];
         },
         setSelect : function (elemID) {
-            if (!elemID || elemID === "panel" ) return;
+
+            if (!elemID || elemID === "panel" || target === elemID  ) return;
             //取消现有目标的效果
             if(target&&elementSet[target]) {
                 sb.removeClass(elementSet[target].container,"element-select");
@@ -1483,10 +1486,10 @@ Core.registerModule("canvas",function(sb){
                     sb.removeClass(parts[i],"show-container-apart");
                 }
             }
-            if (target === elemID) {
-                target = null;
-                return;
-            }
+            // if (target === elemID) {
+            //     target = null;
+            //     return;
+            // }
             target = elemID;
             var container = elementSet[target].container;
             sb.addClass(container, "element-select");
@@ -1500,7 +1503,9 @@ Core.registerModule("canvas",function(sb){
             var i;
             sb.click(etar, {isDown : false}, function (e) {
                     cancelRightMenu();
-                    if (elemID === "panel") return;
+                    console.log(target , elemID);
+                    if (elemID === "panel" || target === elemID) return;
+
                     //取消现有目标的效果
                     if(target && elementSet[target]) {
                         sb.removeClass(elementSet[target].container,"element-select");
@@ -1509,10 +1514,10 @@ Core.registerModule("canvas",function(sb){
                             sb.removeClass(parts[i],"show-container-apart");
                         }
                     }
-                    if (target === elemID) {
-                        target = null;
-                        return;
-                    }
+                    // if (target === elemID) {
+                    //     target = null;
+                    //     return;
+                    // }
                     target = elemID;
                     sb.addClass(container, "element-select");
                     var elements = sb.query(".element-container-apart", elementSet[target].container);
@@ -1566,18 +1571,21 @@ Core.registerModule("canvas",function(sb){
             }
         },
         setPosition:function(event,elem,x1,y1,x2,y2,show){
-            var offsetX = event.screenX>(window.innerWidth+x2)?x2:x1,
-            offsetY = (event.screenY>window.innerHeight+y2)?y2:y1;
-            elem.style.left = (event.screenX+offsetX)+"px";
-            elem.style.top = (event.screenY+offsetY)+"px";
+            var offsetX = event.screenX > (window.innerWidth + x2) ? x2 : x1,
+                offsetY = (event.screenY  > window.innerHeight + y2) ? y2 : y1;
+            elem.style.left = (event.screenX + offsetX) + "px";
+            elem.style.top  = (event.screenY + offsetY) + "px";
         },
         createElementContainer:function(sizeObj, partSize, elem, options){
+
             /*
-             * names:con_e container:east
-             *      con_w container:west
-             *      con_s container:south
-             *      con_n container:north
+             * @names:
+             *      con_e container : east
+             *      con_w container : west
+             *      con_s container : south
+             *      con_n container : north
              */
+
             options = options || {};
 
             var container = options.container || document.createElement("div");
@@ -1586,51 +1594,53 @@ Core.registerModule("canvas",function(sb){
             var move_s = document.createElement("div");
             var move_n = document.createElement("div");
             var parts = {
+
                 "con_e":{
                     className:"con-part-e",
                     resizeHandle:sb.proxy(sb.resizeRX, sb),
-                    style:"right:"+(-partSize/2-2)+"px;top:50%;"
+                    style:"right:"+(-partSize)+"px;top:50%;"
                 },
                 "con_w":{
                     className:"con-part-w",
                     resizeHandle:sb.proxy(sb.resizeLX, sb),
-                    style:"left:"+(-partSize/2-2)+"px;top:50%;"
+                    style:"left:"+(-partSize)+"px;top:50%;"
                 },
                 "con_s":{
                     className:"con-part-s",
                     resizeHandle:sb.proxy(sb.resizeBY, sb),
-                    style: "bottom:"+(-partSize/2-2)+"px;left:50%;"
+                    style: "bottom:"+(-partSize)+"px;left:50%;"
                 },
                 "con_n":{
                     className:"con-part-n",
                     resizeHandle:sb.proxy(sb.resizeTY, sb),
-                    style:"top:"+(-partSize/2-2)+"px;left:50%;"
+                    style:"top:"+(-partSize)+"px;left:50%;"
                 },
                 "con_se":{
                     className:"con-part-se",
                     resizeHandle:sb.proxy(sb.resizeRB, sb),
-                    style:"bottom:"+(-partSize/2-2)+"px;right:"+(-partSize/2-2)+"px;"
+                    style:"bottom:"+(-partSize)+"px;right:"+(-partSize)+"px;"
                 },
                 "con_ne":{
                     className:"con-part-ne",
                     resizeHandle:sb.proxy(sb.resizeRT, sb),
-                    style:"top:"+(-partSize/2-2)+"px;right:"+(-partSize/2-2)+"px;"
+                    style:"top:"+(-partSize)+"px;right:"+(-partSize)+"px;"
                 },
                 "con_sw":{
                     className:"con-part-sw",
                     resizeHandle:sb.proxy(sb.resizeLB, sb),
-                    style:"bottom:"+(-partSize/2-2)+"px;left:"+(-partSize/2-2)+"px;"
+                    style:"bottom:"+(-partSize)+"px;left:"+(-partSize)+"px;"
                 },
                 "con_nw":{
                     className:"con-part-nw",
                     resizeHandle:sb.proxy(sb.resizeLT, sb),
-                    style:"top:"+(-partSize/2-2)+"px;left:"+(-partSize/2-2)+"px;"
+                    style:"top:"+(-partSize)+"px;left:"+(-partSize)+"px;"
                 }
             };
             var frag = document.createDocumentFragment();
+            
             for (var item in parts) {
                 var element = sb.create("div");
-                element.className = "element-container-apart "+parts[item].className;
+                element.className = "element-container-apart " + parts[item].className;
                 element.setAttribute("style", parts[item].style+"height:"+partSize+"px;width:"+partSize+"px;");
                 parts[item].element = element;
                 parts[item].resizeHandle([element,container,elem]);
@@ -1646,25 +1656,30 @@ Core.registerModule("canvas",function(sb){
                 container.style.width = sizeObj.width + 'px';
             }
 
-            container.className = "element-container";
-            move_e.className = "element-container-apart-move con-move-e";
-            move_w.className = "element-container-apart-move con-move-w";
-            move_s.className = "element-container-apart-move con-move-s";
-            move_n.className = "element-container-apart-move con-move-n";
-            move_w.setAttribute("style", "left:0px;top:0;height:100%;width:10px;");
-            move_e.setAttribute("style", "right:0px;top:0;height:100%;width:10px;");
-            move_s.setAttribute("style", "bottom:0px;left:0;height:10px;width:100%;");
-            move_n.setAttribute("style", "top:0px;left:0;height:10px;width:100%;");
-            container.setAttribute("draggable", false);
-            container.appendChild(move_w);
-            container.appendChild(move_e);
-            container.appendChild(move_s);
-            container.appendChild(move_n);
-            container.appendChild(frag);
-            sb.move(move_w,container);
-            sb.move(move_e,container);
-            sb.move(move_s,container);
-            sb.move(move_n,container);
+            $(move_e).addClass("element-container-apart-move con-move-e");
+            $(move_w).addClass("element-container-apart-move con-move-w");
+            $(move_s).addClass("element-container-apart-move con-move-s");
+            $(move_n).addClass("element-container-apart-move con-move-n");
+
+            $(move_w).attr("style", "left:-6px;top:0;height:100%;width:6px;");
+            $(move_e).attr("style", "right:-6px;top:0;height:100%;width:6px;");
+            $(move_s).attr("style", "bottom:-6px;left:0;height:6px;width:100%;");
+            $(move_n).attr("style", "top:-6px;left:0;height:6px;width:100%;");
+
+            $(container)
+                .addClass("element-container")
+                .append(move_w)
+                .append(move_e)
+                .append(move_s)
+                .append(move_n)
+                .append(frag)
+                .attr("draggable", false);
+
+            sb.move(move_w, container);
+            sb.move(move_e, container);
+            sb.move(move_s, container);
+            sb.move(move_n, container);
+
             return {
                 container:container
             }
