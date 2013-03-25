@@ -45,7 +45,8 @@ Core.registerModule("view",function(sb){
                 "insertSlider":this.insertFrame,
                 "enterEditorMode":this.enterEditorMode,
                 "enterPreviewMode":this.enterPreviewMode,
-                "changeScreenScale" : this.changeScreenScale
+                "changeScreenScale" : this.changeScreenScale,
+                "createThumb" : this.createThumb
             });
             // preFramesButn.onclick = function(){
             //     if(dispFrames.getFirstElement()==frames.getFirstElement()) return;
@@ -80,6 +81,19 @@ Core.registerModule("view",function(sb){
             FRAME_Y = sMap.y;
             global.refleshFrameListMargin(value)
             global.refleshFrameViewSize();
+        },
+        createThumb : function () {
+            var frame = frames.getFirstElement();
+            // html2canvas( [ document.querySelector('#canvas .container') ], {
+            //     onrendered: function(canvas) {
+            //         console.log('html to canvas');
+            //         $(canvas).css({
+            //             'height': '160px',
+            //             'width' : '120px'
+            //         })
+            //         document.body.appendChild(canvas);
+            //     }
+            // });
         },
         refleshFrameListMargin : function (value) {
             $("#frame-list").css('margin-top', MAGIN_TOP_MAP[value])
@@ -183,16 +197,6 @@ Core.registerModule("view",function(sb){
             var curr;
             if(frameID&&frames[frameID]){
 
-                // html2canvas( [ document.querySelector('#canvas .container') ], {
-                //     onrendered: function(canvas) {
-                //         console.log('html to canvas');
-                //         $(canvas).css({
-                //             'height': '160px',
-                //             'width' : '120px'
-                //         })
-                //         document.body.appendChild(canvas);
-                //     }
-                // });
                 //currentFrame = frameID;
                 //若为第一个帧，显示该帧所在的组
                 if(frameID==dispFrames.getFirstElement()){

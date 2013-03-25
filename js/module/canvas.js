@@ -702,70 +702,90 @@ Core.registerModule("canvas",function(sb){
                 data:null
             });
         },
+        _createThumb : function (sliderIndex, callback) {
+            var renderElement = sliders[sliderIndex];
+
+            html2canvas( [ renderElement ], {
+                onrendered: function(canvas) {
+                    // $(canvas).css({
+                    //     'height': '120px',
+                    //     'width' : '160px'
+                    // })
+                    // document.body.appendChild(canvas);
+                    callback && callback(canvas.toDataURL());
+                }
+            });
+        },
 
         enterSaveFile:function(){
-            
-            var json = new sb.ObjectLink(),
-                datas;
-            SliderDataSet.forEach(function(a,m){
-                var data = new sb.ObjectLink();
-                var slider = {};
-                a.forEach(function(b,n){
-                    var e = {};
-                    e.type = b["data"].tagName;
-                    e.cAttr = b["container"].getAttribute("style");
-                    e.eAttr = b["data"].getAttribute("style");
-                    e.zIndex = b["zIndex"];
-                    //img.src||video-srouce.src||textbox.src
-                    e.value = b["data"].src || $(b["data"]).find('.video-source').attr('src') || encodeURIComponent(b["data"].innerHTML);
-                    if(e.type=="IMG"){
-                        e.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
-                    }
-                    if (e.type === 'CODE') {
-                        //code mirror
-                        var doc =  b['file'].getDoc();
-                        e.value = doc.getValue();
-                        e.codeType = doc.getMode().name;
-                        e.theme = b['file'].getOption('theme');
-                    }
-                    data[n] = e;
-                });
-                slider["anim"] = sliders[m].getAttribute("data-anim");
-                slider["panelAttr"] = sb.find(".panel", sliders[m]).getAttribute("style");
-                slider["element"] = data;
-                json[m] = slider;
-            });
-            datas = {
-                cntConf : {
-                    'height' : editorContainer.style.height,
-                    'width' : editorContainer.style.width
-                },
-                cntData : json.toJSONString()
-            }
-            var scriptBegin = '<script type="text/javascript">',
-                scriptEnd   = '</script>',
-                styleBegin  = '<style type="text/css">',
-                styleEnd    = '</style>',
-                stream      = JSON.stringify(datas),
-                // header      = window._sourceMap.header,
-                // footer      = window._sourceMap.footer,
-                header      = window._sourceMap.blogHeader,
-                footer      = window._sourceMap.blogFooter,
-                cmJS        = window._sourceMap.cmJS,
-                cmThemeJS   = window._sourceMap.cmThemeJS,
-                cmCss       = window._sourceMap.cmCSS,
-                cmThemeCSS  = window._sourceMap.cmThemeCSS,
-                animation   = window._sourceMap.animationCSS;
 
-            var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
-            sb.notify({
-                type : "preSave",
-                data :  header +
-                        styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
-                        dataHtml +
-                        scriptBegin + cmJS + cmThemeJS + scriptEnd +
-                        footer
+            global._createThumb(sliders.getFirstElement(), function (thumb) {
+                var json = new sb.ObjectLink(),
+                    count = 0,
+                    datas;
+
+                SliderDataSet.forEach(function(datasets, sliderIndex){
+                    var data = new sb.ObjectLink();
+                    var slider = {};
+                    datasets.forEach(function(b, n){
+                        var sliderElement = {};
+                        sliderElement.type = b["data"].tagName;
+                        sliderElement.cAttr = b["container"].getAttribute("style");
+                        sliderElement.eAttr = b["data"].getAttribute("style");
+                        sliderElement.zIndex = b["zIndex"];
+                        //img.src||video-srouce.src||textbox.src
+                        sliderElement.value = b["data"].src || $(b["data"]).find('.video-source').attr('src') || encodeURIComponent(b["data"].innerHTML);
+                        if(sliderElement.type=="IMG"){
+                            sliderElement.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
+                        }
+                        if (sliderElement.type === 'CODE') {
+                            //code mirror
+                            var doc =  b['file'].getDoc();
+                            sliderElement.value = doc.getValue();
+                            sliderElement.codeType = doc.getMode().name;
+                            sliderElement.theme = b['file'].getOption('theme');
+                        }
+                        data[n] = sliderElement;
+                    });
+                    slider["anim"] = sliders[sliderIndex].getAttribute("data-anim");
+                    slider["panelAttr"] = sb.find(".panel", sliders[sliderIndex]).getAttribute("style");
+                    slider["element"] = data;
+                    json[sliderIndex] = slider;
+                });
+                datas = {
+                    cntConf : {
+                        'height' : editorContainer.style.height,
+                        'width' : editorContainer.style.width,
+                        'thumb' : thumb     //缩略图
+                    },
+                    cntData : json.toJSONString()
+                }
+                var scriptBegin = '<script type="text/javascript">',
+                    scriptEnd   = '</script>',
+                    styleBegin  = '<style type="text/css">',
+                    styleEnd    = '</style>',
+                    stream      = JSON.stringify(datas),
+                    // header      = window._sourceMap.header,
+                    // footer      = window._sourceMap.footer,
+                    header      = window._sourceMap.blogHeader,
+                    footer      = window._sourceMap.blogFooter,
+                    cmJS        = window._sourceMap.cmJS,
+                    cmThemeJS   = window._sourceMap.cmThemeJS,
+                    cmCss       = window._sourceMap.cmCSS,
+                    cmThemeCSS  = window._sourceMap.cmThemeCSS,
+                    animation   = window._sourceMap.animationCSS;
+
+                var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
+                sb.notify({
+                    type : "preSave",
+                    data :  header +
+                            styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
+                            dataHtml +
+                            scriptBegin + cmJS + cmThemeJS + scriptEnd +
+                            footer
+                });
             });
+                
         },
         hideSliderEditor : function () {
             sb.unbind(window, "keyup", keyOperate);
