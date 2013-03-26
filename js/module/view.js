@@ -2,7 +2,7 @@ Core.registerModule("view",function(sb){
     var frame_count = 0,frame_number = 0,VIEWSCALE=5, MAX_FRAME_NUMBER=10,
     frames = new sb.ObjectLink(),dispFrames = new sb.ObjectLink(),hidFrames = new sb.ObjectLink(),
     currentFrame = null,frameContainer = null,
-    changeCurrFrameFunc = null,preFramesButn=null,nextFramesButn = null,
+    changeCurrFrameFunc = null,
     getElementDataFunc=null,showFrameElementByDataFunc=null;
 
     var SCREEN_SIZE_MAP = {
@@ -22,14 +22,14 @@ Core.registerModule("view",function(sb){
         DEFAULT_SCREEN = '4:3',
         FRAME_X = 160,
         FRAME_Y = 120,
-        global;
+        global,
+        conf = {
+            SCALE_SIZE : 0.65
+        }
     return {
         init:function(){
             global = this;
             frameContainer = sb.find("#frame-list");
-            // preFramesButn = sb.find("#pre-frame-list");
-            // nextFramesButn = sb.find("#next-frame-list");
-            // addFrameElementFunc = this.addFrameElement;
             changeCurrFrameFunc = this.changeCurrFrame;
             changeDisplayFrameListFunc = this.changeDisplayFrameList;
             getElementDataFunc = this.getElementData;
@@ -48,23 +48,6 @@ Core.registerModule("view",function(sb){
                 "changeScreenScale" : this.changeScreenScale,
                 "createThumb" : this.createThumb
             });
-            // preFramesButn.onclick = function(){
-            //     if(dispFrames.getFirstElement()==frames.getFirstElement()) return;
-            //     frameContainer.className = "";
-            //     changeDisplayFrameListFunc(dispFrames.getFirstElement(),"showPre");
-            //     window.setTimeout(function(){
-            //         frameContainer.className = "anim-move-left";
-            //     });
-            // };
-            // nextFramesButn.onclick = function(){
-            //     if(dispFrames.getLastElement()==frames.getLastElement()) return;
-            //     if(dispFrames.findIndex(dispFrames.getLastElement())<MAX_FRAME_NUMBER) return;
-            //     frameContainer.className = "";
-            //     changeDisplayFrameListFunc(dispFrames.getLastElement(),"showNext");
-            //     window.setTimeout(function(){
-            //         frameContainer.className = "anim-move-right";
-            //     });
-            // }
             //初始化窗口大小与margin
             global.refleshFrameListMargin(SCREEN_SIZE_MAP[DEFAULT_SCREEN]);
             var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
@@ -104,6 +87,7 @@ Core.registerModule("view",function(sb){
             frames.forEach(function (item, key) {
                 $(item).css('height', FRAME_Y + 'px').css('width', FRAME_X + 'px')
             });
+            $('.frameCon').css('height', FRAME_Y * conf.SCALE_SIZE + 'px').css('width', FRAME_X * conf.SCALE_SIZE + 'px')
 
         },
         insertFrame:function(){
@@ -129,8 +113,8 @@ Core.registerModule("view",function(sb){
         },
         addSlider:function(method){
             var frame = global.createFrame(method);
-            if(method=="append") global.addFrameElement(frame.frame,method,null,frameContainer);
-            else if(method=="insert") global.addFrameElement(frame.frame,method,frames[currentFrame],frameContainer);
+            if(method=="append") global.addFrameElement(frame.frameCon ,method,null,frameContainer);
+            else if(method=="insert") global.addFrameElement(frame.frameCon ,method,frames[currentFrame],frameContainer);
             global.changeDisplayFrameList(frame.id,method);
         },
         deleteFrame:function(){
@@ -149,7 +133,7 @@ Core.registerModule("view",function(sb){
             var oldCurr = global.showFrame(nearFrame,method=="pre"?"before":"after");
             //删除预览frame
             if(oldCurr){
-                frameContainer.removeChild(frames[oldCurr]);
+                frameContainer.removeChild($(frames[oldCurr]).parent()[0]);
                 frame_count--;
                 delete frames[oldCurr];
                 if(dispFrames[oldCurr]) delete dispFrames[oldCurr];
@@ -185,7 +169,8 @@ Core.registerModule("view",function(sb){
             }
             if(dispFrame){
                 delete hidFrames[dispFrame];
-                frames[dispFrame].style.display = "block";
+                // frames[dispFrame].style.display = "block";
+                $(frames[dispFrame]).parent().show();
             }
         },
         /*
@@ -243,7 +228,8 @@ Core.registerModule("view",function(sb){
             oldCurr = currentFrame;
             if(frames[currentFrame]) sb.removeClass(frames[currentFrame],"focus");
             currentFrame = newCurr;
-            frames[currentFrame].style.display = "block";
+            // frames[currentFrame].style.display = "block";
+            $(frames[currentFrame]).parent().show();
             sb.addClass(frames[currentFrame],"focus");
             sb.notify({
                 type:"changeSlider",
@@ -395,7 +381,8 @@ Core.registerModule("view",function(sb){
             newDispFrames = frames.subSet(beginIndex,endIndex);
             for(var o in frames){
                 if(frames.hasOwnProperty(o)){
-                    frames[o].style.display = "none";
+                    // frames[o].style.display = "none";
+                    $(frames[o]).parent().hide();
                     hidFrames[o] = frames[o];
                     delete dispFrames[o];
                 }
@@ -404,7 +391,8 @@ Core.registerModule("view",function(sb){
             for (var i = 0; i < length; i++) {
                 frame = newDispFrames[i];
                 dispFrames[frame] = frames[frame];
-                dispFrames[frame].style.display = "block";
+                // dispFrames[frame].style.display = "block";
+                $(dispFrames[frame]).parent().show();
                 delete hidFrames[frame];
             }
             changeCurrFrameFunc(begin,"append");
@@ -417,13 +405,19 @@ Core.registerModule("view",function(sb){
          *          5.return Object:{id,frame}
          */
         createFrame:function(method){
+            var scaleSize = conf.SCALE_SIZE;
             var frame = document.createElement("div");
+            var frameCon = document.createElement("div");
             var framePanel = sb.create("div");
+            frameCon.appendChild(frame)
             frame.appendChild(framePanel);
             frame.className = "frame scale";
             framePanel.className = "frame-panel";
             frame.setAttribute("style", "display:block;");
             $(frame).css('height', FRAME_Y + 'px').css('width', FRAME_X + 'px');
+            $(frameCon)
+                .addClass('frameCon')
+                .css('height', FRAME_Y*scaleSize + 'px').css('width', FRAME_X*scaleSize + 'px');
 
             framePanel.setAttribute("style", "position:absolute;width:100%;height:100%;");
             frame_number++;
@@ -451,7 +445,8 @@ Core.registerModule("view",function(sb){
             },false);
             return {
                 id:"frame"+frame_number,
-                frame:frame
+                frame:frame,
+                frameCon : frameCon
             }
         },
         changeSliderStyle:function(att){
