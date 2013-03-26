@@ -333,7 +333,7 @@ Core.registerModule("canvas",function(sb){
                             attrValue = darr.join(" ");
                         }
                         else if (valueType=="WebkitTransform") {
-                            attrValue = defaultAtt[valueType].replace(/^rotate\(/,'').replace(/edg\)$/,'');
+                            attrValue = defaultAtt[valueType].replace(/^rotate\(/,'').replace(/deg\)$/,'');
                         }
                         sb.notify({
                             type:event,
@@ -1600,6 +1600,7 @@ Core.registerModule("canvas",function(sb){
             elem.style.left = (event.screenX + offsetX) + "px";
             elem.style.top  = (event.screenY + offsetY) + "px";
         },
+
         createElementContainer:function(sizeObj, partSize, elem, options){
 
             /*
@@ -1612,32 +1613,39 @@ Core.registerModule("canvas",function(sb){
 
             options = options || {};
 
-            var container = options.container || document.createElement("div");
-            var move_e = document.createElement("div");
-            var move_w = document.createElement("div");
-            var move_s = document.createElement("div");
-            var move_n = document.createElement("div");
-            var parts = {
+            var container = options.container || document.createElement("div"),
+                move_e = document.createElement("div"),
+                move_w = document.createElement("div"),
+                move_s = document.createElement("div"),
+                move_n = document.createElement("div"),
+
+                rotateCon = document.createElement("div"),
+                rotateLeft = document.createElement("div"),
+                rotateRight = document.createElement("div"),
+
+                centerValue = '-webkit-calc(50% - ' + partSize/2 + 'px)'
+
+                parts = {
 
                 "con_e":{
                     className:"con-part-e",
                     resizeHandle:sb.proxy(sb.resizeRX, sb),
-                    style:"right:"+(-partSize)+"px;top:50%;"
+                    style:"right:"+(-partSize)+"px;top:" + centerValue + ";"
                 },
                 "con_w":{
                     className:"con-part-w",
                     resizeHandle:sb.proxy(sb.resizeLX, sb),
-                    style:"left:"+(-partSize)+"px;top:50%;"
+                    style:"left:"+(-partSize)+"px;top:" + centerValue + ";"
                 },
                 "con_s":{
                     className:"con-part-s",
                     resizeHandle:sb.proxy(sb.resizeBY, sb),
-                    style: "bottom:"+(-partSize)+"px;left:50%;"
+                    style: "bottom:"+(-partSize)+"px;left:" + centerValue + ";"
                 },
                 "con_n":{
                     className:"con-part-n",
                     resizeHandle:sb.proxy(sb.resizeTY, sb),
-                    style:"top:"+(-partSize)+"px;left:50%;"
+                    style:"top:"+(-partSize)+"px;left:" + centerValue + ";"
                 },
                 "con_se":{
                     className:"con-part-se",
@@ -1660,7 +1668,7 @@ Core.registerModule("canvas",function(sb){
                     style:"top:"+(-partSize)+"px;left:"+(-partSize)+"px;"
                 }
             };
-            container.style.WebkitTransformOrigin = '0px 0px';
+            container.style.WebkitTransformOrigin = 'center center';
             var frag = document.createDocumentFragment();
             
             for (var item in parts) {
@@ -1681,11 +1689,18 @@ Core.registerModule("canvas",function(sb){
                 container.style.width = sizeObj.width + 'px';
             }
 
+            //边框移动控件
             $(move_e).addClass("element-container-apart-move con-move-e");
             $(move_w).addClass("element-container-apart-move con-move-w");
             $(move_s).addClass("element-container-apart-move con-move-s");
             $(move_n).addClass("element-container-apart-move con-move-n");
 
+            //旋转控件
+            $(rotateCon).addClass('con-rotate').append(rotateLeft).append(rotateRight);
+            $(rotateLeft).addClass('con-rotate-elem con-rotate-left');
+            $(rotateRight).addClass('con-rotate-elem con-rotate-right');
+
+            //resize控件
             $(move_w).attr("style", "left:-6px;top:0;height:100%;width:6px;");
             $(move_e).attr("style", "right:-6px;top:0;height:100%;width:6px;");
             $(move_s).attr("style", "bottom:-6px;left:0;height:6px;width:100%;");
@@ -1697,17 +1712,55 @@ Core.registerModule("canvas",function(sb){
                 .append(move_e)
                 .append(move_s)
                 .append(move_n)
+                .append(rotateCon)
                 .append(frag)
                 .attr("draggable", false);
-
             sb.move(move_w, container);
             sb.move(move_e, container);
             sb.move(move_s, container);
             sb.move(move_n, container);
+            global._dragRotate(rotateCon, container)
+            global._rotate(rotateLeft, container, 'left')
+            global._rotate(rotateRight, container, 'right')
 
             return {
                 container:container
             }
+        },
+        _dragRotate : function (rotateBtn, tar) {
+            var initX=0,pInitW=0,
+                flag={ isInit:false, isDown:false };
+
+            sb.ondrag(rotateBtn, flag, function(event) {
+                if(flag.isDown){
+                    var clientX = event.screenX;
+                    var clientY = event.screenY;
+                    if(!flag.isInit) {
+
+                        initX = clientX;
+                        initY = clientY
+                        flag.isInit = true;
+                        var transform = $(tar).css('WebkitTransform');
+                        initRoate = transform ? parseFloat( transform.replace(/^rotate\(/,'').replace(/deg\)$/,'') ) : 0;
+                    } else {
+                        // console.log(Math.sqrt( Math.pow(clientY - initY,2) + Math.pow(clientX - initX, 2) ));
+                        var diffResize = (clientX - initX) * Math.cos(2*Math.PI - initRoate*Math.PI/180);
+                        
+                        initRoate += diffResize/100;
+                        tar.style.WebkitTransform = 'rotate(' + initRoate + 'deg)';
+                    }
+                    
+                }
+            });
+        },
+        _rotate : function (rotateBtn, tar, forward) {
+            $(rotateBtn).on('click', function () {
+                var transform = $(tar).css('WebkitTransform');
+                var rotateValue = transform ? parseFloat( transform.replace(/^rotate\(/,'').replace(/deg\)$/,'') ) : 0;
+                if (forward === 'left') rotateValue = rotateValue - 1;
+                else  rotateValue = rotateValue + 1;
+                tar.style.WebkitTransform = 'rotate(' + rotateValue + 'deg)';
+            })
         }
     };
 });

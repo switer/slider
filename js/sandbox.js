@@ -1282,8 +1282,7 @@ var SandBox = (function() {
         if (transform && transform.match('rotate')) {
             var rotate = transform.match(/rotate\(.*\)/)[0].replace(/^rotate\(/, '').replace(/deg\)$/, ''),
                 rotateValue = parseFloat(rotate);
-                console.log(fnType);
-            fnType && ( diffResize = diffResize*(Math[fnType](Math.PI*rotateValue/180)));
+            // fnType && ( diffResize = diffResize*(Math[fnType](Math.PI*2 - Math.PI*rotateValue/180)));
         }
         return diffResize;
     }

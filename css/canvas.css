@@ -111,6 +111,12 @@
 
 
 }
+.con-rotate {position: absolute;top: -40px;left: -webkit-calc(50% - 19px);display: -webkit-box;display: none;}
+.element-select .con-rotate {display: -webkit-box!important;}
+.con-rotate-elem {width: 19px;height: 11px;}
+.con-rotate-elem:hover {cursor: pointer;box-shadow: 0 0 10px 2px #CCC;}
+.con-rotate-left {background: url(../img/rotate_left.png);}
+.con-rotate-right {background: url(../img/rotate_right.png);}
 .show-container-apart:hover {background-color: cornflowerblue;}
 
 .element-container-apart{
