@@ -379,7 +379,7 @@
 
             </div>
         </div>
-        <div id='shapebar' data-intro='图形工具栏' data-step='2'>
+        <div id='shapebar' class="l-sb transition-l" data-intro='图形工具栏' data-step='2'>
             <div id='triangle' class='shape-icon' data-type='triangle'></div>
             <div id='circular' class='shape-icon' data-type='circular'></div>
             <div id='rectangle' class='shape-icon' data-type='rectangle'></div>
@@ -389,7 +389,7 @@
             <div id='moon' class='shape-icon' data-type='moon'></div>
             <div id='polygon' class='shape-icon' data-type='polygon'></div>
         </div>
-        <div id="toolbar">
+        <div id="toolbar" class="l-tb transition-l">
             <div id="tool-buttons"  data-intro='功能工具栏' data-step='3'>
                 <div id="tool-enterPreviewMode" class="tool-app" data-title="保存" data-intro='保存' data-step='4'></div>
                 <div id="tool-openFileSystem" class="tool-app " data-title="打开文件夹" data-intro='打开文件夹' data-step='5'></div>
@@ -413,29 +413,29 @@
                 <div id="tool-deleteSlider" class="tool-app" data-title="删除当前幻灯片" data-intro='删除当前幻灯片' data-step='16'></div>
                 <div id="tool-help" class="tool-app" data-title="帮助" data-intro='帮助' data-step='17'></div>
             </div>
-            <!--工具栏详细操作菜单-->
-            <div id="tool-operation" >
-                <div id="tool-addAnimation-operation" class="tool-app-items">
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="none">无效果</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-left">从左闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-right">从右闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-top">从上闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-bottom">从下闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-top-left">从左上闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-top-right">从右上闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-bottom-left">从左下闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-bottom-right">从右下闪入</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-scale">放大</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-xSpin">左右翻转</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-ySpin">上下翻转</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-rightRotate">顺时针旋转</div>
-                    <div class="operation-item" data-event="changeSliderAnim" data-param="anim-leftRotate">逆时针旋转</div>
-                </div>
-                <div id="tool-elemOperation-operation" class="tool-app-items">
-                    <div class="operation-item"  data-event="copyElement" data-param="">复制</div>
-                    <div class="operation-item"  data-event="pasteElement" data-param="">粘贴</div>
-                    <div class="operation-item"  data-event="deleteElement" data-param="">删除</div>
-                </div>
+        </div>
+        <!--工具栏详细操作菜单-->
+        <div id="tool-operation" >
+            <div id="tool-addAnimation-operation" class="tool-app-items">
+                <div class="operation-item" data-event="changeSliderAnim" data-param="none">无效果</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-left">从左闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-right">从右闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-top">从上闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-bottom">从下闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-top-left">从左上闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-top-right">从右上闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-bottom-left">从左下闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-bottom-right">从右下闪入</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-scale">放大</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-xSpin">左右翻转</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-ySpin">上下翻转</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-rightRotate">顺时针旋转</div>
+                <div class="operation-item" data-event="changeSliderAnim" data-param="anim-leftRotate">逆时针旋转</div>
+            </div>
+            <div id="tool-elemOperation-operation" class="tool-app-items">
+                <div class="operation-item"  data-event="copyElement" data-param="">复制</div>
+                <div class="operation-item"  data-event="pasteElement" data-param="">粘贴</div>
+                <div class="operation-item"  data-event="deleteElement" data-param="">删除</div>
             </div>
         </div>
         <div id="view" class="cf">

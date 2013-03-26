@@ -102,7 +102,7 @@ Core.registerModule("toolbar",function(sb){
             deleteSlider = sb.find("#tool-deleteSlider");
             insertSlider = sb.find("#tool-insertSlider");
             previewApp = sb.find("#tool-preview");
-            operation = sb.find("#tool-operation");
+            operation = $("#tool-operation")[0];
             operationSubMenuItems = sb.query(".operation-item",operation);
             toolAppMenu = sb.find("#tool-buttons");
             appDetailItems = sb.query(".ondetail",toolAppMenu);
@@ -128,13 +128,13 @@ Core.registerModule("toolbar",function(sb){
                     } 
                     
                    
-                    optItem =operation.querySelector("#" + tar.id + "-operation");
+                    optItem = operation.querySelector("#" + tar.id + "-operation");
 
                     if (global._tarAppId !== tar.id ||
                          ( global._tarAppId === tar.id && operation.style.display === 'none' ) ) {
                         operation.style.display = "block";
                         optItem.style.display = "block";
-                        operation.style.top = (event.currentTarget.offsetTop-22)+"px";
+                        operation.style.top = (event.currentTarget.offsetTop - 10)+"px";
                     }
                     else {
                         operation.style.display = "none";
@@ -206,6 +206,12 @@ Core.registerModule("toolbar",function(sb){
             });
             $("#tool-help").on('click', function () {
                 introJs().start();
+            })
+            var $bar = $('#toolbar');
+            $bar.on('click', function (evt) {
+                if ($(evt.target)[0].id !== 'tool-buttons') return; 
+                if ( $bar.hasClass("l-tb") ) $bar.removeClass('l-tb')
+                else $bar.addClass('l-tb');
             })
             addTextApp.onclick = function(){
                 sb.notify({

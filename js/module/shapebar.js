@@ -22,8 +22,13 @@ Core.registerModule("shapebar", function(sb){
 						}
 					})
 				});
-	
 			})
+			var $bar = $('#shapebar');
+            $bar.on('click', function (evt) {
+                if ($(evt.target)[0].id !== 'shapebar') return; 
+                if ( $bar.hasClass("l-sb") ) $bar.removeClass('l-sb')
+                else $bar.addClass('l-sb');
+            })
 
 			var cb = window.colorboard.create(function (value) {
                 global._chooseColorCallback && global._chooseColorCallback(value);
