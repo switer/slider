@@ -800,9 +800,11 @@ var SandBox = (function() {
                     }
                     flag.isInit = true;
                 }
+                var diffResize = clientX-initX;
+                diffResize = exFns.getRoateResize(tar, diffResize, 'cos');
 
-                if(other) other.style.width = (pInitW+clientX-initX)+"px";
-                else tar.style.width = (pInitW+clientX-initX)+"px";
+                if(other) other.style.width = (pInitW+diffResize)+"px";
+                else tar.style.width = (pInitW+diffResize)+"px";
             }
         });
     };
@@ -826,9 +828,12 @@ var SandBox = (function() {
                     pInitL = parseInt(tar.style.left.substr(0, tar.style.left.length-2));
                     flag.isInit = true;
                 }
-                if(other)  other.style.width = (pInitW-(clientX-initX))+"px";
-                else tar.style.width = (pInitW-(clientX-initX))+"px";
-                tar.style.left = (pInitL+(clientX-initX))+"px";
+                var diffResize = clientX-initX;
+                diffResize = exFns.getRoateResize(tar, diffResize, 'cos');
+
+                if(other)  other.style.width = ( pInitW - diffResize ) + "px";
+                else tar.style.width = ( pInitW - diffResize ) + "px";
+                tar.style.left = ( pInitL + diffResize ) + "px";
             }
         });
     };
@@ -849,8 +854,10 @@ var SandBox = (function() {
                         pInitH = parseInt(tar.style.height.substr(0, tar.style.height.length-2));
                     flag.isInit = true;
                 }
-                if(other) other.style.height = (pInitH+eventY-initY)+"px";
-                else tar.style.height = (pInitH+eventY-initY)+"px";
+                var diffResize = eventY-initY;
+                diffResize = exFns.getRoateResize(tar, diffResize, 'sin');
+                if(other) other.style.height = (pInitH + diffResize)+"px";
+                else tar.style.height = (pInitH + diffResize)+"px";
             }
         });
     };
@@ -877,47 +884,46 @@ var SandBox = (function() {
                     }
                     flag.isInit = true;
                 }
+                var diffResize = clientY-initY,
+                    diffX = clientX-initX;
+                diffResize = exFns.getRoateResize(tar, diffResize, 'sin');
+                diffX = exFns.getRoateResize(tar, diffX, 'cos');
                 if(other){
-                    other.style.height = (pInitH+clientY-initY)+"px";
-                    other.style.width = (pInitW+clientX-initX)+"px";
+                    other.style.height = (pInitH+diffResize)+"px";
+                    other.style.width = (pInitW+diffX)+"px";
                 }else{
-                    tar.style.height = (pInitH+clientY-initY)+"px";
-                    tar.style.width = (pInitW+clientX-initX)+"px";
+                    tar.style.height = (pInitH+diffResize)+"px";
+                    tar.style.width = (pInitW+diffX)+"px";
                 }
             }
         });
     };
-    SandBox.prototype.resizeRX =function(elem,tar,other){
-        var initX=0,pInitW=0,
-        flag={
-            isInit:false,
-            isDown:false
-        };
-        this.ondrag(elem,flag, function(event){
-            if(flag.isDown){
-                var clientX = event.screenX;
-                if(!flag.isInit){
-                    initX=clientX;
-                    if(other)
-                        pInitW = parseInt(other.style.width.substr(0, other.style.width.length-2));
-                    else{
-                        pInitW = parseInt(tar.style.width.substr(0, tar.style.width.length-2));
-                    }
-                    flag.isInit = true;
-                }
-                // var transform = $(tar).css('WebkitTransform');
-                var diffResize = clientX-initX;
-                // if (transform && transform.match('rotate')) {
-                //     var rotate = transform.match(/rotate\(.*\)/)[0].replace(/^rotate\(/, '').replace(/deg\)$/, ''),
-                //         rotateValue = parseFloat(rotate);
-                //     diffResize = diffResize*Math.cos(Math.PI*rotateValue/180);
-                // }
 
-                if(other) other.style.width = pInitW+diffResize + "px";
-                else tar.style.width = pInitW+diffResize+"px";
-            }
-        });
-    };
+    // SandBox.prototype.resizeRX =function(elem,tar,other){
+    //     var initX=0,pInitW=0,
+    //     flag={
+    //         isInit:false,
+    //         isDown:false
+    //     };
+    //     this.ondrag(elem,flag, function(event){
+    //         if(flag.isDown){
+    //             var clientX = event.screenX;
+    //             if(!flag.isInit){
+    //                 initX=clientX;
+    //                 if(other)
+    //                     pInitW = parseInt(other.style.width.substr(0, other.style.width.length-2));
+    //                 else{
+    //                     pInitW = parseInt(tar.style.width.substr(0, tar.style.width.length-2));
+    //                 }
+    //                 flag.isInit = true;
+    //             }
+    //             var diffResize = clientX-initX;
+    //             diffResize = exFns.getRoateResize(tar, diffResize);
+    //             if(other) other.style.width = pInitW + diffResize + "px";
+    //             else tar.style.width = pInitW + diffResize+"px";
+    //         }
+    //     });
+    // };
     SandBox.prototype.resizeTY =function(elem,tar,other){
         var initY=0,pInitH=0,pInitT,
         flag={
@@ -938,9 +944,11 @@ var SandBox = (function() {
                     pInitT = parseInt(tar.style.top.substr(0, tar.style.top.length-2));
                     flag.isInit = true;
                 }
-                if(other) other.style.height = (pInitH-(eventY-initY))+"px";
-                else tar.style.height = (pInitH-(eventY-initY))+"px";
-                tar.style.top = (pInitT+(eventY-initY))+"px";
+                var diffResize = eventY-initY;
+                diffResize = exFns.getRoateResize(tar, diffResize, 'sin');
+                if(other) other.style.height = (pInitH - diffResize)+"px";
+                else tar.style.height = (pInitH - diffResize)+"px";
+                tar.style.top = (pInitT + diffResize)+"px";
             }
         });
     };
@@ -969,16 +977,21 @@ var SandBox = (function() {
                     pInitL = parseInt(tar.style.left.substr(0, tar.style.left.length-2));
                     flag.isInit = true;
                 }
+                var diffy = eventY-initY,
+                    diffx = eventX-initX;
+                diffy = exFns.getRoateResize(tar, diffy, 'sin');
+                diffx = exFns.getRoateResize(tar, diffx, 'cos');
+
                 if(other) {
-                    other.style.height = (pInitH-(eventY-initY))+"px";
-                    other.style.width = (pInitW-(eventX-initX))+"px";
+                    other.style.height = (pInitH-diffy)+"px";
+                    other.style.width = (pInitW-diffx)+"px";
                 }
                 else {
-                    tar.style.height = (pInitH-(eventY-initY))+"px";
-                    tar.style.width = (pInitW-(eventX-initX))+"px";
+                    tar.style.height = (pInitH-diffy)+"px";
+                    tar.style.width = (pInitW-diffx)+"px";
                 }
-                tar.style.top = (pInitT+(eventY-initY))+"px";
-                tar.style.left = (pInitL+(eventX-initX))+"px";
+                tar.style.top = (pInitT+diffy)+"px";
+                tar.style.left = (pInitL+diffx)+"px";
             }
         });
     };
@@ -1006,15 +1019,20 @@ var SandBox = (function() {
                     pInitL = parseInt(tar.style.left.substr(0, tar.style.left.length-2));
                     flag.isInit = true;
                 }
+                var diffy = eventY-initY,
+                    diffx = eventX-initX;
+                diffy = exFns.getRoateResize(tar, diffy, 'sin');
+                diffx = exFns.getRoateResize(tar, diffx, 'cos');
+
                 if(other) {
-                    other.style.height = (pInitH+eventY-initY)+"px";
-                    other.style.width = (pInitW-(eventX-initX))+"px";
+                    other.style.height = (pInitH+diffy)+"px";
+                    other.style.width = (pInitW-diffx)+"px";
                 }
                 else {
-                    tar.style.height = (pInitH+eventY-initY)+"px";
-                    tar.style.width = (pInitW-(eventX-initX))+"px";
+                    tar.style.height = (pInitH+diffy)+"px";
+                    tar.style.width = (pInitW-diffx)+"px";
                 }
-                tar.style.left = (pInitL+(eventX-initX))+"px";
+                tar.style.left = (pInitL+diffx)+"px";
             }
         });
     };
@@ -1042,15 +1060,20 @@ var SandBox = (function() {
                     pInitT = parseInt(tar.style.top.substr(0, tar.style.top.length-2));
                     flag.isInit = true;
                 }
+                var diffy = eventY-initY,
+                    diffx = eventX-initX;
+                diffy = exFns.getRoateResize(tar, diffy, 'sin');
+                diffx = exFns.getRoateResize(tar, diffx, 'cos');
+
                 if(other) {
-                    other.style.height = (pInitH-(eventY-initY))+"px";
-                    other.style.width = (pInitW+(eventX-initX))+"px";
+                    other.style.height = (pInitH-diffy)+"px";
+                    other.style.width = (pInitW+diffx)+"px";
                 }
                 else {
-                    tar.style.height = (pInitH-(eventY-initY))+"px";
-                    tar.style.width = (pInitW+(eventX-initX))+"px";
+                    tar.style.height = (pInitH-diffy)+"px";
+                    tar.style.width = (pInitW+diffx)+"px";
                 }
-                tar.style.top = (pInitT+(eventY-initY))+"px";
+                tar.style.top = (pInitT+diffy)+"px";
             }
         });
     };
@@ -1254,6 +1277,16 @@ var SandBox = (function() {
     SandBox.prototype.create = function(tagName){
         return document.createElement(tagName);
     };
+    SandBox.prototype.getRoateResize = function (tar, diffResize, fnType) {
+        var transform = $(tar).css('WebkitTransform');
+        if (transform && transform.match('rotate')) {
+            var rotate = transform.match(/rotate\(.*\)/)[0].replace(/^rotate\(/, '').replace(/deg\)$/, ''),
+                rotateValue = parseFloat(rotate);
+                console.log(fnType);
+            fnType && ( diffResize = diffResize*(Math[fnType](Math.PI*rotateValue/180)));
+        }
+        return diffResize;
+    }
     if (!SandBox.prototype.ObjectLink.prototype.toJSONString) {
         SandBox.prototype.ObjectLink.prototype.toJSONString = function (filter) {
             return JSON.stringify(this, filter);
@@ -1266,5 +1299,9 @@ var SandBox = (function() {
     SandBox.pub = function() {
         return pubSandBox;
     };
+
+    var exFns = {
+        getRoateResize : SandBox.prototype.getRoateResize
+    }
     return SandBox;
 })();

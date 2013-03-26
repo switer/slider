@@ -1660,6 +1660,7 @@ Core.registerModule("canvas",function(sb){
                     style:"top:"+(-partSize)+"px;left:"+(-partSize)+"px;"
                 }
             };
+            container.style.WebkitTransformOrigin = '0px 0px';
             var frag = document.createDocumentFragment();
             
             for (var item in parts) {
