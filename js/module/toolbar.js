@@ -30,8 +30,8 @@ Core.registerModule("toolbar",function(sb){
             sb.css(ecd,{
                 display:'none',
                 height:'30px',
-                top:'580px',
-                left:(window.innerWidth-700)+'px'
+                top:'400px',
+                left:(100)+'px'
             });
             $('.close-menu', ecd).css('top','-10px').css('right','-10px')
             sb.css(link,{

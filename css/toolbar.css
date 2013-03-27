@@ -1,8 +1,9 @@
 #toolbar{
     position: absolute;
     left: 0px;
-    top: 5px;
+    top: 0px;
     z-index: 700;
+    height: 100%;
 
 }
 #tool-buttons{
@@ -10,19 +11,20 @@
     /*position: relative;*/
     /*float: left;*/
     /*width: 80px;*/
-    height: auto;
+    height: 100%;
     /*padding-bottom: 10px;*/
     background-color: #EEE;
     padding: 5px 15px;
-    padding-right: 40px;
+    padding-right: 45px;
     /*-webkit-box-shadow:3px 0px 8px #BBB;*/
     -webkit-border-top-right-radius:10px;
-    -webkit-border-bottom-right-radius:10px;
+    /*-webkit-border-bottom-right-radius:10px;*/
     /*box-shadow:5px 0px 5px #BBB;*/
     border-radius-topright:10px;
     border-radius-bottomright:10px;
     border: 1px solid rgba(0,0,0,1);
     border-left: 0;
+    border-top: 0;
 }
 #tool-operation{
 
@@ -78,7 +80,7 @@
     border: 1px solid black;
     background-color: #CCC;
     /*margin: auto;*/
-    margin-top: 10px;
+    margin-top: 6px;
     cursor: pointer;
     background-position: center;
     background-size: 46px 46px;

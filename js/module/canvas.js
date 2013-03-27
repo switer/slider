@@ -703,15 +703,20 @@ Core.registerModule("canvas",function(sb){
             });
         },
         _createThumb : function (sliderIndex, callback) {
-            var renderElement = sliders[sliderIndex];
+
+            var renderElement = sliders[sliderIndex],
+                curSlider = sliders[currentSlider];
+            if ( sliderIndex !== currentSlider ) {
+                renderElement.style.display = 'block';
+                curSlider.style.display = 'none';
+            }
 
             html2canvas( [ renderElement ], {
                 onrendered: function(canvas) {
-                    // $(canvas).css({
-                    //     'height': '120px',
-                    //     'width' : '160px'
-                    // })
-                    // document.body.appendChild(canvas);
+                    if ( sliderIndex !== currentSlider ) {
+                        renderElement.style.display = 'none'
+                        curSlider.style.display = 'block';
+                    }
                     callback && callback(canvas.toDataURL());
                 }
             });
@@ -722,7 +727,8 @@ Core.registerModule("canvas",function(sb){
             global._createThumb(sliders.getFirstElement(), function (thumb) {
                 var json = new sb.ObjectLink(),
                     count = 0,
-                    datas;
+                    datas,
+                    isHasCode  = false;
 
                 SliderDataSet.forEach(function(datasets, sliderIndex){
                     var data = new sb.ObjectLink();
@@ -739,6 +745,7 @@ Core.registerModule("canvas",function(sb){
                             sliderElement.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
                         }
                         if (sliderElement.type === 'CODE') {
+                            isHasCode = true;
                             //code mirror
                             var doc =  b['file'].getDoc();
                             sliderElement.value = doc.getValue();
@@ -765,8 +772,6 @@ Core.registerModule("canvas",function(sb){
                     styleBegin  = '<style type="text/css">',
                     styleEnd    = '</style>',
                     stream      = JSON.stringify(datas),
-                    // header      = window._sourceMap.header,
-                    // footer      = window._sourceMap.footer,
                     header      = window._sourceMap.blogHeader,
                     footer      = window._sourceMap.blogFooter,
                     cmJS        = window._sourceMap.cmJS,
@@ -775,14 +780,28 @@ Core.registerModule("canvas",function(sb){
                     cmThemeCSS  = window._sourceMap.cmThemeCSS,
                     animation   = window._sourceMap.animationCSS;
 
-                var dataHtml = '<script type="text/html" id="datajson">' + stream + '</script>';
+                var dataHtml = '<script type="text/html" id="datajson">' + stream + scriptEnd,
+                    combHTML;
+                if (isHasCode) {  //按需添加代码片段
+                    combHTML =  header +
+                                styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
+                                dataHtml +
+                                scriptBegin + cmJS + cmThemeJS + scriptEnd +
+                                footer
+                } else { //不需要添加codemirror的代码
+                    combHTML =  header +
+                                styleBegin + animation + styleEnd +
+                                dataHtml +
+                                scriptBegin + scriptEnd +
+                                footer
+                }
+
+
+
+                
                 sb.notify({
                     type : "preSave",
-                    data :  header +
-                            styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
-                            dataHtml +
-                            scriptBegin + cmJS + cmThemeJS + scriptEnd +
-                            footer
+                    data :  combHTML
                 });
             });
                 
@@ -835,6 +854,7 @@ Core.registerModule("canvas",function(sb){
             elementOpertateFunc("panel",panel);
             newSlider.appendChild(panel);
             newSlider.className = "editor";
+            newSlider.zIndex = 1;
             
 
             if(currentSlider) sliders[currentSlider].style.display = "none";

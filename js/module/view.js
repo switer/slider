@@ -53,6 +53,7 @@ Core.registerModule("view",function(sb){
             var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
             FRAME_Y = sMap.y;
             FRAME_X = sMap.x;
+
         },
         destroy:function(){
         },
@@ -114,7 +115,10 @@ Core.registerModule("view",function(sb){
         addSlider:function(method){
             var frame = global.createFrame(method);
             if(method=="append") global.addFrameElement(frame.frameCon ,method,null,frameContainer);
-            else if(method=="insert") global.addFrameElement(frame.frameCon ,method,frames[currentFrame],frameContainer);
+            else if(method=="insert") {
+                var posParent = $(frames[currentFrame]).parent()[0]
+                global.addFrameElement(frame.frameCon ,method, posParent,frameContainer);
+            }
             global.changeDisplayFrameList(frame.id,method);
         },
         deleteFrame:function(){
@@ -293,7 +297,6 @@ Core.registerModule("view",function(sb){
                         elem.style.borderWidth = parseInt(parseInt(borderWidth.substr(0,borderWidth.length-2))/VIEWSCALE+0.5)+"px";
                     }
                     elem.style.zIndex = data[a].zIndex;
-                    console.log('preview data : ' + data[a].type);
                     if(data[a].type=="IMG"){
                         var img = new Image();
                         var panel = sb.create("div");

@@ -101,7 +101,8 @@ input{
 .cf {zoom:1;}
 .video-play {background-image: url(../img/video_play.png);background-repeat: no-repeat;background-size: 50%;background-position: center;}
 .w0 {width: 0px!important;}
-.transition-w {-webkit-transition:width 0.4s;}
-.transition-l {-webkit-transition:left 0.4s;}
-.l-tb {left: -60px!important;z-index: 0!important;opacity: 0.7}
-.l-sb {left: -50px!important;z-index: 0!important;opacity: 0.7}
+.transition-w {-webkit-transition:width 0.3s;}
+.transition-l {-webkit-transition:left 0.3s;}
+.l-tb {left: -60px!important;z-index: 0!important;opacity: 1}
+.l-sb {left: -40px!important;z-index: 0!important;opacity: 1}
+/*.allow {background-image: url(../img/right.png);background-repeat: no-repeat;background-position: 100% 50%;background-size: 35px;}*/

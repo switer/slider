@@ -125,7 +125,9 @@
     (function () {
         var tar = document.querySelector('#slider-preview'),
                 defaultScale = 'scale(1)',
-                scaleName = 'WebkitTransform';
+                defaultMarginTop = '0px',
+                scaleName = 'WebkitTransform',
+                global = {};
 
             var eH,
                 eW,
@@ -133,34 +135,17 @@
                 sW,
                 x,
                 y;
-            // document.onselectstart = function () {
-            //     return false;
-            // }
-            function getSize (scaleNumber) {
-                ( scaleNumber !== undefined ) || (scaleNumber = 1);
-                eH = tar.clientHeight;
-                eSH = eH * scaleNumber;
-                eW = tar.clientWidth ;
-                sH = document.height;
-                sW = document.width;
-                x = (sW - eW)/2;
-                y = (sH - eH)/2;
-                sy = (sH - eSH)/2;
-            }
-            function setPosition (scaleNumber) {
-                getSize(scaleNumber)
-                console.log(y, sy);
-                if (sy < 0) tar.style.top = (y + Math.abs(sy) + 100) + 'px';
-                else tar.style.top = (y + 100) 'px';
-                tar.style.left = x + 'px';
+            document.querySelector("#operation").onselectstart = function () {
+                return false;
             }
 
             function init() {
                 tar.style.WebkitTransform = defaultScale;
+                tar.style.WebkitTransformOrigin = 'top center';
+                tar.style.marginTop = defaultMarginTop;
             }
 
             function transScale(value) {
-
                 var number = parseFloat(value.replace(/^scale\(/, '').replace(/\)$/,''));
                 return number;
             }
@@ -174,20 +159,44 @@
                 var scaleValue  = transScale( readScale(tar) ) + 0.05;
                 var scaleNumber = combScale( scaleValue );
                 tar.style[scaleName] =  scaleNumber;
-                setPosition(scaleValue)
                 document.querySelector('#scale').innerHTML = parseInt(scaleValue * 100) + '%'
             })
             document.querySelector('.reduce').addEventListener('click', function () {
                 var scaleValue  = transScale( readScale(tar) ) - 0.05;
                 var scaleNumber = combScale( scaleValue );
                 tar.style[scaleName] =  scaleNumber;
-                setPosition(scaleValue)
                 document.querySelector('#scale').innerHTML = parseInt(scaleValue * 100)  + '%'
             })
-            window.addEventListener('resize', function () {
-                setPosition();
+            function _up (tar, offset) {
+                var marginTop  = parseInt(tar.style.marginTop) - offset;
+                tar.style.marginTop =  marginTop + 'px';
+            }
+            function _down (tar, offset) {
+                var marginTop  = parseInt(tar.style.marginTop) + offset;
+                tar.style.marginTop =  marginTop + 'px';
+            }
+            document.querySelector('.moveUp').addEventListener('mousedown', function () {
+                _up(tar, 1);
+                var index = 0;
+                global.moveUpInter = window.setInterval(function () {
+                    index ++;
+                    _up(tar, parseInt(index/4) );
+                }, 50);
             })
-            setPosition();
+            document.querySelector('.moveUp').addEventListener('mouseup', function () {
+                window.clearInterval(global.moveUpInter);
+            })
+            document.querySelector('.moveDown').addEventListener('mousedown', function () {
+                _down(tar, 1)
+                var index = 0;
+                global.moveDownInter = window.setInterval(function () {
+                    index ++;
+                    _down(tar, parseInt(index/4) );
+                }, 50);
+            })
+            document.querySelector('.moveDown').addEventListener('mouseup', function () {
+                window.clearInterval(global.moveDownInter);
+            })
             init();
     })()
 </script>

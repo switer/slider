@@ -43,7 +43,7 @@ Core.registerModule("shapebar", function(sb){
 		//显示取色板
 		_chooseColor : function (event, callback) {
 			global._chooseColorCallback = callback;
-			$(global._colorboard).css('display', 'block').css('top', event.clientY + 'px').css('right', '100px')
+			$(global._colorboard).css('display', 'block').css('top', event.clientY + 'px').css('left', '100px')
 		},
 		destroy : function () {
 
