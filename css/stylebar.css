@@ -73,20 +73,20 @@
 
 }
 .execC-but{
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    border: none;
+    width: 40px;
+    height: 40px;
+    /*border-radius: 8px;*/
+    /*border: none;*/
     outline: none;
     background-position: center;
     background-repeat: no-repeat;
-    -webkit-box-shadow:0px 0px 4px blue;
+    /*-webkit-box-shadow:0px 0px 4px blue;*/
     display: block;
 
 }
 select.execC-but {-webkit-appearance:button;width: auto!important;}
 .execC-but:hover{
-    -webkit-box-shadow:0px 0px 8px black;
+    /*-webkit-box-shadow:0px 0px 8px black;*/
 }
 .font-bold .execC-but{
 
@@ -137,7 +137,7 @@ select.execC-but {-webkit-appearance:button;width: auto!important;}
 .font-unOrderList {background-image: url("../img/unorder_list.png");background-size: 25px;background-repeat: no-repeat;background-position: center;}
 .execCommand-item select{
     width: 80px;
-    height: 30px;
+    height: 40px;
 }
 #setlink{
     display: none;

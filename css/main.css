@@ -103,6 +103,6 @@ input{
 .w0 {width: 0px!important;}
 .transition-w {-webkit-transition:width 0.3s;}
 .transition-l {-webkit-transition:left 0.3s;}
-.l-tb {left: -60px!important;z-index: 0!important;opacity: 1}
+.l-tb {left: -70px!important;z-index: 0!important;opacity: 1}
 .l-sb {left: -40px!important;z-index: 0!important;opacity: 1}
 /*.allow {background-image: url(../img/right.png);background-repeat: no-repeat;background-position: 100% 50%;background-size: 35px;}*/

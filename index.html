@@ -368,13 +368,16 @@
                     <div id="elem-zIndex-toTop" class="elem-item" data-event="moveToTop" data-title="置于最顶层">置顶</div>
                     <div id="elem-zIndex-toBottom" class="elem-item" data-event="moveToBottom" data-title="置于最底层">置底</div>
                 </div>
+                <div class="elem-operation dp-none textedit-setting-item">
+                    <div id="show_execCommandDetail" class="elem-item" data-event="showEcd" data-title="打开文本编辑工具栏">工具栏</div>
+                </div>
                 <div class="elem-operation dp-none codebox-setting-item">
-                    <div id="elem-attribute-setting" class="elem-item" data-event="codeboxSetting" data-title="设置编辑框的编程语言">编程语言</div>
-                    <div id="elem-attribute-setting" class="elem-item" data-event="codeboxThemeSetting" data-title="编辑框主题">主题</div>
+                    <div class="elem-item" data-event="codeboxSetting" data-title="设置编辑框的编程语言">编程语言</div>
+                    <div class="elem-item" data-event="codeboxThemeSetting" data-title="编辑框主题">主题</div>
                 </div>
                 <div class="elem-operation">
-                    <div id="elem-attribute-setting" class="elem-item" data-event="backgroundSetting" data-title="设置背景">背景</div>
-                    <div id="elem-attribute-setting" class="elem-item" data-event="elemAttrSetting" data-title="属性设置">属性</div>
+                    <div  class="elem-item" data-event="backgroundSetting" data-title="设置背景">背景</div>
+                    <div class="elem-item" data-event="elemAttrSetting" data-title="属性设置">属性</div>
                 </div>
 
             </div>
@@ -404,7 +407,7 @@
                 <div id="tool-addCode" class="tool-app" data-title="添加代码编辑框" data-intro='添加代码编辑框' data-step='10'></div>
                 <!--<div id="tool-elemOperation" class="tool-app ondetail title" data-title="操作"></div>-->
                 <div id="tool-screen" class="tool-app" data-title="更改幻灯片比例" data-intro='更改幻灯片比例' data-step='11'></div>
-                <div class="tool-app show_execCommandDetail" data-title="打开文本编辑工具" data-intro='打开文本编辑工具' data-step='12'></div>
+                <!--<div class="tool-app show_execCommandDetail" data-title="打开文本编辑工具" data-intro='打开文本编辑工具' data-step='12'></div>-->
                 <div id="tool-import" class="tool-app" data-title="导入幻灯片" data-intro='导入幻灯片' data-step='13'>
                     <input type="file" id="importInp"/>
                 </div>
@@ -415,7 +418,7 @@
             </div>
         </div>
         <!--工具栏详细操作菜单-->
-        <div id="tool-operation" >
+        <div id="tool-operation" class='panel1'>
             <div id="tool-addAnimation-operation" class="tool-app-items">
                 <div class="operation-item" data-event="changeSliderAnim" data-param="none">无效果</div>
                 <div class="operation-item" data-event="changeSliderAnim" data-param="anim-move-left">从左闪入</div>

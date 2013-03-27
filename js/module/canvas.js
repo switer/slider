@@ -1606,12 +1606,18 @@ Core.registerModule("canvas",function(sb){
             });
         },
         _chooseMenuItem : function (elemId) {
-            var $codeboxItem = $(".codebox-setting-item", eom);
-            if (elemId !== 'panel' 
-                && SliderDataSet[currentSlider][elemId].data.tagName === 'CODE') {
+            var $codeboxItem = $(".codebox-setting-item", eom),
+                $textEditItem = $(".textedit-setting-item", eom);
+            var type = ( elemId === 'panel' ) ? 'panel' : SliderDataSet[currentSlider][elemId].data.tagName;
+            if (type === 'CODE') {
                 $codeboxItem.removeClass('dp-none');
-            } else {
+            }
+            else if (type === 'DIV'){
+                $textEditItem.removeClass('dp-none');
+            } 
+            else {
                 $codeboxItem.addClass('dp-none');
+                $textEditItem.addClass('dp-none');
             }
         },
         setPosition:function(event,elem,x1,y1,x2,y2,show){

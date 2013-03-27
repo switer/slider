@@ -15,7 +15,7 @@ Core.registerModule("toolbar",function(sb){
 
             ecd = sb.find("#execCommand-detail",document);
             ecb = sb.find("#execCommand-bar",document);
-            showEcdBut = sb.find(".show_execCommandDetail",document);
+            // showEcdBut = sb.find(".show_execCommandDetail",document);
             ecdresize = sb.find(".resize",ecd);
             // ecdmove = sb.find(".move",ecd);
             closeEcd = sb.find(".close-menu",ecd);
@@ -29,7 +29,7 @@ Core.registerModule("toolbar",function(sb){
             linkValue = sb.find(".link-value",link);
             sb.css(ecd,{
                 display:'none',
-                height:'30px',
+                height:'40px',
                 top:'400px',
                 left:(100)+'px'
             });
@@ -78,12 +78,12 @@ Core.registerModule("toolbar",function(sb){
                     }
                 });
             }, false);
-            showEcdBut.addEventListener("click", function(e){
-                sb.notify({
-                    type:'showEcd',
-                    data:e
-                });
-            }, false);
+            // showEcdBut.addEventListener("click", function(e){
+            //     sb.notify({
+            //         type:'showEcd',
+            //         data:e
+            //     });
+            // }, false);
             closeEcd.addEventListener("click", function(e){
                 sb.notify({
                     type:'showEcd',
