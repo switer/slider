@@ -6,6 +6,10 @@
     bottom: 0px;
     z-index: 100;
     background-image: url(../img/wood.jpg);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-top: 1px solid black;
+    padding-top: 10px;
 }
 .frame{
     position: relative;
@@ -15,6 +19,7 @@
     /*width: 160px;*/
     background-color: white;
     -webkit-box-shadow: 0px 0px 10px steelBlue;
+    border: 1px solid black;
 
 }
 .frameCon {}
