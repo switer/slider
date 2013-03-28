@@ -185,8 +185,8 @@
     line-height: 30px;
     cursor: pointer;
     padding-left: 10px;
-
 }
+.menu-disabled {color: gray;}
 
 .elem-item:hover{
 

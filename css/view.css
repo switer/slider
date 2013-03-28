@@ -162,3 +162,4 @@
 .view-menu .menu-item:hover{
     background-color: cornflowerblue;
 }
+.right-menu-sel {box-shadow: 0 0 10px 2px rgba(0, 220, 0, 0.9);}

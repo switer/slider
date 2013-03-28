@@ -279,6 +279,7 @@ Core.registerModule("canvas",function(sb){
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
+                    if ( $(e.target).hasClass('menu-disabled') )  return;
                     var notify = e.currentTarget.getAttribute("data-event");
                     sb.notify({
                         type:notify,
@@ -1625,8 +1626,18 @@ Core.registerModule("canvas",function(sb){
         },
         _chooseMenuItem : function (elemId) {
             var $codeboxItem = $(".codebox-setting-item", eom),
-                $textEditItem = $(".textedit-setting-item", eom);
+                $textEditItem = $(".textedit-setting-item", eom),
+                $zIndexItem = $(".zIndex-setting-item", eom),
+                $elemItem   = $(".elem-setting-item", eom);
+
             var type = ( elemId === 'panel' ) ? 'panel' : SliderDataSet[currentSlider][elemId].data.tagName;
+            if (type === 'panel') {
+                $zIndexItem.addClass('menu-disabled')
+                $elemItem.addClass('menu-disabled')
+            } else {
+                $zIndexItem.removeClass('menu-disabled')
+                $elemItem.removeClass('menu-disabled')
+            }
             if (type === 'CODE') {
                 $codeboxItem.removeClass('dp-none');
             }

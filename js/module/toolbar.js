@@ -233,12 +233,12 @@ Core.registerModule("toolbar",function(sb){
             //         data: null
             //     });  
             // };
-            // insertSlider.onclick = function(){
-            //     sb.notify({
-            //         type:"insertSlider",
-            //         data: null
-            //     });  
-            // };
+            insertSlider.onclick = function(){
+                sb.notify({
+                    type:"insertSlider",
+                    data: null
+                });  
+            };
 
             //颜色取色板
             var cb = window.colorboard.create(function (value) {

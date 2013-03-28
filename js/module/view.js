@@ -84,6 +84,10 @@ Core.registerModule("view",function(sb){
             })
             $(document).on('click', function (evt) {
                 if ( !$(evt.target).hasClass('view-menu') ) {
+                    
+                    if (global._paramCache['curFrameId']) {
+                        $(frames[global._paramCache['curFrameId']]).removeClass('right-menu-sel');
+                    }
                     $('#frame_view_menu').addClass('dp-none');
                 }
             })
@@ -159,7 +163,7 @@ Core.registerModule("view",function(sb){
                 global.addFrameElement(frame.frameCon ,method,null,frameContainer);
             }
             else if(method == "insert") {
-                var posParent = $(frames[frameDataId]).parent()[0]
+                var posParent = $(frames[(frameDataId || currentFrame)]).parent()[0]
                 global.addFrameElement(frame.frameCon ,method, posParent,frameContainer);
             }
             global.changeDisplayFrameList(frame.id, method);
@@ -508,11 +512,15 @@ Core.registerModule("view",function(sb){
                     evt.target.oncontextmenu = function(){
                         return false;
                     }
+                    if (global._paramCache['curFrameId']) {
+                        $(frames[global._paramCache['curFrameId']]).removeClass('right-menu-sel');
+                    }
                     $('#frame_view_menu').removeClass('dp-none').css({
                         top : evt.clientY - $('#frame_view_menu')[0].offsetHeight,
                         left : evt.clientX
                     })
                     global._paramCache['curFrameId'] = frameID;
+                    $(frame).addClass('right-menu-sel');
                 }
             })
             return {
