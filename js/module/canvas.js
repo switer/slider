@@ -279,7 +279,9 @@ Core.registerModule("canvas",function(sb){
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
-                    if ( $(e.target).hasClass('menu-disabled') )  return;
+                    if ( $(e.target).parent().hasClass('menu-disabled') )  {
+                        return;
+                    }
                     var notify = e.currentTarget.getAttribute("data-event");
                     sb.notify({
                         type:notify,
@@ -886,7 +888,6 @@ Core.registerModule("canvas",function(sb){
                     key : sliderID,
                     value : newSlider
                 }, method, curElemId);
-                console.log('insert ', curElemId);
                 addSliderElementFunc(newSlider, method, sliders[curElemId], editorContainer);
 
             } else if(method == "append"){
@@ -923,7 +924,6 @@ Core.registerModule("canvas",function(sb){
             else Core.log("wrong insert slider method!");
         },
         addSliderElement:function(elem,method,pos,container){
-            console.log(elem, pos);
             if(method=="insert") container.insertBefore(elem, pos);
             else if(method=="append") container.appendChild(elem);
             else Core.log("wrong insert slider-Element method!");

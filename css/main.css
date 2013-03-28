@@ -99,7 +99,7 @@ input{
 .cf:before, .cf:after {content:"";display:table;}
 .cf:after {clear:both;}
 .cf {zoom:1;}
-.video-play {background-image: url(../img/video_play.png);background-repeat: no-repeat;background-size: 50%;background-position: center;}
+.video-play {background-image: url(../img/video_play.png);background-repeat: no-repeat;background-size: 30%;background-position: center;}
 .w0 {width: 0px!important;}
 .transition-w {-webkit-transition:width 0.3s;}
 .transition-l {-webkit-transition:left 0.3s;}

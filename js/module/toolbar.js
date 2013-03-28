@@ -100,8 +100,8 @@ Core.registerModule("toolbar",function(sb){
             addImageApp = sb.find("#tool-addimage");
             addTextApp = sb.find("#tool-addtext");
             addSliderApp = sb.find("#tool-addslider");
-            deleteSlider = sb.find("#tool-deleteSlider");
-            insertSlider = sb.find("#tool-insertSlider");
+            // deleteSlider = sb.find("#tool-deleteSlider");
+            // insertSlider = sb.find("#tool-insertSlider");
             previewApp = sb.find("#tool-preview");
             operation = $("#tool-operation")[0];
             operationSubMenuItems = sb.query(".operation-item",operation);
@@ -233,12 +233,12 @@ Core.registerModule("toolbar",function(sb){
             //         data: null
             //     });  
             // };
-            insertSlider.onclick = function(){
-                sb.notify({
-                    type:"insertSlider",
-                    data: null
-                });  
-            };
+            // insertSlider.onclick = function(){
+            //     sb.notify({
+            //         type:"insertSlider",
+            //         data: null
+            //     });  
+            // };
 
             //颜色取色板
             var cb = window.colorboard.create(function (value) {
