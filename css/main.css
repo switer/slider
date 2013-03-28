@@ -104,6 +104,6 @@ input{
 .transition-w {-webkit-transition:width 0.3s;}
 .transition-l {-webkit-transition:left 0.3s;}
 .l-tb {left: -70px!important;z-index: 0!important;opacity: 1}
-.l-sb {left: -40px!important;z-index: 0!important;opacity: 1}
+.l-sb {left: 30px!important;z-index: 0!important;opacity: 1}
 .box {border: 1px solid;border-radius: 5px;background: white;height: 25px;}
 /*.allow {background-image: url(../img/right.png);background-repeat: no-repeat;background-position: 100% 50%;background-size: 35px;}*/
