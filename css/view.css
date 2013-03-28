@@ -143,3 +143,22 @@
     /*-moz-transform: scale(0.65);*/
     /*transform: scale(0.65);*/
 }
+.view-menu {
+    width: 100px;
+    height: auto;
+    position: absolute;
+    top: 100px;
+    left: 200px;
+    padding: 20px 0;
+    z-index : 999;
+}
+
+.view-menu .menu-item {
+    height: 30px;
+    padding-left: 15px;
+    line-height: 30px;
+    cursor: pointer;
+}
+.view-menu .menu-item:hover{
+    background-color: cornflowerblue;
+}

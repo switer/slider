@@ -29,6 +29,8 @@ Core.registerModule("view",function(sb){
     return {
         init:function(){
             global = this;
+            global._paramCache = {};
+
             frameContainer = sb.find("#frame-list");
             changeCurrFrameFunc = this.changeCurrFrame;
             changeDisplayFrameListFunc = this.changeDisplayFrameList;
@@ -53,6 +55,38 @@ Core.registerModule("view",function(sb){
             var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
             FRAME_Y = sMap.y;
             FRAME_X = sMap.x;
+            $('#frame_view_menu').on('click .menu-item', function (evt) {
+                var $tar = $(evt.target),
+                    dataId = global._paramCache['curFrameId'].match(/[0-9]*$/),
+                    type = $tar.data('type'),
+                    evtType = $tar.data('event'),
+                    params;
+                if (!$tar.hasClass('menu-item')) return;
+                switch (type) {
+                    case 'create' : 
+                        params = 'append';
+                        break;
+                    case 'insert' : 
+                        params = {
+                            'method' : 'insert',
+                            'dataId' : dataId
+                        };
+                        break;
+                    case 'delete' : 
+                        params =  dataId;
+                        break;
+                }
+                sb.notify({
+                    type : evtType,
+                    data : params
+                })
+                $('#frame_view_menu').addClass('dp-none');
+            })
+            $(document).on('click', function (evt) {
+                if ( !$(evt.target).hasClass('view-menu') ) {
+                    $('#frame_view_menu').addClass('dp-none');
+                }
+            })
 
         },
         destroy:function(){
@@ -113,28 +147,41 @@ Core.registerModule("view",function(sb){
             else Core.log("wrong insert slider-Element method!");
         },
         addSlider:function(method){
+
+            var frameDataId;
+            if (typeof(method) == 'object') {
+                var params = method;
+                method = params.method;
+                frameDataId = 'frame' + params.dataId;
+            }
             var frame = global.createFrame(method);
-            if(method=="append") global.addFrameElement(frame.frameCon ,method,null,frameContainer);
-            else if(method=="insert") {
-                var posParent = $(frames[currentFrame]).parent()[0]
+            if(method == "append") {
+                global.addFrameElement(frame.frameCon ,method,null,frameContainer);
+            }
+            else if(method == "insert") {
+                var posParent = $(frames[frameDataId]).parent()[0]
                 global.addFrameElement(frame.frameCon ,method, posParent,frameContainer);
             }
-            global.changeDisplayFrameList(frame.id,method);
+            global.changeDisplayFrameList(frame.id, method);
         },
-        deleteFrame:function(){
+        deleteFrame:function(delId){
             //nearFrame:当前frame的邻近frame,
             //method {'before','after'}:the sequence insert into dispFrames
-            var nearFrame,method;
+            // delId = delId ? 'frame' + delId : delId;
+            // var tarDelData = currentFrame;
+            // console.log('delete frame : ', currentFrame);
+            global.showFrame('frame' + delId);
+            var nearFrame, method;
             //select from display frames
             nearFrame = frames.getSlider("pre",currentFrame,-1)||
             frames.getSlider("next",currentFrame,-1);
             if(nearFrame == null){
                 //select from all frames
-                nearFrame = frames.getSlider(method="pre",currentFrame,-1)||
-                frames.getSlider(method="next",currentFrame,-1);
+                nearFrame = frames.getSlider(method = "pre",currentFrame,-1)||
+                frames.getSlider(method = "next",currentFrame,-1);
             }
             //显示新的预览列表
-            var oldCurr = global.showFrame(nearFrame,method=="pre"?"before":"after");
+            var oldCurr = global.showFrame(nearFrame, method=="pre"?"before":"after");
             //删除预览frame
             if(oldCurr){
                 frameContainer.removeChild($(frames[oldCurr]).parent()[0]);
@@ -143,6 +190,7 @@ Core.registerModule("view",function(sb){
                 if(dispFrames[oldCurr]) delete dispFrames[oldCurr];
                 if(hidFrames[oldCurr]) delete hidFrames[oldCurr];  
             }
+            //指定当前显示窗口，重绘窗口列表
             global.changeDisplayFrameList(currentFrame,"delete");
         },
         /*
@@ -188,7 +236,7 @@ Core.registerModule("view",function(sb){
 
                 //currentFrame = frameID;
                 //若为第一个帧，显示该帧所在的组
-                if(frameID==dispFrames.getFirstElement()){
+                if(frameID == dispFrames.getFirstElement()){
                     curr = currentFrame;
                     global.changeDisplayFrameList(frameID,"showPre");
                     window.setTimeout(function(){
@@ -276,6 +324,7 @@ Core.registerModule("view",function(sb){
             return datas;
         },
         showFrameElementByData:function(data,frame){
+
             var elem = null,borderWidth;
             var frameEelem = frames[frame];
             var framePanel = sb.find(".frame-panel", frameEelem);
@@ -314,7 +363,6 @@ Core.registerModule("view",function(sb){
                         elem.appendChild(panel);
                     }
                     else if(data[a].type=="DIV" || data[a].type === 'CODE'){
-                        console.log(data[a]);
                         var text = document.createElement("div");
                         text.innerHTML = data[a].value;
                         text.className = "text";
@@ -349,9 +397,10 @@ Core.registerModule("view",function(sb){
         changeDisplayFrameList:function(begin,method){
             var beginIndex = -1,endIndex = -1,newDispFrames = null,length,frame = null;
             beginIndex = frames.findIndex(begin);
+
             if(method=="append"){
                 var indexA = beginIndex;
-                if((indexA=(indexA-MAX_FRAME_NUMBER+1))<1){
+                if((indexA=(indexA - MAX_FRAME_NUMBER+1))<1){
                     indexA = 1;
                 }
                 endIndex = beginIndex;
@@ -364,7 +413,7 @@ Core.registerModule("view",function(sb){
             }
             else if(method=="delete"){
                 beginIndex = frames.findIndex(dispFrames.getSlider(null, null, 1));
-                endIndex  = beginIndex+MAX_FRAME_NUMBER-1;
+                endIndex  = beginIndex + MAX_FRAME_NUMBER-1;
             }
             else if(method=="showPre"){
                 var indexB = beginIndex;
@@ -398,7 +447,7 @@ Core.registerModule("view",function(sb){
                 $(dispFrames[frame]).parent().show();
                 delete hidFrames[frame];
             }
-            changeCurrFrameFunc(begin,"append");
+            var old = global.changeCurrFrame(begin,"append");
         },
         /*
          *function：1.create a new frame-element{DIV}
@@ -412,6 +461,14 @@ Core.registerModule("view",function(sb){
             var frame = document.createElement("div");
             var frameCon = document.createElement("div");
             var framePanel = sb.create("div");
+
+            var opDataId = null;
+            if (  method && ( typeof(method) === 'object' ) ) {
+                var param = method;
+                method = param.method;
+                opDataId = 'slider' + param.dataId;
+            }
+
             frameCon.appendChild(frame)
             frame.appendChild(framePanel);
             frame.className = "frame scale";
@@ -434,7 +491,7 @@ Core.registerModule("view",function(sb){
             else if(method=="insert") global.addFrameObject({
                 key:frameID,
                 value:frame
-            },method,currentFrame);
+            },method, (opDataId || currentFrame));
             var SframeNum = frame_number;
             frame.addEventListener("click", function(){
                 sb.notify({
@@ -446,6 +503,18 @@ Core.registerModule("view",function(sb){
                     data:frameID
                 });
             },false);
+            $(frame).on('mousedown ', function (evt) {
+                if (evt.button === 2) {
+                    evt.target.oncontextmenu = function(){
+                        return false;
+                    }
+                    $('#frame_view_menu').removeClass('dp-none').css({
+                        top : evt.clientY - $('#frame_view_menu')[0].offsetHeight,
+                        left : evt.clientX
+                    })
+                    global._paramCache['curFrameId'] = frameID;
+                }
+            })
             return {
                 id:"frame"+frame_number,
                 frame:frame,

@@ -53,6 +53,7 @@ Core.registerModule("toolbar",function(sb){
             });
             comfirmLink.addEventListener("click", function(){
                 document.execCommand("createLink", false, linkValue.value);
+                $('#setlink').css('display ', 'none');
             }, false);
             link_but.addEventListener("click", function(e){
                 sb.notify({
@@ -225,18 +226,19 @@ Core.registerModule("toolbar",function(sb){
                     data:"append"
                 });
             };
-            deleteSlider.onclick = function(){
-                sb.notify({
-                    type:"deleteSlider",
-                    data:{}
-                });  
-            };
-            insertSlider.onclick = function(){
-                sb.notify({
-                    type:"insertSlider",
-                    data:{}
-                });  
-            };
+            // deleteSlider.onclick = function(){
+            //     console.log('on click delete slider');
+            //     sb.notify({
+            //         type:"deleteSlider",
+            //         data: null
+            //     });  
+            // };
+            // insertSlider.onclick = function(){
+            //     sb.notify({
+            //         type:"insertSlider",
+            //         data: null
+            //     });  
+            // };
 
             //颜色取色板
             var cb = window.colorboard.create(function (value) {

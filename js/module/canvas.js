@@ -816,28 +816,43 @@ Core.registerModule("canvas",function(sb){
             });
         },
         insertSlider:function(){
-            createSliderFunc("insert");
+            createSliderFunc("insert", currentSlider);
         },
         //新添加：sliderId
-        deleteSlider:function(){
-            var preSlider = sliders.getSlider("pre",currentSlider,-1) ||
-            sliders.getSlider("next",currentSlider,-1);
-            if(currentSlider){
+        deleteSlider : function(delId){
+            delId = delId ? 'slider' + delId : delId;
+            var tarSlider = delId || currentSlider,
+                oralCur = currentSlider,
+                preSlider = sliders.getSlider("pre", tarSlider, -1) ||
+                                sliders.getSlider("next", tarSlider, -1);
+
+            oralCur && ( sliders[oralCur].style.display = "none");
+            if(tarSlider){
                 //删除slider DOM 元素
-                editorContainer.removeChild(sliders[currentSlider]);
-                delete sliders[currentSlider];
-                delete SliderDataSet[currentSlider]
-                //重置当前slider
+                editorContainer.removeChild(sliders[tarSlider]);
+                delete sliders[tarSlider];
+                delete SliderDataSet[tarSlider]
+                
                 currentSlider = preSlider;
             }
+            //如果之前显示的元素为显示，那么就隐藏它
+            
             //显示可能被隐藏的前slider
             if(preSlider&&sliders[preSlider]) sliders[preSlider].style.display = "block";
             else {
                 //如果前slider不存在，那么就创建新的
                 createSliderFunc("append");
             }
+
+
         },
         createSlider:function(method, pasteObj){
+            var opDataId = null;
+            if (  method && ( typeof(method) === 'object' ) ) {
+                var param = method;
+                method = param.method;
+                opDataId = 'slider' + param.dataId;
+            }
             var newSlider = document.createElement("div");
             var panel = document.createElement("div");
 
@@ -862,28 +877,30 @@ Core.registerModule("canvas",function(sb){
             slider_number++;
             slider_count++;
 
-            var sliderID = "slider"+slider_number; 
+            var sliderID = "slider" + slider_number; 
 
-            if(method=="insert"){
-
+            if(method == "insert"){
+                var curElemId = opDataId || currentSlider;
                 addSliderObjectFunc({
-                    key:sliderID,
-                    value:newSlider
-                },method,currentSlider);
+                    key : sliderID,
+                    value : newSlider
+                }, method, curElemId);
+                console.log('insert ', curElemId);
+                addSliderElementFunc(newSlider, method, sliders[curElemId], editorContainer);
 
-                addSliderElementFunc(newSlider,method,sliders[currentSlider],editorContainer);
-            }else if(method=="append"){
+            } else if(method == "append"){
+
                 addSliderObjectFunc({
                     key:sliderID,
                     value:newSlider
                 },method,null);
-                addSliderElementFunc(newSlider,method,null,editorContainer);
+                addSliderElementFunc(newSlider, method, null, editorContainer);
             }
             currentSlider = sliderID;
             editor = sliders[currentSlider];
             sb.notify({
-                type:"changeShowAnim",
-                data:editor.getAttribute("data-anim")
+                type : "changeShowAnim",
+                data : editor.getAttribute("data-anim")
             });
             return {
                 id:sliderID,
@@ -905,6 +922,7 @@ Core.registerModule("canvas",function(sb){
             else Core.log("wrong insert slider method!");
         },
         addSliderElement:function(elem,method,pos,container){
+            console.log(elem, pos);
             if(method=="insert") container.insertBefore(elem, pos);
             else if(method=="append") container.appendChild(elem);
             else Core.log("wrong insert slider-Element method!");
@@ -1442,7 +1460,7 @@ Core.registerModule("canvas",function(sb){
                 }
             }
         },
-        pasteElement:function(){
+        pasteElement : function(){
 
             if(copyParams){
                 //image
