@@ -245,6 +245,7 @@ Core.registerModule("canvas",function(sb){
             sb.data("sliderDataSet",SliderDataSet);
             sb.listen({
                 "onImportSlider" : this.readData,
+                'loadTemplFile' : this.loadTemplFile,
                 "enterEditorMode":this.enterEditorMode,
                 "enterSaveFile":this.enterSaveFile,
                 "addImage":this.addImage,
@@ -275,7 +276,8 @@ Core.registerModule("canvas",function(sb){
                 "backgroundSetting" : this.backgroundSetting,
                 "codeboxSetting" : this.codeboxSetting,
                 "changeCodeType" : this.changeCodeType,
-                "codeboxThemeSetting" : this.codeboxThemeSetting
+                "codeboxThemeSetting" : this.codeboxThemeSetting,
+                "autoSaveTimer" : this.autoSaveTimer
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
@@ -403,20 +405,19 @@ Core.registerModule("canvas",function(sb){
             //代码输入框主题
             var chooseThemebox = window.ChooseBox.create([
                     {key : 'default',         value : 'default'},
-                    {key : 'blackboard',         value : 'blackboard'},
-                    {key : 'cobalt',         value : 'cobalt'},
+                    {key : 'blackboard',      value : 'blackboard'},
+                    {key : 'cobalt',          value : 'cobalt'},
                     {key : 'eclipse',         value : 'eclipse'},
                     {key : 'elegant',         value : 'elegant'},
-                    {key : 'erlang-dark',         value : 'erlang-dark'},
+                    {key : 'erlang-dark',     value : 'erlang-dark'},
                     {key : 'monokai',         value : 'monokai'},
-                    {key : 'lesser-dark',         value : 'lesser-dark'},
-                    {key : 'neat',         value : 'neat'},
-                    {key : 'night',         value : 'night'},
-                    {key : 'rubyblue',         value : 'rubyblue'},
+                    {key : 'lesser-dark',     value : 'lesser-dark'},
+                    {key : 'neat',            value : 'neat'},
+                    {key : 'night',           value : 'night'},
+                    {key : 'rubyblue',        value : 'rubyblue'},
                     {key : 'xq-dark',         value : 'xq-dark'},
-                    {key : 'twilight',         value : 'twilight'},
-                    {key : 'vibrant-ink',         value : 'vibrant-ink'},
-
+                    {key : 'twilight',        value : 'twilight'},
+                    {key : 'vibrant-ink',     value : 'vibrant-ink'}
                 ]);
             //初始隐藏
             window.ChooseBox.hide(chooseThemebox);
@@ -432,6 +433,15 @@ Core.registerModule("canvas",function(sb){
             $(document.body).append(chooseThemebox);
             sb.move(chooseThemebox, chooseThemebox);
             global._chooseThemebox = chooseThemebox;
+            //窗口关闭前的保存文件操作
+            window.onbeforeunload = function () {
+                global.saveTempFile();
+                return '要离开正在编辑的内容？'
+            }
+        },
+        autoSaveTimer : function () {
+            //一个定时器定时保存文件
+            window.setInterval( global.saveTempFile, 1000*5);
         },
         _hideChooseBox : function () {
             window.ChooseBox.hide(global._choosebox);
@@ -505,6 +515,109 @@ Core.registerModule("canvas",function(sb){
 
             });
         },
+        renderSlider : function (data) {
+
+            var importData = JSON.parse(data),
+                slidersData = JSON.parse(importData.cntData),
+                slidersConf = importData.cntConf,
+                sliderArray = readAsArray(slidersData),
+                rmArray = sliders.toArray();
+
+            render(sliderArray);
+            global.removeSliderByArray(rmArray);
+            function readAsArray(data) {
+                var sliders = [];
+                    // imgCount = 0;
+                for(var s in data){
+                    if ( data.hasOwnProperty(s) ) {
+                        var elementArray = [];
+                        var elements = data[s].element;
+                        for (var e in elements) {
+                            if(elements.hasOwnProperty(e)){
+                                elementArray.push(elements[e]);
+                                // if (elements[e].type === 'IMG') imgCount ++;
+                            }
+                        }
+                        sliders.push({
+                            data : data[s],
+                            elements : elementArray
+                            // imgCount : imgCount
+                        });
+                    }
+                }
+                return sliders;
+            }
+
+            function render(array) {
+                var slider = array.shift();
+                if (slider) {
+                    renderElements(slider);
+                    render(array);
+                }
+            }
+            
+            function renderElements (slider, callback) {
+                var elements = slider.elements;
+
+                createSliderFunc('append', {
+                    attr : slider.data['panelAttr'], 
+                    anim:slider.data['anim']
+                });
+
+                sb.notify({
+                    type:"importSlider",
+                    data: 'append'
+                });
+                var count = 0;
+                for (var i = 0; i < elements.length; i++) {
+                    var data = elements[i],elem;
+                    if(data.type === "DIV"){
+                        sb.notify({
+                            type:"addText",
+                            data: {
+                                paste : true,
+                                attr : data.cAttr,
+                                elemAttr : data.eAttr,
+                                value : decodeURIComponent(data.value)
+                            }
+                        });
+                    }
+                    else if(data.type === "IMG") {
+                        sb.notify({
+                            type:"addImage",
+                            data: {
+                                paste : true,
+                                attr : data.cAttr,
+                                elemAttr : data.eAttr,
+                                pAttr : data.panelAtt,
+                                value : data.value
+                            }
+                        });
+                    } 
+                    else if (data.type === "VIDEO") {
+                        global._addVideElement(data.value, {
+                            isPaste : true,
+                            eAttr : data.eAttr,
+                            cAttr : data.cAttr,
+                            value : data.value
+                        })
+                    }
+                    if(data.type === "CODE"){
+                        sb.notify({
+                            type:"addCode",
+                            data: {
+                                paste : true,
+                                attr : data.cAttr,
+                                elemAttr : data.eAttr,
+                                value : data.value,
+                                theme : data.theme,
+                                codeType : data.codeType
+                            }
+                        });
+                    }
+                }
+            }
+        },
         readData:function (inp) {
 
             var reader = new FileReader();
@@ -515,116 +628,14 @@ Core.registerModule("canvas",function(sb){
                 var datajson = reader.result.match(/\<script\ type\=\"text\/html\"\ id\=\"datajson\"\>.*\<\/script\>/);
                 if (datajson) {
                    var data =  datajson[0].replace(/^\<script[^\<\>]*\>/,'').replace(/\<\/script\>/,'');
-                    renderSlider(data);
+                    global.renderSlider(data);
                 } 
 
             }
-            function renderSlider(data) {
-
-                var importData = JSON.parse(data),
-                    slidersData = JSON.parse(importData.cntData),
-                    slidersConf = importData.cntConf;
-                var sliderArray = readAsArray(slidersData),
-                    rmArray = sliders.toArray();
-
-                render(sliderArray);
-                global.removeSliderByArray(rmArray);
-                function readAsArray(data) {
-                    var sliders = [];
-                        // imgCount = 0;
-                    for(var s in data){
-                        if ( data.hasOwnProperty(s) ) {
-                            var elementArray = [];
-                            var elements = data[s].element;
-                            for (var e in elements) {
-                                if(elements.hasOwnProperty(e)){
-                                    elementArray.push(elements[e]);
-                                    // if (elements[e].type === 'IMG') imgCount ++;
-                                }
-                            }
-                            sliders.push({
-                                data : data[s],
-                                elements : elementArray
-                                // imgCount : imgCount
-                            });
-                        }
-                    }
-                    return sliders;
-                }
-
-                function render(array) {
-                    var slider = array.shift();
-                    if (slider) {
-                        renderElements(slider);
-                        render(array);
-                    }
-                }
-                
-                function renderElements (slider, callback) {
-                    var elements = slider.elements;
-
-                    createSliderFunc('append', {
-                        attr : slider.data['panelAttr'], 
-                        anim:slider.data['anim']
-                    });
-
-                    sb.notify({
-                        type:"importSlider",
-                        data: 'append'
-                    });
-                    var count = 0;
-                    for (var i = 0; i < elements.length; i++) {
-                        var data = elements[i],elem;
-                        if(data.type === "DIV"){
-                            sb.notify({
-                                type:"addText",
-                                data: {
-                                    paste : true,
-                                    attr : data.cAttr,
-                                    elemAttr : data.eAttr,
-                                    value : decodeURIComponent(data.value)
-                                }
-                            });
-                        }
-                        else if(data.type === "IMG") {
-                            sb.notify({
-                                type:"addImage",
-                                data: {
-                                    paste : true,
-                                    attr : data.cAttr,
-                                    elemAttr : data.eAttr,
-                                    pAttr : data.panelAtt,
-                                    value : data.value
-                                }
-                            });
-                        } 
-                        else if (data.type === "VIDEO") {
-                            global._addVideElement(data.value, {
-                                isPaste : true,
-                                eAttr : data.eAttr,
-                                cAttr : data.cAttr,
-                                value : data.value
-                            })
-                        }
-                        if(data.type === "CODE"){
-                            sb.notify({
-                                type:"addCode",
-                                data: {
-                                    paste : true,
-                                    attr : data.cAttr,
-                                    elemAttr : data.eAttr,
-                                    value : data.value,
-                                    theme : data.theme,
-                                    codeType : data.codeType
-                                }
-                            });
-                        }
-                    }
-                    // if (slider.imgCount === 0) {
-                    //     callback && callback();
-                    // }
-                }//renderElements
-            }
+        },
+        //恢复缓存文件
+        loadTemplFile : function (data) {
+            global.renderSlider(data);
         },
         destroy:function(){
             editor=null;
@@ -725,50 +736,57 @@ Core.registerModule("canvas",function(sb){
             });
         },
 
-        enterSaveFile:function(){
+        _createSliderJSONData : function () {
+            var json = new sb.ObjectLink(),
+                isHasCode  = false;
 
-            global._createThumb(sliders.getFirstElement(), function (thumb) {
-                var json = new sb.ObjectLink(),
-                    count = 0,
-                    datas,
-                    isHasCode  = false;
-
-                SliderDataSet.forEach(function(datasets, sliderIndex){
-                    var data = new sb.ObjectLink();
-                    var slider = {};
-                    datasets.forEach(function(b, n){
-                        var sliderElement = {};
-                        sliderElement.type = b["data"].tagName;
-                        sliderElement.cAttr = b["container"].getAttribute("style");
-                        sliderElement.eAttr = b["data"].getAttribute("style");
-                        sliderElement.zIndex = b["zIndex"];
-                        //img.src||video-srouce.src||textbox.src
-                        sliderElement.value = b["data"].src || $(b["data"]).find('.video-source').attr('src') || encodeURIComponent(b["data"].innerHTML);
-                        if(sliderElement.type=="IMG"){
-                            sliderElement.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
-                        }
-                        if (sliderElement.type === 'CODE') {
-                            isHasCode = true;
-                            //code mirror
-                            var doc =  b['file'].getDoc();
-                            sliderElement.value = doc.getValue();
-                            sliderElement.codeType = doc.getMode().name;
-                            sliderElement.theme = b['file'].getOption('theme');
-                        }
-                        data[n] = sliderElement;
-                    });
-                    slider["anim"] = sliders[sliderIndex].getAttribute("data-anim");
-                    slider["panelAttr"] = sb.find(".panel", sliders[sliderIndex]).getAttribute("style");
-                    slider["element"] = data;
-                    json[sliderIndex] = slider;
+            SliderDataSet.forEach(function(datasets, sliderIndex){
+                var data = new sb.ObjectLink();
+                var slider = {};
+                datasets.forEach(function(b, n){
+                    var sliderElement = {};
+                    sliderElement.type = b["data"].tagName;
+                    sliderElement.cAttr = b["container"].getAttribute("style");
+                    sliderElement.eAttr = b["data"].getAttribute("style");
+                    sliderElement.zIndex = b["zIndex"];
+                    //img.src||video-srouce.src||textbox.src
+                    sliderElement.value = b["data"].src || $(b["data"]).find('.video-source').attr('src') || encodeURIComponent(b["data"].innerHTML);
+                    if(sliderElement.type=="IMG"){
+                        sliderElement.panelAtt = sb.find(".element-panel",b["container"]).getAttribute("style");
+                    }
+                    if (sliderElement.type === 'CODE') {
+                        isHasCode = true;
+                        //code mirror
+                        var doc =  b['file'].getDoc();
+                        sliderElement.value = doc.getValue();
+                        sliderElement.codeType = doc.getMode().name;
+                        sliderElement.theme = b['file'].getOption('theme');
+                    }
+                    data[n] = sliderElement;
                 });
+                slider["anim"] = sliders[sliderIndex].getAttribute("data-anim");
+                slider["panelAttr"] = sb.find(".panel", sliders[sliderIndex]).getAttribute("style");
+                slider["element"] = data;
+                json[sliderIndex] = slider;
+            });
+            return {
+                data : json,
+                isHasCode : isHasCode
+            }
+        },
+
+        _createSaveData : function (callback) {
+            global._createThumb(sliders.getFirstElement(), function (thumb) {
+                var sliderJson = global._createSliderJSONData(),
+                    count = 0,
+                    datas;
                 datas = {
                     cntConf : {
                         'height' : editorContainer.style.height,
                         'width' : editorContainer.style.width,
                         'thumb' : thumb     //缩略图
                     },
-                    cntData : json.toJSONString()
+                    cntData : sliderJson.data.toJSONString()
                 }
                 var scriptBegin = '<script type="text/javascript">',
                     scriptEnd   = '</script>',
@@ -776,7 +794,9 @@ Core.registerModule("canvas",function(sb){
                     styleEnd    = '</style>',
                     stream      = JSON.stringify(datas),
                     header      = window._sourceMap.blogHeader,
+                    // header      = window._sourceMap.header,
                     footer      = window._sourceMap.blogFooter,
+                    // footer      = window._sourceMap.footer,
                     cmJS        = window._sourceMap.cmJS,
                     cmThemeJS   = window._sourceMap.cmThemeJS,
                     cmCss       = window._sourceMap.cmCSS,
@@ -785,7 +805,7 @@ Core.registerModule("canvas",function(sb){
 
                 var dataHtml = '<script type="text/html" id="datajson">' + stream + scriptEnd,
                     combHTML;
-                if (isHasCode) {  //按需添加代码片段
+                if (sliderJson.isHasCode) {  //按需添加代码片段
                     combHTML =  header +
                                 styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
                                 dataHtml +
@@ -798,16 +818,32 @@ Core.registerModule("canvas",function(sb){
                                 scriptBegin + scriptEnd +
                                 footer
                 }
-
-
-
+                callback && callback(combHTML)
                 
-                sb.notify({
-                    type : "preSave",
-                    data :  combHTML
-                });
             });
-                
+        },
+        enterSaveFile:function(){
+            global._createSaveData(function (data) {
+                sb.notify({
+                    type : 'preSave',
+                    data : data
+                })
+            });
+        },
+        saveTempFile : function () {
+            console.log('saveTempFile');
+            var dataJson = global._createSliderJSONData(),
+                datas = {
+                    cntConf : {
+                        'height' : editorContainer.style.height,
+                        'width' : editorContainer.style.width,
+                    },
+                    cntData : dataJson.data.toJSONString()
+                }
+            sb.notify({
+                    type : "beforeCloseSave",
+                    data :  JSON.stringify(datas)
+            });
         },
         hideSliderEditor : function () {
             sb.unbind(window, "keyup", keyOperate);

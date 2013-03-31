@@ -10,6 +10,7 @@ Core.registerModule("filesystem", function(sb){
 			_.bindAll(this);
 			sb.listen({
 				'preSave' : this.checkAutoSave,
+				'beforeCloseSave' : this.beforeCloseSave,
 				'showFileSystem' : this.showFileSystem,
 				'saveFile' : this.saveFileHandler,
 				'openFileSystem' : this.openFileSystem
@@ -31,8 +32,12 @@ Core.registerModule("filesystem", function(sb){
 				var errStr =  err.code && ( webfs.errorCodeMap[err.code]  || webfs.phonegapErrorCodeMap[err.code])
 				msg(errStr || err);
 			}
-
+			function hideMsg () {
+				$nBox.suiHide();
+			}
+			//保存到当前模块全局
 			global._errHandler = errHandler;
+			global._hideMsg = hideMsg;
 			require(['webfs'],
 			function (wfs) {
 				webui = wfs.webui;
@@ -42,6 +47,7 @@ Core.registerModule("filesystem", function(sb){
 				_this._container = '#fileView';
 
 				webui.renderRoot(window.TEMPORARY, _this._container, function () {
+					global._checkTemplFile.call(this);
 					//文件的打开事件API
 					webui.initFileOperation('click', _this._container, errHandler);
 					//删除按钮的API
@@ -52,6 +58,10 @@ Core.registerModule("filesystem", function(sb){
 					$('#addFile').html('保存为');
 					$(".fs-icon-back.fs-icon-root").css('top', '45px');
 					$(".fs-view").css('marginTop','105px')
+					// sb.notify({
+					// 	type : 'autoSaveTimer',
+					// 	data : null
+					// });
 				});
 				
 				function initWebuiEvenet() {
@@ -126,6 +136,30 @@ Core.registerModule("filesystem", function(sb){
 
 				}
 			})
+			
+		},
+		_checkTemplFile : function () {
+			var _this = this;
+			if (window.localStorage.getItem('is_save_temp_file_success') == 'true') {
+				//重置标志位
+				window.localStorage.setItem('is_save_temp_file_success', 'false')
+
+				var cwd = webui.getCwd(_this._container);
+				global._errHandler('正在恢复上次打开文件');
+				webfs.openfile('.~close_temp_file.html', cwd, function (file) {
+					webfs.readfile(file, 'UTF-8', function (evt) {
+
+						var content = evt.target.result;
+						sb.notify({
+							type : 'loadTemplFile',
+							data : content
+						})
+
+					}, function () {
+						alert('error');
+					});
+				}, global._errHandler);
+			}
 		},
 		_saveFile : function (data) {
 
@@ -133,6 +167,21 @@ Core.registerModule("filesystem", function(sb){
 		saveFileHandler : function (data) {
 			if (!global._save_file) global.showFileSystem(data);
 			else global._saveFile(data);
+		},
+		//保存临时文件
+		beforeCloseSave : function (data) {
+			console.log('beforeCloseSave');
+			var directory = './',
+				filename = '.~close_temp_file.html';
+			global.wfs.webfs.writeFileInPath(directory, 
+				filename, data, function () {
+					console.log('success');
+					window.localStorage.setItem('is_save_temp_file_success', 'true')
+					// global._errHandler('成功保存临时文件')
+					console.log('成功保存临时文件')
+			}, function (err) {
+					// global._errHandler('保存临时文件失败：' + err.code)
+			}, { override : true });
 		},
 		//检查是否自动保存
 		checkAutoSave : function (data) {

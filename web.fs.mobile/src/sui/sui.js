@@ -71,6 +71,7 @@
         $parent = $mask.parent();
     if ( !$mask.hasClass(conf.mask_class) ) return;
     if ($parent.data('cancel')) {
+
       //防止事件透传, 采用delay隐藏
       $parent.delayHide();
     }

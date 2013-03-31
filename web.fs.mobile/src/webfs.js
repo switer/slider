@@ -160,14 +160,21 @@ define('webfs/fs',['webfs/fs/util'], function (util) {
 		filesystem(window.TEMPORARY, function (fs) {
 			var root = fs.root.toURL(),
 				rootPath = root.match(/.*\/$/) ? root : root + '/';
-
 			path = path.match(/.*\/$/) ? path : path + '/';
 			path = path.replace(new RegExp('^' + rootPath), './'); 
+			console.log(path, fs.root);
 			opendir(path, fs.root, function (directoryEntry) {
-				//先把旧文件删除
-				unlink (filename, directoryEntry, function () {
-					writefile(filename, directoryEntry, content, success, error, options)
-				}, error) 
+				console.log('opendir success')
+				openfile(filename, directoryEntry, function () {
+					console.log('has old file');
+					//先把旧文件删除
+					unlink (filename, directoryEntry, function () {
+						writefile(filename, directoryEntry, content, success, error, options)
+					}, error) 
+				}, function () {
+					console.log('not old file');
+					writefile(filename, directoryEntry, content, success, error, options);
+				});
 			}, error)
 		}, error);
 	}
