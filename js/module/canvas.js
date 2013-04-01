@@ -485,7 +485,8 @@ Core.registerModule("canvas",function(sb){
 
         },
         changeScreenScale : function (value) {
-            var sMap = SCREEN_SIZE_MAP[value];
+            var sMap;
+            sMap = SCREEN_SIZE_MAP[value];
             if (!sMap) {
                 throw new Error('Unmatched screen size');
             }
@@ -524,7 +525,10 @@ Core.registerModule("canvas",function(sb){
                 slidersConf = importData.cntConf,
                 sliderArray = readAsArray(slidersData),
                 rmArray = sliders.toArray();
-
+            // global.changeScreenScale({
+            //     height : slidersConf.height,
+            //     width : slidersConf.width
+            // })
             render(sliderArray);
             global.removeSliderByArray(rmArray);
             function readAsArray(data) {
