@@ -102,9 +102,11 @@ input{
 .video-play {background-image: url(../img/video_play.png);background-repeat: no-repeat;background-size: 30%;background-position: center;}
 .w0 {width: 0px!important;}
 .transition-w {-webkit-transition:width 0.3s;}
+.transition-h {-webkit-transition:height 0.3s;}
 .transition-l {-webkit-transition:left 0.3s;}
-.l-tb {left: -70px!important;z-index: 0!important;opacity: 1}
-.l-sb {left: 30px!important;z-index: 0!important;opacity: 1}
+.transition-r {-webkit-transition:right 0.3s;}
+.l-tb {left: -70px!important;}
+.l-sb {right: -85px!important;}
 .box {border: 1px solid;border-radius: 5px;background: white;height: 25px;}
 .w-auto {width: auto;}
 /*.allow {background-image: url(../img/right.png);background-repeat: no-repeat;background-position: 100% 50%;background-size: 35px;}*/

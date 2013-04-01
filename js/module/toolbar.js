@@ -209,11 +209,11 @@ Core.registerModule("toolbar",function(sb){
                 introJs().start();
             })
             var $bar = $('#toolbar');
-            // $bar.on('click', function (evt) {
-            //     if ($(evt.target)[0].id !== 'tool-buttons') return; 
-            //     if ( $bar.hasClass("l-tb") ) $bar.removeClass('l-tb')
-            //     else $bar.addClass('l-tb');
-            // })
+            $bar.on('click', function (evt) {
+                if ($(evt.target)[0].id !== 'tool-buttons') return; 
+                if ( $bar.hasClass("l-tb") ) $bar.removeClass('l-tb')
+                else $bar.addClass('l-tb');
+            })
             addTextApp.onclick = function(){
                 sb.notify({
                     type:"addText",

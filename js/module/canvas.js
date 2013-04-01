@@ -435,11 +435,12 @@ Core.registerModule("canvas",function(sb){
             global._chooseThemebox = chooseThemebox;
             //窗口关闭前的保存文件操作
             window.onbeforeunload = function () {
-                global.saveTempFile();
+                // global.saveTempFile();
                 return '要离开正在编辑的内容？'
             }
         },
         autoSaveTimer : function () {
+            console.log('setTimer');
             //一个定时器定时保存文件
             window.setInterval( global.saveTempFile, 1000*5);
         },
@@ -501,19 +502,20 @@ Core.registerModule("canvas",function(sb){
             _.each(rmArray , function (item) {
                 var idNum = item.key.replace(/[a-z]*/g, '');
                 sb.notify({
-                    type:"changeSlider",
-                    data:idNum
-                });
-                sb.notify({
-                    type:"changeFrame",
-                    data:'frame' + idNum
-                });
-                sb.notify({
                     type : 'deleteSlider',
-                    data : null
+                    data : idNum
                 })
-
             });
+            var showSliderNum = sliders.getFirstElement().replace(/[a-z]*/g, '')
+            sb.notify({
+                type : "changeSlider",
+                data : showSliderNum
+            });
+            sb.notify({
+                type : "changeFrame",
+                data : 'frame' + showSliderNum
+            })
+            $('#view').show();
         },
         renderSlider : function (data) {
 
@@ -625,9 +627,15 @@ Core.registerModule("canvas",function(sb){
 
             reader.readAsText(file, 'UTF-8');
             reader.onloadend = function (event) {
-                var datajson = reader.result.match(/\<script\ type\=\"text\/html\"\ id\=\"datajson\"\>.*\<\/script\>/);
+                // var datajson = reader.result.match(/\<script\ type\=\"text\/html\"\ id\=\"datajson\"\>.*\<\/script\>/);
+                var datajson = reader.result.match(/\<\!\-\-\[DATA_JSON_BEGIN\]\-\-\>.*\<\!\-\-\[DATA_JSON_END\]\-\-\>/);
                 if (datajson) {
-                   var data =  datajson[0].replace(/^\<script[^\<\>]*\>/,'').replace(/\<\/script\>/,'');
+                   var data =  datajson[0]
+                                .replace(/^\<\!\-\-\[DATA_JSON_BEGIN\]\-\-\>/,'')
+                                .replace(/\<\!\-\-\[DATA_JSON_END\]\-\-\>/,'')
+                                .replace(/^\<script[^\<\>]*\>/,'')
+                                .replace(/\<\/script\>/,'');
+                   console.log(data);
                     global.renderSlider(data);
                 } 
 
@@ -801,9 +809,12 @@ Core.registerModule("canvas",function(sb){
                     cmThemeJS   = window._sourceMap.cmThemeJS,
                     cmCss       = window._sourceMap.cmCSS,
                     cmThemeCSS  = window._sourceMap.cmThemeCSS,
-                    animation   = window._sourceMap.animationCSS;
+                    animation   = window._sourceMap.animationCSS,
+                    dataJsonMarkBegin   = '<!--[DATA_JSON_BEGIN]-->', 
+                    dataJsonMarkEnd     = '<!--[DATA_JSON_END]-->';
 
-                var dataHtml = '<script type="text/html" id="datajson">' + stream + scriptEnd,
+                var dataHtml = dataJsonMarkBegin + '<script type="text/html" id="datajson">' 
+                                + stream + scriptEnd + dataJsonMarkEnd,
                     combHTML;
                 if (sliderJson.isHasCode) {  //按需添加代码片段
                     combHTML =  header +
@@ -830,8 +841,8 @@ Core.registerModule("canvas",function(sb){
                 })
             });
         },
+        //缓存文件
         saveTempFile : function () {
-            console.log('saveTempFile');
             var dataJson = global._createSliderJSONData(),
                 datas = {
                     cntConf : {
@@ -859,7 +870,7 @@ Core.registerModule("canvas",function(sb){
         },
         //新添加：sliderId
         deleteSlider : function(delId){
-            delId = delId ? 'slider' + delId : delId;
+            delId = !_.isEmpty(delId) ? 'slider' + delId : delId;
             var tarSlider = delId || currentSlider,
                 oralCur = currentSlider,
                 preSlider = sliders.getSlider("pre", tarSlider, -1) ||
@@ -1834,8 +1845,10 @@ Core.registerModule("canvas",function(sb){
                         var transform = $(tar).css('WebkitTransform');
                         initRoate = transform ? parseFloat( transform.replace(/^rotate\(/,'').replace(/deg\)$/,'') ) : 0;
                     } else {
-                        // console.log(Math.sqrt( Math.pow(clientY - initY,2) + Math.pow(clientX - initX, 2) ));
-                        var diffResize = (clientX - initX) * Math.cos(2*Math.PI - initRoate*Math.PI/180);
+                        //
+                        initRoate = initRoate % 360;
+                        var trFnValue = initRoate*Math.PI/180;
+                        var diffResize = (clientX - initX) * Math.cos(trFnValue) + (clientY - initY) * Math.sin(trFnValue);
                         
                         initRoate += diffResize/100;
                         tar.style.WebkitTransform = 'rotate(' + initRoate + 'deg)';

@@ -376,21 +376,21 @@ define('webfs/ui',
 		$(container).append(html);
 	}
 	/*渲染根目录API，也是webfs的启动函数*/
-	function renderRoot(type, container, success, error) {
+	function renderRoot(type, container, success, error, options) {
 		webfs.filesystem(type,
 			function(fs) {
 				_this._root = fs.root.toURL();
 				setCwd(fs.root, container);
 				webfs.readdir(fs.root, 
 					function (entries) {
-						renderDirector(entries, container, success);
+						renderDirector(entries, container, success, options);
 					}
 				);
 			},
 		errorHanlder(error, 'UI:renderRoot / FS:filesystem'));
 	}
 	/*渲染一个目录路径API，可用于打开子目录*/
-	function renderDirectorPath (path, container, success, error) {
+	function renderDirectorPath (path, container, success, error, options) {
 		if (path === getCwd(container).toURL()) path = './';
 		window.timeDate = new Date();
 		webfs.opendir(path, getCwd(container), function (entry) {
@@ -398,14 +398,14 @@ define('webfs/ui',
 				setCwd(entry, container);
 				webfs.readdir(entry, 
 					function(entries) {
-						renderDirector(entries, container, success);
+						renderDirector(entries, container, success, options);
 					},
 				errorHanlder(error, 'UI:renderDirectorPath / FS:readdir'));
 			}
 		}, errorHanlder(error, 'UI:renderDirectorPath / FS:opendir'))
 	}
 	/*渲染目录*/
-	function renderDirector (entries, container, success) {
+	function renderDirector (entries, container, success, options) {
 		//render 目录前先把删除按钮状态设为隐藏
 		_this._delIconVisi[container] = false;
 
@@ -442,6 +442,9 @@ define('webfs/ui',
 				//匹配文件类型的图片样式
 				iconClass = util.suffix(name).length > 0 && !item.isDirectory ? ' fs-icon-type-' + util.suffix(name) : '';
 
+				if ( options && options.filter) {
+					if (item.name.match(options.filter)) return
+				}
 			iconContent =  util.render({
 						"fileType" : fileType, //文件类型
 						"name" : name,//文件名

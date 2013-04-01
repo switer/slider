@@ -6,11 +6,11 @@ Core.registerModule("view",function(sb){
     getElementDataFunc=null,showFrameElementByDataFunc=null;
 
     var SCREEN_SIZE_MAP = {
-            '4:3'   : {x:160,y:120},
-            '16:9'  : {x:160,y:90},
-            '16:10'  : {x:160,y:100},
-            '2:1'   : {x:160,y:80},
-            '1:1'   : {x:160,y:160}
+            '4:3'   : {x:160, y:120,    scale : 5 },
+            '16:9'  : {x:160, y:90,     scale : 6 },
+            '16:10' : {x:160, y:100,    scale : 6 },
+            '2:1'   : {x:160, y:80,     scale : 6.25 },
+            '1:1'   : {x:160, y:160,    scale : 5 }
         },
         MAGIN_TOP_MAP = {
             '4:3'   : '-15px',
@@ -22,15 +22,15 @@ Core.registerModule("view",function(sb){
         DEFAULT_SCREEN = '4:3',
         FRAME_X = 160,
         FRAME_Y = 120,
+        FRAME_SCALE_SIZE = 5,
         global,
         conf = {
-            SCALE_SIZE : 0.65
+            SCALE_SIZE : 0.5
         }
     return {
         init:function(){
             global = this;
             global._paramCache = {};
-
             frameContainer = sb.find("#frame-list");
             changeCurrFrameFunc = this.changeCurrFrame;
             changeDisplayFrameListFunc = this.changeDisplayFrameList;
@@ -41,7 +41,7 @@ Core.registerModule("view",function(sb){
                 "deleteSlider":this.deleteFrame,
                 "addSlider":this.addSlider,
                 "importSlider":this.addSlider,
-                "showSlider":this.showFrame,
+                // "showSlider":this.showFrame,
                 "changeSliderStyle":this.changeSliderStyle,
                 "changeFrame":this.showFrame,
                 "insertSlider":this.insertFrame,
@@ -52,9 +52,12 @@ Core.registerModule("view",function(sb){
             });
             //初始化窗口大小与margin
             global.refleshFrameListMargin(SCREEN_SIZE_MAP[DEFAULT_SCREEN]);
-            var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
+            var sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN];
+
             FRAME_Y = sMap.y;
             FRAME_X = sMap.x;
+            FRAME_SCALE_SIZE = sMap.scale;
+
             $('#frame_view_menu').on('click .menu-item', function (evt) {
                 var $tar = $(evt.target),
                     dataId = global._paramCache['curFrameId'].match(/[0-9]*$/),
@@ -86,7 +89,7 @@ Core.registerModule("view",function(sb){
                 if ( !$(evt.target).hasClass('view-menu') ) {
                     
                     if (global._paramCache['curFrameId']) {
-                        $(frames[global._paramCache['curFrameId']]).removeClass('right-menu-sel');
+                        $(frames[global._paramCache['curFrameId']]).parent().removeClass('right-menu-sel');
                     }
                     $('#frame_view_menu').addClass('dp-none');
                 }
@@ -101,6 +104,8 @@ Core.registerModule("view",function(sb){
             if (!sMap) return;
             FRAME_X = sMap.x;
             FRAME_Y = sMap.y;
+            FRAME_SCALE_SIZE = sMap.scale;
+
             global.refleshFrameListMargin(value)
             global.refleshFrameViewSize();
         },
@@ -124,13 +129,16 @@ Core.registerModule("view",function(sb){
         refleshFrameViewSize : function () {
             
             frames.forEach(function (item, key) {
-                $(item).css('height', FRAME_Y + 'px').css('width', FRAME_X + 'px')
+                $(item)
+                    .css('height', FRAME_Y * FRAME_SCALE_SIZE + 'px')
+                    .css('width', FRAME_X * FRAME_SCALE_SIZE + 'px');
+                item.style['WebkitTransform'] =  'scale(' + conf.SCALE_SIZE/FRAME_SCALE_SIZE + ')';
             });
-            $('.frameCon').css('height', FRAME_Y * conf.SCALE_SIZE + 'px').css('width', FRAME_X * conf.SCALE_SIZE + 'px')
-
+            $('.frameCon').css('height', FRAME_Y*conf.SCALE_SIZE  + 'px').css('width', FRAME_X*conf.SCALE_SIZE + 'px')
         },
         insertFrame:function(){
             global.addSlider("insert");
+            global.updateFrameLabel();
         },
         addFrameObject:function(frame,method,pos){
             if(method=="insert") {
@@ -167,6 +175,7 @@ Core.registerModule("view",function(sb){
                 global.addFrameElement(frame.frameCon ,method, posParent,frameContainer);
             }
             global.changeDisplayFrameList(frame.id, method);
+            global.updateFrameLabel();
         },
         deleteFrame:function(delId){
             //nearFrame:当前frame的邻近frame,
@@ -196,6 +205,7 @@ Core.registerModule("view",function(sb){
             }
             //指定当前显示窗口，重绘窗口列表
             global.changeDisplayFrameList(currentFrame,"delete");
+            global.updateFrameLabel();
         },
         /*
          *get a appropriate hidden frame and display it
@@ -236,15 +246,15 @@ Core.registerModule("view",function(sb){
          */
         showFrame:function(frameID){
             var curr;
+            console.log('will show : ' + frameID);
             if(frameID&&frames[frameID]){
-
                 //currentFrame = frameID;
                 //若为第一个帧，显示该帧所在的组
                 if(frameID == dispFrames.getFirstElement()){
                     curr = currentFrame;
                     global.changeDisplayFrameList(frameID,"showPre");
                     window.setTimeout(function(){
-                        frameContainer.className = "anim-move-left";
+                        // frameContainer.className = "anim-move-left";
                     });
                     return curr;
                 }
@@ -253,7 +263,7 @@ Core.registerModule("view",function(sb){
                     curr = currentFrame;
                     global.changeDisplayFrameList(frameID,"showNext");
                     window.setTimeout(function(){
-                        frameContainer.className = "anim-move-right";
+                        // frameContainer.className = "anim-move-right";
                     });
                     return curr;
                 }
@@ -282,11 +292,11 @@ Core.registerModule("view",function(sb){
                 }, method, currentFrame);   
             }
             oldCurr = currentFrame;
-            if(frames[currentFrame]) sb.removeClass(frames[currentFrame],"focus");
+            if(frames[currentFrame]) $(frames[currentFrame]).parent().removeClass("focus");;
             currentFrame = newCurr;
             // frames[currentFrame].style.display = "block";
             $(frames[currentFrame]).parent().show();
-            sb.addClass(frames[currentFrame],"focus");
+            $(frames[currentFrame]).parent().addClass("focus");
             sb.notify({
                 type:"changeSlider",
                 data:parseInt(currentFrame.substr("frame".length,currentFrame.length))
@@ -342,12 +352,17 @@ Core.registerModule("view",function(sb){
                     elem.setAttribute("style", data[a].attr);
                     borderWidth = elem.style.borderWidth;
                     elem.style.position = "absolute";
-                    elem.style.left = (parseInt(data[a].left.substr(0,data[a].left.length-2))/VIEWSCALE)+"px";
-                    elem.style.top = (parseInt(data[a].top.substr(0,data[a].top.length-2))/VIEWSCALE)+"px";
-                    elem.style.height = (parseInt(data[a].height.substr(0,data[a].height.length-2))/VIEWSCALE)+"px";
-                    elem.style.width = (parseInt(data[a].width.substr(0,data[a].width.length-2))/VIEWSCALE)+"px";
+                    // elem.style.left = (parseInt(data[a].left)/VIEWSCALE)+"px";
+                    // elem.style.top = (parseInt(data[a].top)/VIEWSCALE)+"px";
+                    // elem.style.height = (parseInt(data[a].height)/VIEWSCALE)+"px";
+                    // elem.style.width = (parseInt(data[a].width)/VIEWSCALE)+"px";
+                    elem.style.left     = data[a].left;
+                    elem.style.top      = data[a].top;
+                    elem.style.height   = data[a].height;
+                    elem.style.width    = data[a].width;
                     if(borderWidth) {
-                        elem.style.borderWidth = parseInt(parseInt(borderWidth.substr(0,borderWidth.length-2))/VIEWSCALE+0.5)+"px";
+                        // elem.style.borderWidth = parseInt(parseInt(borderWidth)/VIEWSCALE+0.5)+"px";
+                        elem.style.borderWidth = borderWidth;
                     }
                     elem.style.zIndex = data[a].zIndex;
                     if(data[a].type=="IMG"){
@@ -370,13 +385,17 @@ Core.registerModule("view",function(sb){
                         var text = document.createElement("div");
                         text.innerHTML = data[a].value;
                         text.className = "text";
-                        var theight = (parseInt(data[a].height.substr(0,data[a].height.length-2)));
-                        var twidth = (parseInt(data[a].width.substr(0,data[a].width.length-2)));
-                        text.style.top = ((-theight*(VIEWSCALE-1)/(VIEWSCALE))/2)+"px";
-                        text.style.left = ((-twidth*(VIEWSCALE-1)/(VIEWSCALE))/2)+"px";
-                        text.style.height = data[a].height;
-                        text.style.width = data[a].width;
-                        text.style.position = "relative";
+                        // var theight = (parseInt(data[a].height.substr(0,data[a].height.length-2)));
+                        // var twidth = (parseInt(data[a].width.substr(0,data[a].width.length-2)));
+                        // text.style.top = ((-theight*(VIEWSCALE-1)/(VIEWSCALE))/2)+"px";
+                        // text.style.left = ((-twidth*(VIEWSCALE-1)/(VIEWSCALE))/2)+"px";
+                        // text.style.top = data[a].top;
+                        // text.style.left = data[a].left;
+                        // text.style.height = data[a].height;
+                        // text.style.width = data[a].width;
+                        // text.style.position = "relative";
+                        text.style.height = '100%';
+                        text.style.width = '100%';
                         elem.className = "textCon";
                         elem.appendChild(text);
                         elem.style.overflow = "hidden";
@@ -460,11 +479,12 @@ Core.registerModule("view",function(sb){
          *          4.add the frame event handle
          *          5.return Object:{id,frame}
          */
-        createFrame:function(method){
-            var scaleSize = conf.SCALE_SIZE;
-            var frame = document.createElement("div");
-            var frameCon = document.createElement("div");
-            var framePanel = sb.create("div");
+        createFrame : function(method){
+            var scaleSize = conf.SCALE_SIZE,
+                frame = document.createElement("div"),
+                frameCon = document.createElement("div"),
+                frameLabel = document.createElement('div'),
+                framePanel = sb.create("div");
 
             var opDataId = null;
             if (  method && ( typeof(method) === 'object' ) ) {
@@ -472,13 +492,24 @@ Core.registerModule("view",function(sb){
                 method = param.method;
                 opDataId = 'slider' + param.dataId;
             }
-
-            frameCon.appendChild(frame)
+            //指示当前当前frame下标
+            $(frameLabel).css({
+                position : 'absolute',
+                bottom  : '-20px',
+                width   : '100%',
+                height : '20px',
+                textAlign : 'center',
+                fontSize : '14px'
+            }).addClass('frame-label');
+            $(frameCon).append(frame).append(frameLabel);
             frame.appendChild(framePanel);
             frame.className = "frame scale";
             framePanel.className = "frame-panel";
             frame.setAttribute("style", "display:block;");
-            $(frame).css('height', FRAME_Y + 'px').css('width', FRAME_X + 'px');
+            $(frame)
+                .css('height', FRAME_Y * FRAME_SCALE_SIZE + 'px')
+                .css('width', FRAME_X * FRAME_SCALE_SIZE + 'px');
+            $(frame)[0].style['WebkitTransform'] =  'scale(' + conf.SCALE_SIZE/FRAME_SCALE_SIZE + ')';
             $(frameCon)
                 .addClass('frameCon')
                 .css('height', FRAME_Y*scaleSize + 'px').css('width', FRAME_X*scaleSize + 'px');
@@ -513,14 +544,14 @@ Core.registerModule("view",function(sb){
                         return false;
                     }
                     if (global._paramCache['curFrameId']) {
-                        $(frames[global._paramCache['curFrameId']]).removeClass('right-menu-sel');
+                        $(frames[global._paramCache['curFrameId']]).parent().removeClass('right-menu-sel');
                     }
                     $('#frame_view_menu').removeClass('dp-none').css({
                         top : evt.clientY - $('#frame_view_menu')[0].offsetHeight,
                         left : evt.clientX
                     })
                     global._paramCache['curFrameId'] = frameID;
-                    $(frame).addClass('right-menu-sel');
+                    $(frame).parent().addClass('right-menu-sel');
                 }
             })
             return {
@@ -528,6 +559,12 @@ Core.registerModule("view",function(sb){
                 frame:frame,
                 frameCon : frameCon
             }
+        },
+        updateFrameLabel : function () {
+            var frames = document.querySelectorAll('#view .frameCon');
+            _.each(frames, function (frame,index) {
+                $(frame).find('.frame-label').html(index + 1);
+            })
         },
         changeSliderStyle:function(att){
             sb.find(".frame-panel",frames[currentFrame]).style[att.key] = att.value;

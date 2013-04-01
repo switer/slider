@@ -1,12 +1,30 @@
 Core.registerModule("filesystem", function(sb){
 
 	var webui, webfs,
-		global  = {};//全局变量
+		global ;//全局变量
 
 	return {
 		init : function () {
+			//initial global var
 			var _this = this;
 				global = this;
+				global._curSaveId = 1;
+				global._lastSaveId = -1;
+				global._curTempId = 0;
+
+			//当前打开编辑幻灯片的id
+			var _lastSaveId = window.localStorage.getItem('slider_file_saveId');
+
+			if (_lastSaveId !== null) {
+				console.log('last id : ' + _lastSaveId);
+				global._lastSaveId = parseInt(_lastSaveId);
+				global._curSaveId = (global._lastSaveId + 1) % 2;
+				console.log('_curSaveId' + global._curSaveId);
+			}
+			window.localStorage.setItem('slider_file_saveId', global._curSaveId);
+
+			
+
 			_.bindAll(this);
 			sb.listen({
 				'preSave' : this.checkAutoSave,
@@ -33,6 +51,7 @@ Core.registerModule("filesystem", function(sb){
 				msg(errStr || err);
 			}
 			function hideMsg () {
+				var $nBox = $('#notifyBox');
 				$nBox.suiHide();
 			}
 			//保存到当前模块全局
@@ -47,7 +66,6 @@ Core.registerModule("filesystem", function(sb){
 				_this._container = '#fileView';
 
 				webui.renderRoot(window.TEMPORARY, _this._container, function () {
-					global._checkTemplFile.call(this);
 					//文件的打开事件API
 					webui.initFileOperation('click', _this._container, errHandler);
 					//删除按钮的API
@@ -58,10 +76,15 @@ Core.registerModule("filesystem", function(sb){
 					$('#addFile').html('保存为');
 					$(".fs-icon-back.fs-icon-root").css('top', '45px');
 					$(".fs-view").css('marginTop','105px')
-					// sb.notify({
-					// 	type : 'autoSaveTimer',
-					// 	data : null
-					// });
+					//检查上次缓存文件并回复
+					global._checkTemplFile.call(_this);
+					//开始自动保存
+					sb.notify({
+						type : 'autoSaveTimer',
+						data : null
+					});
+				}, global._errHandler, {
+					filter : /^\.\~.*/
 				});
 				
 				function initWebuiEvenet() {
@@ -138,27 +161,36 @@ Core.registerModule("filesystem", function(sb){
 			})
 			
 		},
-		_checkTemplFile : function () {
-			var _this = this;
-			if (window.localStorage.getItem('is_save_temp_file_success') == 'true') {
-				//重置标志位
-				window.localStorage.setItem('is_save_temp_file_success', 'false')
-
+		_checkTemplFile : function (callback) {
+			var _this = this,
+				wrapCallback = function () {
+					setTimeout(function () {
+						global._hideMsg();
+					}, 1500)
+					callback && callback.call(_this);
+				}
+			if ( global._lastSaveId !== -1 ) {
+				//获取上次保存成功的缓存文件
+				var lastTempFileName =  window.localStorage.getItem('last_temp_file_name')
 				var cwd = webui.getCwd(_this._container);
 				global._errHandler('正在恢复上次打开文件');
-				webfs.openfile('.~close_temp_file.html', cwd, function (file) {
+				webfs.openfile(lastTempFileName, cwd, function (file) {
 					webfs.readfile(file, 'UTF-8', function (evt) {
-
 						var content = evt.target.result;
 						sb.notify({
 							type : 'loadTemplFile',
 							data : content
 						})
+						wrapCallback();
 
-					}, function () {
-						alert('error');
+					}, function (err) {
+						global._errHandler(err);
+						wrapCallback()
 					});
-				}, global._errHandler);
+				}, function (err) {
+					wrapCallback();
+					global._errHandler(err)
+				});
 			}
 		},
 		_saveFile : function (data) {
@@ -170,17 +202,20 @@ Core.registerModule("filesystem", function(sb){
 		},
 		//保存临时文件
 		beforeCloseSave : function (data) {
-			console.log('beforeCloseSave');
 			var directory = './',
-				filename = '.~close_temp_file.html';
+				filename = '.~close_temp_file_' + global._curSaveId + '-' + global._curTempId;
+			// window.localStorage.setItem('is_save_temp_file_success', 'false')
 			global.wfs.webfs.writeFileInPath(directory, 
 				filename, data, function () {
-					console.log('success');
-					window.localStorage.setItem('is_save_temp_file_success', 'true')
+					//当前编辑缓存文件保存为两个(已完成保存状态与将要保存状态)
+					global._curTempId  = (global._curTempId + 1) % 2;
+					//重新标志当前保存成功的缓存文件
+					window.localStorage.setItem('last_temp_file_name', filename)
 					// global._errHandler('成功保存临时文件')
 					console.log('成功保存临时文件')
 			}, function (err) {
 					// global._errHandler('保存临时文件失败：' + err.code)
+					console.log('保存临时文件失败：' + err.code)
 			}, { override : true });
 		},
 		//检查是否自动保存

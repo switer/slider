@@ -12,7 +12,7 @@
 	        title.className = 'colorboard_title';
 	        closeMenu.className = 'close-menu';
 	        colorSelector.className = 'colorSelector';
-	        $(colorSelector).attr('style',"display: none;position: absolute;width: 190px;height: 170px;top: 50px;right: 0px;background-color: #FAFAFA;border-radius: 2px;border: 1px solid black;z-index: 999;");
+	        $(colorSelector).attr('style',"display: none;position: absolute;width: 190px;height: 170px;top: 50px;right: 0px;background-color: #FAFAFA;border-radius: 2px;border: 1px solid black;z-index: 999;-webkit-transition:top 0.3s;");
 	        $(general_list).attr('style',"width: 170px;margin: 10px 10px;height: 14px;");
 	        $(standard_list).attr('style',"width: 170px;margin: 10px 10px;height: 14px;");
 	        $(color_list).attr('style',"width: 170px;margin: 10px 10px;height: 70px;");
