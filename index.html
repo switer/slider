@@ -194,7 +194,7 @@
                 <div id="code"></div>
             </div>
             <div id="canvas">
-                <div class="container" data-intro='编辑框' data-step='1'></div>
+                <div class="container" data-intro='编辑框' data-step='1' data-position='left'></div>
                 <div id="element-attrSetting-menu" class="panel1">
                     <div class="move"></div>
                     <div class="setting-menu-head">
@@ -363,21 +363,21 @@
                 </div>
                 <div id="element-operate-menu" class="panel1">
                     <div class="close-menu" data-title="关闭"></div>
-                    <div class="elem-operation elem-setting-item">
-                        <div id="elem-delete" class="elem-item" data-event="deleteElement" data-title="删除该元素">删除</div>
-                        <div id="elem-copy" class="elem-item" data-event="copyElement" data-title="复制该元素">复制</div>
-                        <div id="elem-paste" class="elem-item" data-event="pasteElement" data-title="粘贴当前幻灯片">粘贴</div>
+                    <div class="elem-operation">
+                        <div id="elem-delete" class="elem-item elem-setting-item" data-event="deleteElement" data-title="删除该元素">删除</div>
+                        <div id="elem-copy" class="elem-item elem-setting-item" data-event="copyElement" data-title="复制该元素">复制</div>
+                        <div id="elem-paste" class="elem-item paste-menu-item" data-event="pasteElement" data-title="粘贴当前幻灯片">粘贴</div>
                     </div>
                     <div class="elem-operation zIndex-setting-item">
-                        <div id="elem-zIndex-upward" class="elem-item" data-event="moveUpward" data-title="往上移动一层">往上移</div>
-                        <div id="elem-zIndex-downward" class="elem-item" data-event="moveDownward" data-title="往下移动一层">往下移</div>
+                        <div id="elem-zIndex-upward" class="elem-item" data-event="moveUpward" data-title="往上移动一层">上移一层</div>
+                        <div id="elem-zIndex-downward" class="elem-item" data-event="moveDownward" data-title="往下移动一层">下移一层</div>
                         <div id="elem-zIndex-toTop" class="elem-item" data-event="moveToTop" data-title="置于最顶层">置顶</div>
                         <div id="elem-zIndex-toBottom" class="elem-item" data-event="moveToBottom" data-title="置于最底层">置底</div>
                     </div>
-                    <div class="elem-operation dp-none textedit-setting-item">
+                    <div class="elem-operation dp-none textedit-setting-item menu-detect-item">
                         <div id="show_execCommandDetail" class="elem-item" data-event="showEcd" data-title="打开文本编辑工具栏">工具栏</div>
                     </div>
-                    <div class="elem-operation dp-none codebox-setting-item">
+                    <div class="elem-operation dp-none codebox-setting-item menu-detect-item">
                         <div class="elem-item" data-event="codeboxSetting" data-title="设置编辑框的编程语言">编程语言</div>
                         <div class="elem-item" data-event="codeboxThemeSetting" data-title="编辑框主题">主题</div>
                     </div>
@@ -387,7 +387,7 @@
                     </div>
                 </div>
             </div>
-            <div id='shapebar' class="transition-r allow" data-intro='图形工具栏' data-step='2'>
+            <div id='shapebar' class="transition-r allow" data-intro='图形工具栏' data-step='2' data-position='left'>
                 <div id='triangle' class='shape-icon' data-type='triangle'></div>
                 <div id='circular' class='shape-icon' data-type='circular'></div>
                 <div id='rectangle' class='shape-icon' data-type='rectangle'></div>
@@ -398,32 +398,32 @@
                 <div id='polygon' class='shape-icon' data-type='polygon'></div>
             </div>
             <div id="toolbar" class="transition-l allow">
-                <div id="tool-buttons"  data-intro='功能工具栏' data-step='3'>
-                    <div id="tool-enterPreviewMode" class="tool-app" data-title="保存" data-intro='保存' data-step='4'></div>
-                    <div id="tool-addslider" class="tool-app" data-title="添加新的幻灯片" data-intro='添加新的幻灯片' data-step='14'></div>
-                    <div id="tool-openFileSystem" class="tool-app " data-title="打开文件夹" data-intro='打开文件夹' data-step='5'></div>
-                    <div id="tool-addAnimation" class="tool-app ondetail" data-title="更改幻灯片过渡动画" data-intro='更改幻灯片过渡动画' data-step='6'></div>
-                    <div id="tool-addVideo" class="tool-app" data-title="添加视频" data-intro='添加视频' data-step='7'>
+                <div id="tool-buttons"  data-intro='功能工具栏' data-step='3' data-position='right'>
+                    <div id="tool-enterPreviewMode" class="tool-app" data-title="保存" data-intro='保存' data-step='5'></div>
+                    <div id="tool-addslider" class="tool-app" data-title="添加新的幻灯片" data-intro='添加新的幻灯片' data-step='6'></div>
+                    <div id="tool-openFileSystem" class="tool-app " data-title="打开保存文件" data-intro='打开保存文件' data-step='7'></div>
+                    <div id="tool-addAnimation" class="tool-app ondetail" data-title="更改幻灯片过渡动画" data-intro='更改幻灯片过渡动画' data-step='8'></div>
+                    <div id="tool-addVideo" class="tool-app" data-title="添加视频" data-intro='添加视频' data-step='9'>
                         <input type="file" id="addVideoInp"/>
                     </div>
-                    <div id="tool-addimage" class="tool-app" data-title="添加一张图片" data-intro='添加一张图片' data-step='8'>
+                    <div id="tool-addimage" class="tool-app" data-title="添加一张图片" data-intro='添加一张图片' data-step='10'>
                         <input type="file" id="addImageInp"/>
                     </div>
-                    <div id="tool-addtext" class="tool-app" data-title="添加文本输入框" data-intro='添加文本输入框' data-step='9'></div>
-                    <div id="tool-addCode" class="tool-app" data-title="添加代码编辑框" data-intro='添加代码编辑框' data-step='10'></div>
+                    <div id="tool-addtext" class="tool-app" data-title="添加文本输入框" data-intro='添加文本输入框' data-step='11'></div>
+                    <div id="tool-addCode" class="tool-app" data-title="添加代码编辑框" data-intro='添加代码编辑框' data-step='12'></div>
                     <!--
                     <div id="tool-insertSlider" class="tool-app" data-title="往当前位置插入新的幻灯片" data-intro='往当前位置插入新的幻灯片' data-step='15'></div>
                     -->
                     <!--<div id="tool-elemOperation" class="tool-app ondetail title" data-title="操作"></div>-->
-                    <div id="tool-screen" class="tool-app" data-title="更改幻灯片比例" data-intro='更改幻灯片比例' data-step='11'></div>
+                    <div id="tool-screen" class="tool-app" data-title="更改幻灯片比例" data-intro='更改幻灯片比例' data-step='13'></div>
                     <!--<div class="tool-app show_execCommandDetail" data-title="打开文本编辑工具" data-intro='打开文本编辑工具' data-step='12'></div>-->
-                    <div id="tool-import" class="tool-app" data-title="导入幻灯片" data-intro='导入幻灯片' data-step='13'>
+                    <div id="tool-import" class="tool-app" data-title="导入幻灯片" data-intro='导入幻灯片' data-step='14'>
                         <input type="file" id="importInp"/>
                     </div>
                     <!--
                     <div id="tool-deleteSlider" class="tool-app" data-title="删除当前幻灯片" data-intro='删除当前幻灯片' data-step='16'></div>
                     -->
-                    <div id="tool-help" class="tool-app" data-title="帮助" data-intro='帮助' data-step='17'></div>
+                    <div id="tool-help" class="tool-app" data-title="帮助" data-intro='帮助' data-step='15'></div>
                 </div>
             </div>
             <!--工具栏详细操作菜单-->
@@ -455,7 +455,7 @@
                 <div class='menu-item' data-type='insert' data-event='addSlider'>插入</div>
                 <div class='menu-item' data-type='delete' data-event='deleteSlider'>删除</div>
             </div>
-            <div id="view" class="cf">
+            <div id="view" class="cf" data-step='4' data-position='right'>
                 <div id="frame-list" class="anim-move-left cf"></div>
             </div>
             <!--footer-->

@@ -16,11 +16,13 @@ Core.registerModule("canvas",function(sb){
         "anim-leftRotate"   :"逆时针旋转"
         },
         SCREEN_SIZE_MAP = {
-            '4:3'   : {x:800,y:600},
             '16:9'  : {x:960,y:540},
-            '16:10'  : {x:960,y:600},
+            '16:10' : {x:960,y:600},
+            '6:5'   : {x:600,y:500},
+            '5:3'   : {x:600,y:360},
+            '4:3'   : {x:800,y:600},
             '2:1'   : {x:1000,y:500},
-            '1:1'   : {x:800,y:800}
+            '1:1'   : {x:640,y:640}
         },
         DEFAULT_SCREEN = '4:3',
         canvasX = 1200,
@@ -39,7 +41,6 @@ Core.registerModule("canvas",function(sb){
 
     var global = {},
         rightMenuBtn; //右键选中标志
-    var DATA = '{"slider1":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data1":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"hello%20%2C%E4%BD%A0%E5%A5%BD%E5%90%97"}}},"slider2":{"anim":"anim-move-right","panelAttr":"width:100%;height:100%;position:absolute;left:0;top:0;","element":{"data2":{"type":"DIV","cAttr":"position: absolute; left: 150px; top: 200px; z-index: 1;","eAttr":"height:200px;width:500px;overflow:hidden;","zIndex":1,"value":"%E6%88%91%E5%BE%88%E5%97%A8"}}}}';
     return {
         init : function() {
 
@@ -281,7 +282,7 @@ Core.registerModule("canvas",function(sb){
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
-                    if ( $(e.target).parent().hasClass('menu-disabled') )  {
+                    if ( $(e.target).hasClass('menu-disabled') || $(e.target).parent().hasClass('menu-disabled') )  {
                         return;
                     }
                     var notify = e.currentTarget.getAttribute("data-event");
@@ -525,10 +526,13 @@ Core.registerModule("canvas",function(sb){
                 slidersConf = importData.cntConf,
                 sliderArray = readAsArray(slidersData),
                 rmArray = sliders.toArray();
-            // global.changeScreenScale({
-            //     height : slidersConf.height,
-            //     width : slidersConf.width
-            // })
+            //计算比例数
+            var proportionArr = sb.reduce(parseInt(slidersConf.width), parseInt(slidersConf.height));
+            //更改屏幕大小
+            sb.notify({
+                type : 'changeScreenScale',
+                data : proportionArr.join(':') 
+            })
             render(sliderArray);
             global.removeSliderByArray(rmArray);
             function readAsArray(data) {
@@ -1680,26 +1684,33 @@ Core.registerModule("canvas",function(sb){
             var $codeboxItem = $(".codebox-setting-item", eom),
                 $textEditItem = $(".textedit-setting-item", eom),
                 $zIndexItem = $(".zIndex-setting-item", eom),
-                $elemItem   = $(".elem-setting-item", eom);
+                $elemItem   = $(".elem-setting-item", eom),
+                $pasteItem   = $(".paste-menu-item", eom);
+
 
             var type = ( elemId === 'panel' ) ? 'panel' : SliderDataSet[currentSlider][elemId].data.tagName;
-            if (type === 'panel') {
-                $zIndexItem.addClass('menu-disabled')
+            $('.menu-detect-item').addClass('dp-none');
+            //粘贴选项
+            if (copyParams) {
+                $pasteItem.removeClass('menu-disabled');
+            }
+            else {
+                $pasteItem.addClass('menu-disabled');
+            }
+
+            if (type === 'panel') { //面板没有复制粘贴之类的操作
+                $zIndexItem.addClass('menu-disabled')   
                 $elemItem.addClass('menu-disabled')
             } else {
                 $zIndexItem.removeClass('menu-disabled')
                 $elemItem.removeClass('menu-disabled')
             }
-            if (type === 'CODE') {
+            if (type === 'CODE') { //高亮代码工具菜单
                 $codeboxItem.removeClass('dp-none');
             }
-            else if (type === 'DIV'){
+            else if (type === 'DIV'){ //文本框工具菜单
                 $textEditItem.removeClass('dp-none');
             } 
-            else {
-                $codeboxItem.addClass('dp-none');
-                $textEditItem.addClass('dp-none');
-            }
         },
         setPosition:function(event,elem,x1,y1,x2,y2,show){
             var offsetX = event.screenX > (window.innerWidth + x2) ? x2 : x1,

@@ -6,11 +6,13 @@ Core.registerModule("view",function(sb){
     getElementDataFunc=null,showFrameElementByDataFunc=null;
 
     var SCREEN_SIZE_MAP = {
-            '4:3'   : {x:160, y:120,    scale : 5 },
             '16:9'  : {x:160, y:90,     scale : 6 },
             '16:10' : {x:160, y:100,    scale : 6 },
+            '6:5'   : {x:120, y:100,    scale : 5 },
+            '5:3'   : {x:150, y:90,     scale : 4 },
+            '4:3'   : {x:160, y:120,    scale : 5 },
             '2:1'   : {x:160, y:80,     scale : 6.25 },
-            '1:1'   : {x:160, y:160,    scale : 5 }
+            '1:1'   : {x:160, y:160,    scale : 4 }
         },
         MAGIN_TOP_MAP = {
             '4:3'   : '-15px',

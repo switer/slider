@@ -898,32 +898,6 @@ var SandBox = (function() {
             }
         });
     };
-
-    // SandBox.prototype.resizeRX =function(elem,tar,other){
-    //     var initX=0,pInitW=0,
-    //     flag={
-    //         isInit:false,
-    //         isDown:false
-    //     };
-    //     this.ondrag(elem,flag, function(event){
-    //         if(flag.isDown){
-    //             var clientX = event.screenX;
-    //             if(!flag.isInit){
-    //                 initX=clientX;
-    //                 if(other)
-    //                     pInitW = parseInt(other.style.width.substr(0, other.style.width.length-2));
-    //                 else{
-    //                     pInitW = parseInt(tar.style.width.substr(0, tar.style.width.length-2));
-    //                 }
-    //                 flag.isInit = true;
-    //             }
-    //             var diffResize = clientX-initX;
-    //             diffResize = exFns.getRoateResize(tar, diffResize);
-    //             if(other) other.style.width = pInitW + diffResize + "px";
-    //             else tar.style.width = pInitW + diffResize+"px";
-    //         }
-    //     });
-    // };
     SandBox.prototype.resizeTY =function(elem,tar,other){
         var initY=0,pInitH=0,pInitT,
         flag={
@@ -1286,6 +1260,15 @@ var SandBox = (function() {
         }
         return diffResize;
     }
+    //获取两数比例
+    SandBox.prototype.reduce = function reduce(numerator,denominator){
+        var gcd = function gcd(a,b){
+            return b ? gcd(b, a%b) : a;
+        };
+        gcd = gcd(numerator,denominator);
+        return [numerator/gcd, denominator/gcd];
+    }
+
     if (!SandBox.prototype.ObjectLink.prototype.toJSONString) {
         SandBox.prototype.ObjectLink.prototype.toJSONString = function (filter) {
             return JSON.stringify(this, filter);
