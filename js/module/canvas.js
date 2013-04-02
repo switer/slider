@@ -1509,6 +1509,7 @@ Core.registerModule("canvas",function(sb){
                 if ( data.tagName === 'CODE' ) {
                     copyParams.value = pasteElem.file.getDoc().getValue();
                     copyParams.theme = pasteElem.file.getOption('theme');
+                    copyParams.codeType  = pasteElem.file.getOption('mode');
                 }
             }
         },
