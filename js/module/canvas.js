@@ -218,13 +218,16 @@ Core.registerModule("canvas",function(sb){
                 position    : "absolute",
                 display     : "block",
                 width       : "120px",
-                height      : "30px",
-                zIndex      : "999",
-                left        : (editorContainer.offsetLeft + 520) + "px",
-                top         : (editorContainer.offsetTop) + "px"
+                // height      : "40px",
+                zIndex      : "2",
+                left        : "-125px",
+                top         : "0px"
             })
             .attr('title', '当前幻灯片的过度动画')
-            sb.move(showAnim, showAnim);
+            .on('click', function () {
+
+            })
+            sb.move(showAnim, showAnim, {top : true});
 
             editorContainer.appendChild(showAnim);
             sb.bind(window, "keydown",this.keyOperate);

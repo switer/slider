@@ -758,7 +758,8 @@ var SandBox = (function() {
         };
         xhr.send();
     };
-    SandBox.prototype.move = function(elem,tar){
+    SandBox.prototype.move = function(elem,tar, options){
+        options = options || {};
         var initY=0,initX=0,pInitX=0,pInitY=0,
         flag={
             isInit:false,
@@ -775,10 +776,15 @@ var SandBox = (function() {
                     pInitY=parseInt(tar.style.top.substr(0, tar.style.top.length-2)),
                     flag.isInit = true;
                 }
-                //                if(eventX!=0||eventY!=0){
-                tar.style.left = (pInitX+eventX-initX)+"px";
-                tar.style.top = (pInitY+eventY-initY)+"px";
-            //                }
+                if (options.left) {
+                    tar.style.left = (pInitX+eventX-initX)+"px";
+                }
+                else if (options.top) {
+                    tar.style.top = (pInitY+eventY-initY)+"px";
+                } else {
+                    tar.style.left = (pInitX+eventX-initX)+"px";
+                    tar.style.top = (pInitY+eventY-initY)+"px";
+                }
             }
         });
     };

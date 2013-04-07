@@ -112,6 +112,9 @@ Core.registerModule("toolbar",function(sb){
                 "enterPreviewMode":this.enterPreviewMode,
                 "windowResize":this.windowResize 
             });
+            $('.showAnim').on('click', function () {
+
+            })
             //取消按钮点击时出现的全选情况
             for (var i = 0; item =  toolAppItems[i]; i++){
                 item.onselectstart = function(){
@@ -119,44 +122,30 @@ Core.registerModule("toolbar",function(sb){
                 }
             }
 
-            for (i = 0; item = appDetailItems[i]; i++) {
-                item.addEventListener("click", function(event){
-                    var tar, optItem,offsetY;
-                    tar = event.currentTarget;
-
-                    if( global._tarAppId ) {
-                        operation.querySelector("#" + global._tarAppId + "-operation").style.display = "none";
-                    } 
-                    
-                   
-                    optItem = operation.querySelector("#" + tar.id + "-operation");
-
-                    if (global._tarAppId !== tar.id ||
-                         ( global._tarAppId === tar.id && operation.style.display === 'none' ) ) {
-                        operation.style.display = "block";
-                        optItem.style.display = "block";
-                        operation.style.top = (event.currentTarget.offsetTop - 10)+"px";
-                    }
-                    else {
-                        operation.style.display = "none";
-                    }
-
-                    global._tarAppId = tar.id;
-                    
-                },false);
-            }
+            // for (i = 0; item = appDetailItems[i]; i++) {
+            $('#tool-addAnimation,.showAnim').on("click", function(event){
+                var tar = event.currentTarget,
+                    $operation = $('#tool-operation');
+                if ( $operation.css('display') === 'none' ) {
+                    $operation.css('display', "block")
+                              .css('top' , (event.clientY - 10)+"px");
+                }
+                else 
+                    $operation.css('display', "none");
+                
+            });
 
             //初始化工具子菜单的点击事件
             for (i = 0; item =  operationSubMenuItems[i]; i++) {
                 item.onclick = function(e){
-                    var notify = e.currentTarget.getAttribute("data-event");
+                    var notifyEvt = e.currentTarget.getAttribute("data-event");
                     var param = e.currentTarget.getAttribute("data-param");
                     sb.notify({
-                        type:notify,
-                        data:param
+                        type : notifyEvt,
+                        data : param
                     });
-                    $(e.target).parent().css('display', 'none')
-                    $(e.target).parent().parent().css('display', 'none')
+                    console.log('hide');
+                    $('#tool-operation').css('display', 'none')
                 }
             }
             enterPreviewMode.onclick = function(){
