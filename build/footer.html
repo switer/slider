@@ -22,9 +22,11 @@
                         var slider = document.createElement("DIV"),
                             panel = document.createElement("DIV")
                             elements = DATA[s].element,
-                            paintingBoard = new window.DrawingBoard(conf.height, conf.width);
+                            paintingBoard = new window.DrawingBoard(conf.height, conf.width),
+                            $pBoard = $(paintingBoard.getCanvas());
+                        $pBoard.addClass('painting-board')
                         slider.appendChild(panel);
-                        $(slider).append(paintingBoard.getCanvas());
+                        $(slider).append($pBoard);
                         paintingBoards[s] = paintingBoard;
                         panel.setAttribute('style', DATA[s].panelAttr);
                         slider.className = "slider " + DATA[s].anim;
@@ -62,7 +64,7 @@
                                     text.setAttribute("style", data.eAttr);
                                     elem.appendChild(text);
                                     (function (eData) {
-                                        setTimeout(function () {
+                                        // setTimeout(function () {
                                             var codeMirror = CodeMirror(text, {
                                               value: eData.value,
                                               mode:  eData.codeType,
@@ -71,7 +73,7 @@
                                               lineWrapping  : true,
                                               readOnly : false
                                             });
-                                        }, 0);
+                                        // }, 0);
                                     })(data)
     
                                 }
@@ -88,6 +90,12 @@
                 module.init();
                 module.keyOn();
             },
+            //cm需要resize来refresh
+            triggerWindowResize : function () {
+                var evt = document.createEvent("UIEvents");
+                evt.initUIEvent('resize', true, true, window)
+                window.dispatchEvent(evt);
+            },
             setTarget : function(newTar) {
                 var className;
                 if(targetSlider&&sliders[targetSlider]) {
@@ -97,9 +105,11 @@
                 code.innerHTML = sliders.findIndex(targetSlider)+"/"+sliders.length();
                 className = sliders[targetSlider].className;
                 sliders[targetSlider].style.display = "block";
+
+                this.triggerWindowResize();
                 window.setTimeout(function(){
                     sliders[targetSlider].className = className;
-                });
+                }, 0);
             },
             keyOn:function(){
                 window.addEventListener("keyup",function(event){
@@ -233,6 +243,17 @@
             })
             $('.fullscreen').on('click', function () {
                 document.body.webkitRequestFullScreen();
+            })
+            $('#hidePaint').on('click', function () {
+                var $this = $(this);
+                if ($this.hasClass('on')) {
+                    $this.removeClass('on')
+                    $(".painting-board").show();
+                }
+                else {
+                    $this.addClass('on')
+                    $(".painting-board").hide();
+                }
             })
             init();
 

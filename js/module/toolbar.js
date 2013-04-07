@@ -220,12 +220,12 @@ Core.registerModule("toolbar",function(sb){
                     data:{}
                 });
             };
-            addSliderApp.onclick = function(){
-                sb.notify({
-                    type:"addSlider",
-                    data:"append"
-                });
-            };
+            // addSliderApp.onclick = function(){
+            //     sb.notify({
+            //         type:"addSlider",
+            //         data:"append"
+            //     });
+            // };
             // deleteSlider.onclick = function(){
             //     console.log('on click delete slider');
             //     sb.notify({

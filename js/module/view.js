@@ -304,11 +304,14 @@ Core.registerModule("view",function(sb){
                 data:parseInt(currentFrame.substr("frame".length,currentFrame.length))
             });
             if(oldCurr){
-                var dataSet = sb.data("sliderDataSet");
-                var frameNumber = oldCurr.substr("frame".length, oldCurr.length);
-                var frameData = dataSet["slider"+frameNumber];
-                var elements = getElementDataFunc(frameData);
-                showFrameElementByDataFunc(elements,oldCurr);
+                var dataSet = sb.data("sliderDataSet"),
+                    sliders = sb.data("sliders"),
+                    frameNumber = oldCurr.substr("frame".length, oldCurr.length),
+                    frameData = dataSet["slider"+frameNumber],
+                    slider = sliders["slider"+frameNumber],
+                    elements = getElementDataFunc(frameData);
+
+                global.showFrameElementByData(elements,oldCurr, slider);
             }
             return oldCurr;
         },
@@ -339,15 +342,18 @@ Core.registerModule("view",function(sb){
             }
             return datas;
         },
-        showFrameElementByData:function(data,frame){
+        showFrameElementByData:function(data,frame, slider){
 
             var elem = null,borderWidth;
             var frameEelem = frames[frame];
             var framePanel = sb.find(".frame-panel", frameEelem);
+            //清空
             frameEelem.innerHTML = "";
+            //再添加
             if(framePanel){
                 frameEelem.appendChild(framePanel);
             }
+            $(framePanel).attr('style', $(slider).find('.panel').attr('style'))
             for(var a in data){
                 if(data.hasOwnProperty(a)){
                     elem = document.createElement("div");

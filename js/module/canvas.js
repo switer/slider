@@ -242,8 +242,9 @@ Core.registerModule("canvas",function(sb){
                 easm.style.display = "none";
                 
             }, false);
-
+            //共享数据
             sb.data("sliderDataSet",SliderDataSet);
+            sb.data("sliders",sliders);
             sb.listen({
                 "onImportSlider" : this.readData,
                 'loadTemplFile' : this.loadTemplFile,
@@ -474,8 +475,8 @@ Core.registerModule("canvas",function(sb){
                     }
                 });
             }
-            var tar = SliderDataSet[currentSlider][rightMenuBtn];
-            tar && $(tar.container).css('backgroundImage', dataUrl);
+            // var tar = SliderDataSet[currentSlider][rightMenuBtn];
+            // tar && $(tar.container).find('.panel').css('backgroundImage', dataUrl);
         },
         changeCodeType : function (param) {
             if (!rightMenuBtn || rightMenuBtn === 'panel') return;
@@ -571,7 +572,7 @@ Core.registerModule("canvas",function(sb){
 
                 createSliderFunc('append', {
                     attr : slider.data['panelAttr'], 
-                    anim:slider.data['anim']
+                    anim : slider.data['anim']
                 });
 
                 sb.notify({
