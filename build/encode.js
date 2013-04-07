@@ -1,3 +1,6 @@
+/**
+	此脚本用于构建主页引用文件数据包sourceMap
+**/
 var fs 		= require('fs'),
 	file 	= 'index.html',
 	cmpJS 	= '../sourceMap.js';
@@ -10,7 +13,9 @@ var fs 		= require('fs'),
 		'cmThemeCSS' 	: 'codeMirrorThemes.css',
 		'cmJS' 			: 'codeMirrorJS.js',
 		'cmCSS' 		: 'codeMirrorCSS.css',
-		'animationCSS'	: 'animation.css'
+		'animationCSS'	: 'animation.css',
+		'drawJS'		: 'drawJS.js',
+		'zepto'			: 'zepto.min.js'
 	}
 
 var ctn,

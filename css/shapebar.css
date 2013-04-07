@@ -17,3 +17,20 @@
 #message {background-image: url(../img/message.png);}
 #moon {background-image: url(../img/moon.png);}
 #polygon {background-image: url(../img/polygon.png);}
+#customShape {background-image: url(../img/custom-shape.png);}
+.painting-board {box-shadow: 0 0 10px 2px #CCC;border: 1px solid;}
+.painting-board-color {width: 40px;background: url(../img/color-selector.png);}
+.painting-board-size {width: auto;display: block;-webkit-appearance:button;height: 32px!important;margin: 0;padding: 0;}
+.painting-board-confirm {-webkit-box-flex:1;background-color: #CCC;box-shadow: inset 0 0 5px 1px white}
+.painting-board-confirm:hover{background-color: cornflowerblue;box-shadow: inset 0 0 5px 1px black;color: white;}
+.painting-board-eraser {background: url(../img/eraser.png);width: 30px;background-size: 30px;}
+.painting-board-eraser.on{box-shadow: inset 0 0 10px 2px cornflowerblue;}
+.painting-board-toolbar {width: 100%;display: -webkit-box;margin-top: 10px;}
+.pb-btn {cursor: pointer;border: 1px solid;border-radius: 5px;height: 30px;margin-right: 10px;text-align: center;line-height: 30px;}
+/*.pb-btn:hover {cursor: pointer;}*/
+.pb-btn:last-child {margin-right: 0;}
+.painting-board-container {
+	position: absolute;top: 0px;right: 120px;
+	border: 1px solid;padding: 10px;border-radius: 10px;
+	background-color: rgba(255,255,255,0.9);
+}

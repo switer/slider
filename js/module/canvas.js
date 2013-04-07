@@ -818,6 +818,8 @@ Core.registerModule("canvas",function(sb){
                     cmCss       = window._sourceMap.cmCSS,
                     cmThemeCSS  = window._sourceMap.cmThemeCSS,
                     animation   = window._sourceMap.animationCSS,
+                    drawJS      = window._sourceMap.drawJS, //画板（用作批注）
+                    zepto       = window._sourceMap.zepto, 
                     dataJsonMarkBegin   = '<!--[DATA_JSON_BEGIN]-->', 
                     dataJsonMarkEnd     = '<!--[DATA_JSON_END]-->';
 
@@ -829,12 +831,15 @@ Core.registerModule("canvas",function(sb){
                                 styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
                                 dataHtml +
                                 scriptBegin + cmJS + cmThemeJS + scriptEnd +
+                                scriptBegin + zepto + scriptEnd +
+                                scriptBegin + drawJS + scriptEnd +
                                 footer
                 } else { //不需要添加codemirror的代码
                     combHTML =  header +
                                 styleBegin + animation + styleEnd +
                                 dataHtml +
-                                scriptBegin + scriptEnd +
+                                scriptBegin + zepto + scriptEnd +
+                                scriptBegin + drawJS + scriptEnd +
                                 footer
                 }
                 callback && callback(combHTML)

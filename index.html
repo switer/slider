@@ -22,6 +22,7 @@
         <script type="text/javascript" src="js/lib/codemirror/codemirror.js"></script>
         <script type="text/javascript" src="js/lib/codemirror/cm.theme.js"></script>
         <script type="text/javascript" src="js/lib/bowser/bowser.js"></script>
+        <script type="text/javascript" src="js/lib/paintBoard/drawJS.js"></script>
         <script type="text/javascript" src="js/util/json.js"></script>
         <script type="text/javascript" src="js/util/colorboard.js"></script>
         <script type="text/javascript" src="js/util/screenboard.js"></script>
@@ -76,9 +77,9 @@
                                 <div class="sui-inp-box">
                                     <input class="sui-inp" type="text" id="fileNameInp"  placeholder="输入文件名" />
                                 </div>
-                                <div class="sui-inp-box">
+<!--                                 <div class="sui-inp-box">
                                     <input class="sui-inp" type="text" id="fileSufInp" placeholder="输入文件类型" />
-                                </div>
+                                </div> -->
                             </div>
                             <input class="sui-btn sui-w-full sui-mg-top sui-btn-primary" id="fileInpBtn" type="button" value="确定">
                         </div>
@@ -396,6 +397,7 @@
                 <div id='message' class='shape-icon' data-type='message'></div>
                 <div id='moon' class='shape-icon' data-type='moon'></div>
                 <div id='polygon' class='shape-icon' data-type='polygon'></div>
+                <div id='customShape' class='shape-icon' data-type='custom' title="自定义图形"></div>
             </div>
             <div id="toolbar" class="transition-l allow">
                 <div id="tool-buttons"  data-intro='功能工具栏' data-step='3' data-position='right'>

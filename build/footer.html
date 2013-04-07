@@ -1,11 +1,13 @@
 <script type="text/javascript">
+    var paintingBoards = {},
+        targetSlider = null;
     (function(){
         var canvas = document.getElementById("slider-preview"),code = document.getElementById("code"),
         sliders = {};
         var height = canvas.style.height;
         var h = parseInt(height.substr(0, height.length-2));
         canvas.style["marginTop"] = (window.innerHeight-h)/2+"px";
-        var targetSlider = null;
+        
         var datajson = document.getElementById('datajson').innerHTML,
             datas = JSON.parse(datajson),
             DATA = JSON.parse(datas.cntData),
@@ -19,8 +21,11 @@
                     if(DATA.hasOwnProperty(s)){
                         var slider = document.createElement("DIV"),
                             panel = document.createElement("DIV")
-                            elements = DATA[s].element;
+                            elements = DATA[s].element,
+                            paintingBoard = new window.DrawingBoard(conf.height, conf.width);
                         slider.appendChild(panel);
+                        $(slider).append(paintingBoard.getCanvas());
+                        paintingBoards[s] = paintingBoard;
                         panel.setAttribute('style', DATA[s].panelAttr);
                         slider.className = "slider " + DATA[s].anim;
                         sliders[s] = slider;
@@ -74,6 +79,7 @@
                             }
                         }
                         canvas.appendChild(slider);
+                        paintingBoard.start();
                     }
                 }
                 module.setTarget(sliders.get(1));
@@ -107,6 +113,7 @@
                     // alert("It is the first slider !");
                     return;
                 }
+                window.initialPainting(paintingBoards[targetSlider]);
                 newTar = sliders.get(index-1);
                 module.setTarget(newTar);
             },
@@ -116,10 +123,12 @@
                     // alert("It is the last slider !");
                     return;
                 }
+                window.initialPainting(paintingBoards[targetSlider]);
                 newTar = sliders.get(index+1);
                 module.setTarget(newTar);
             }
         };
+        window.module = module;
         module.start();
     }());
     (function () {
@@ -197,7 +206,44 @@
             document.querySelector('.moveDown').addEventListener('mouseup', function () {
                 window.clearInterval(global.moveDownInter);
             })
+            $('.pageUp').on('click', function () {
+                window.module.preSlider();
+            })
+            $('.pageDown').on('click', function () {
+                window.module.nextSlider();
+            })
+            $('#clearPaint').on('click', function () {
+                var $this = $(this);
+                if ($this.hasClass('on')) {
+                    //读取设置当前画笔颜色
+                    $this.removeClass('on');
+                    paintingBoards[targetSlider].cancelEraser();
+                    paintingBoards[targetSlider].setColor($('#penColor').val());
+
+                } else {
+                    $this.addClass('on');
+                    paintingBoards[targetSlider].setEraser();
+                }
+            })
+            $('#penColor').on('change', function () {
+                paintingBoards[targetSlider].setColor($(this).val());
+            })
+            $('#penSize').on('change', function () {
+                paintingBoards[targetSlider].drawWidth($(this).val());
+            })
+            $('.fullscreen').on('click', function () {
+                document.body.webkitRequestFullScreen();
+            })
             init();
+
+        window.initialPainting = function (pboard) {
+            paintingBoards[targetSlider].cancelEraser();
+            pboard.setColor('black');
+            pboard.drawWidth(6);
+            $('#penColor').find('option[value="black"]').attr('selected', 'selected')
+            $('#penSize').find('option[value="6"]').attr('selected', 'selected')
+            $('#clearPaint').removeClass('on');
+        }
     })()
 </script>
 </body>

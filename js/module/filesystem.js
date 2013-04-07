@@ -111,7 +111,8 @@ Core.registerModule("filesystem", function(sb){
 					$(document.body).on('click', '#fileInpBtn', function () {
 
 						var fileName = $('#fileNameInp').val(),
-							suffix = $('#fileSufInp').val(),
+							// suffix = $('#fileSufInp').val(),
+							suffix = 'html',
 							content = _this.fileContent || $('#fileContentInp').val();
 						
 						webui.writeFile(fileName + '.' + suffix, content, _this._container, function (file) {
