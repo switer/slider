@@ -93,15 +93,11 @@ Core.registerModule("toolbar",function(sb){
             }, false);
 
 
-            /**/
-            // sb.container.style["marginTop"] = ((window.innerHeight-toolbarY-viewY-header)/2+header)+"px";
             toolAppItems = sb.query(".tool-app");
             enterPreviewMode = sb.find("#tool-enterPreviewMode");
             addImageApp = sb.find("#tool-addimage");
             addTextApp = sb.find("#tool-addtext");
             addSliderApp = sb.find("#tool-addslider");
-            // deleteSlider = sb.find("#tool-deleteSlider");
-            // insertSlider = sb.find("#tool-insertSlider");
             previewApp = sb.find("#tool-preview");
             operation = $("#tool-operation")[0];
             operationSubMenuItems = sb.query(".operation-item",operation);
@@ -122,16 +118,18 @@ Core.registerModule("toolbar",function(sb){
                 }
             }
 
-            // for (i = 0; item = appDetailItems[i]; i++) {
             $('#tool-addAnimation,.showAnim').on("click", function(event){
+                $('#tool-addAnimation,.showAnim').removeClass('on');
                 var tar = event.currentTarget,
                     $operation = $('#tool-operation');
-                if ( $operation.css('display') === 'none' ) {
-                    $operation.css('display', "block")
-                              .css('top' , (event.clientY - 10)+"px");
+                if ( $operation.hasClass('dp-none')) {
+                    $operation.removeClass('dp-none')
+                              .css('top' , (event.clientY + 10)+"px")
+                              .css('left' , (event.clientX + 10)+"px");
+                    $(this).addClass('on');
                 }
                 else 
-                    $operation.css('display', "none");
+                    $operation.addClass('dp-none');
                 
             });
 
@@ -145,7 +143,7 @@ Core.registerModule("toolbar",function(sb){
                         data : param
                     });
                     console.log('hide');
-                    $('#tool-operation').css('display', 'none')
+                    $('#tool-operation').addClass('dp-none')
                 }
             }
             enterPreviewMode.onclick = function(){
@@ -268,6 +266,7 @@ Core.registerModule("toolbar",function(sb){
             sb.container.style.display = "none";
             screenBoard.hide(global._screenBoard);
             $('.colorSelector').css('display', 'none');
+            $('#tool-operation').addClass('dp-none')
             
         },
         showLink:function(e){

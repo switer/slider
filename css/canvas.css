@@ -254,8 +254,8 @@
     background-image: url(../img/close.png);
     height: 20px;
     width: 20px;
-    top:0px;
-    right: 0px;
+    top:-10px;
+    right: -10px;
     cursor: pointer;
 
 }

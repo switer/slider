@@ -27,7 +27,7 @@ input{
 .panel1{
     border: 1px solid #100;
     background-color: #EEE;
-    -webkit-box-shadow:0px 0px 5px #100;
+    -webkit-box-shadow:0px 0px 10px 2px #CCC;
     -moz-box-shadow:0px 0px 5px #100;
     -webkit-border-radius:10px;
     -moz-border-radius:10px;
@@ -105,6 +105,8 @@ input{
 .transition-h {-webkit-transition:height 0.3s;}
 .transition-l {-webkit-transition:left 0.3s;}
 .transition-r {-webkit-transition:right 0.3s;}
+.transition-t {-webkit-transition:top 0.3s;}
+.transition-b {-webkit-transition:bottom 0.3s;}
 .l-tb {left: -70px!important;}
 .l-sb {right: -85px!important;}
 .box {border: 1px solid;border-radius: 5px;background: white;height: 25px;}

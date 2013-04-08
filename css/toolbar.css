@@ -17,7 +17,7 @@
     padding: 5px 15px;
     padding-right: 35px;
     /*-webkit-box-shadow:3px 0px 8px #BBB;*/
-    -webkit-border-top-right-radius:10px;
+    /*-webkit-border-top-right-radius:10px;*/
     /*-webkit-border-bottom-right-radius:10px;*/
     /*box-shadow:5px 0px 5px #BBB;*/
     border-radius-topright:10px;
@@ -32,7 +32,7 @@
     width:120px;
     left: 80px;
     /*background-color: #100;*/
-    display: none;
+    /*display: none;*/
     /*-webkit-box-shadow:0px 0px 10px #100;*/
     /*border-radius:10px;*/
     /*border-radius:10px;*/

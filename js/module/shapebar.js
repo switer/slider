@@ -74,6 +74,7 @@ Core.registerModule("shapebar", function(sb){
 				$sizeSelector = $("<select></select>").addClass('painting-board-size').addClass('pb-btn'),
 				$colorBtn = $("<div></div>").addClass('painting-board-color').addClass('pb-btn'),
 				$eraserBtn = $("<div></div>").addClass('painting-board-eraser').addClass('pb-btn'),
+				$pbPanel  =  $("<div></div>").addClass('painting-board-panel'),
 				sizeArr = [1,2,3,4,6,8,10,12,16, 18, 20, 24, 30, 32, 100],
 				sizeSelHTML = '';
 
@@ -121,14 +122,16 @@ Core.registerModule("shapebar", function(sb){
 						 });
 			$(pbContainer).addClass('painting-board-container')
 						  .css('zIndex', '100')
+						  .append($pbPanel)
 						  .append(pbElem)
 						  .append($toolBar)
 			
 			document.body.appendChild(pbContainer);
 			drawingBoard.start();
+			sb.move($pbPanel[0], pbContainer, {top:true})
 			global._drawingBoard = drawingBoard;
 			global._drawingBoardContainer = pbContainer;
-			global.hidePaintingBoard.call(pbContainer);
+			global.hidePaintingBoard.call();
 		},
 		addPaintingImage : function () {
 
@@ -163,6 +166,7 @@ Core.registerModule("shapebar", function(sb){
         },
         enterPreviewMode:function(){
             sb.container.style.display = "none";
+            global.hidePaintingBoard();
         }
 	}
 });

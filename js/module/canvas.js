@@ -1130,8 +1130,8 @@ Core.registerModule("canvas",function(sb){
         },
         addText:function(textObj){
             var obj = {
-                height:200,
-                width:500
+                height:50,
+                width:300
             };
             var partSize = 8,dataID;
             var textBox = document.createElement("div");
