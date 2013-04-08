@@ -142,7 +142,7 @@ Core.registerModule("toolbar",function(sb){
                         type : notifyEvt,
                         data : param
                     });
-                    console.log('hide');
+                    $('#tool-addAnimation,.showAnim').removeClass('on');
                     $('#tool-operation').addClass('dp-none')
                 }
             }

@@ -42,7 +42,7 @@
     body:-webkit-full-screen {
         width: 100%;height: 100%;background-color: white;
     }
-    #slider-preview{position: relative;-webkit-box-shadow: 0px 0px 24px #CCC;overflow: hidden;margin: auto;}
+    #slider-preview{position: relative;-webkit-box-shadow: 0px 0px 24px #CCC;margin: auto;}
     #code{width: 80px!important;border-radius: 0!important;}
     .slider{position: relative;height: 100%;width: 100%;}
     #operation {display: -webkit-box;opacity: 0.1;position: fixed;bottom: 0;right: 0;z-index: 999;}
@@ -58,6 +58,17 @@
     .on {box-shadow: inset 0 0 10px 2px black;}
     canvas {position: relative;top: 0;left: 0;z-index: 9999;}
     .selBtn {display: block;height: 40px;-webkit-appearance: button;margin: 0;outline: 0;border: 0;}
+    /*高亮代码执行工具条*/
+    .code-bar {width: auto;position: absolute;bottom: 0px;right: 0px;opacity: 0.3;display: -webkit-box;z-index: 100;}
+    .code-bar:hover {opacity: 1;}
+    .code-bar-btn{font-size: 12px;height: 20px;width:auto;text-align: center;background-color: cornflowerblue;color: white;line-height: 20px;padding: 5px;cursor: pointer;}
+    .code-bar-btn:hover{background-color: steelblue;}
+    .code-bar-compile{}
+    .code-bar-run{}
+    .code-bar-consoleBtn{}
+    .code-bar-console{width: -webkit-calc(100% - 2px);height: 100px;position: absolute;bottom: 0px;z-index: 99;background-color: white;bottom: -101px;border: 1px solid black;border-top: 0;overflow-y:auto;display: none;}
+    .code-bar-console .title {height: 20px;line-height: 20px;}
+    .code-bar-console .content {font-size: 12px;word-break: break-all;padding: 0 5px;}
 </style>
 </head>
 <body>

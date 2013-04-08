@@ -57,14 +57,15 @@
                                     elem.style.zIndex = data.zIndex;
                                 }
                                 else if (data.type==='CODE') {
+                                    var text = document.createElement("div"),
+                                        compileTools = module.createCompileBar();
                                     elem = document.createElement("div");
                                     elem.setAttribute("style", data.cAttr);
                                     elem.style.zIndex = data.zIndex;
-                                    var text = document.createElement("div");
                                     text.setAttribute("style", data.eAttr);
                                     elem.appendChild(text);
-                                    (function (eData) {
-                                        // setTimeout(function () {
+                                    $(elem).append(compileTools.bar).append(compileTools.console);
+                                    (function (eData, ct) {
                                             var codeMirror = CodeMirror(text, {
                                               value: eData.value,
                                               mode:  eData.codeType,
@@ -73,8 +74,27 @@
                                               lineWrapping  : true,
                                               readOnly : false
                                             });
-                                        // }, 0);
-                                    })(data)
+                                            $(ct.bar).find('.code-bar-consoleBtn').on('click', function () {
+                                                var $console = $(ct.console)
+                                                if ($(this).hasClass('on')) {
+                                                    $(this).removeClass('on')
+                                                    $console.css('display', 'none')
+                                                } else {
+                                                    $(this).addClass('on')
+                                                    $console.css('display', 'block')
+                                                }
+                                            })
+
+                                            $(ct.bar).find('.code-bar-run').on('click', 
+                                                function (e) {
+                                                    var value = codeMirror.getDoc().getValue();
+                                                    $(ct.console).find('.content').text(eval(value));
+                                                });
+                                            $(ct.bar).find('.code-bar-compile').on('click', 
+                                                function (e) {
+                                                    var value = codeMirror.getDoc().getValue();
+                                                });
+                                    })(data, compileTools)
     
                                 }
                                 if(elem) slider.appendChild(elem);
@@ -95,6 +115,22 @@
                 var evt = document.createEvent("UIEvents");
                 evt.initUIEvent('resize', true, true, window)
                 window.dispatchEvent(evt);
+            },
+            createCompileBar : function () {
+                var $bar        = $('<div></div>').addClass('code-bar'),
+                    $compile    = $('<div>编译</div>').addClass('code-bar-compile').addClass('code-bar-btn'),
+                    $run        = $('<div>运行</div>').addClass('code-bar-run').addClass('code-bar-btn'),
+                    $consoleBtn = $('<div>日志</div>').addClass('code-bar-consoleBtn').addClass('code-bar-btn'),
+                    $console    = $('<div></div>').addClass('code-bar-console'),
+                    $consoleTitle    = $('<div>[Log]:</div>').addClass('title'),
+                    $consoleCtn    = $('<div></div>').addClass('content');
+
+                $bar.append($compile).append($run).append($consoleBtn);
+                $console.append($consoleTitle).append($consoleCtn);
+                return {
+                    bar : $bar[0],
+                    console : $console[0]
+                }
             },
             setTarget : function(newTar) {
                 var className;
@@ -255,6 +291,7 @@
                     $(".painting-board").hide();
                 }
             })
+
             init();
 
         window.initialPainting = function (pboard) {
