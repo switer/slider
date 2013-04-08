@@ -61,6 +61,7 @@ input{
     line-height: 30px;
     border-radius:6px;
     z-index: 999;
+    -webkit-transition: top 0.2s, left 0.2s;
 }
 #message-box .message-content{
 

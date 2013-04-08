@@ -252,12 +252,14 @@
 .close-menu{
     position: absolute;
     background-image: url(../img/close.png);
-    height: 20px;
-    width: 20px;
-    top:-10px;
-    right: -10px;
-    cursor: pointer;
-
+    height: 15px;width: 15px;top:-10px;
+    right: -10px;cursor: pointer;border: 2px solid black;border-radius: 50%;background-size: 15px;
+    -webkit-transition: -webkit-transform 0.5s;
+    background-color: rgba(255,255,255,0.8);
+}
+.close-menu:hover {
+    background-color: cornflowerblue;
+    -webkit-transform: rotate(180deg);
 }
 /*.close-menu:hover{
 

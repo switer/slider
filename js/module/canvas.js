@@ -1313,7 +1313,12 @@ Core.registerModule("canvas",function(sb){
                     rgbArr;
 
                 type = item.getAttribute("data-type");
-                attrValue =   SliderDataSet[currentSlider][rightMenuBtn].container.style[type] || defaultAtt[type];
+                console.log('rightMenuBtn', rightMenuBtn);
+                if (rightMenuBtn === 'panel') {
+                    attrValue =   sliders[currentSlider].style[type] || defaultAtt[type];
+                } else {
+                    attrValue =   SliderDataSet[currentSlider][rightMenuBtn].container.style[type] || defaultAtt[type];
+                }
                 if(type=="boxShadow") {
                     var splitArr = defaultAtt[type].split(" ");
                     var rgbdivArr = [splitArr[0],splitArr[1],splitArr[2]];
