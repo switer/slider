@@ -80,7 +80,7 @@ Core.registerModule("canvas",function(sb){
             });
             eom = sb.find("#element-operate-menu");
             eomItems = sb.query(".elem-item", eom);
-            sb.move(eom, eom);
+            // sb.move(eom, eom);
             easm = sb.find("#element-attrSetting-menu");
             easmMove = sb.query(".move", easm)[0];
             sb.css(easmMove,{
@@ -268,6 +268,7 @@ Core.registerModule("canvas",function(sb){
                 "moveDownward":this.moveDownward,
                 "moveUpward":this.moveUpward,
                 "copyElement":this.copyElement,
+                "cutElement":this.cutElement,
                 "pasteElement":this.pasteElement,
                 "changeSliderAnim":this.changeSliderAnim,
                 "elemAttrSetting":this.elemAttrSetting,
@@ -1481,6 +1482,17 @@ Core.registerModule("canvas",function(sb){
                 SliderDataSet[currentSlider][target]["container"].style.zIndex = minZIndex;
                 SliderDataSet[currentSlider].sortBy("zIndex");
             }
+        },
+        //元素的剪切
+        cutElement : function () {
+            sb.notify({
+                type : 'copyElement',
+                data : null
+            })
+            sb.notify({
+                type : 'deleteElement',
+                data : null
+            })
         },
         deleteElement:function(){
 

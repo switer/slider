@@ -69,7 +69,7 @@
     word-break: break-all;
 }
 .element-container .textboxelement:hover {
-    box-shadow: 0 0 30px 6px #CCC;
+    box-shadow: 0px 0px 0px 6px rgba(0,0,0,0.1);
 }
 .element-container .element-panel{
 
