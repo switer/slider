@@ -1,5 +1,7 @@
 var fs = require('fs'),
 	UglifyJS = require("uglify-js");
 
-var result = UglifyJS.minify("codeMirrorThemes.js");
-fs.writeFileSync('cm.theme.js', result.code, 'utf-8');
+exports.min = function () {
+	var result = UglifyJS.minify("codemirror/codeMirrorThemes.js");
+	fs.writeFileSync('codemirror/cm.theme.js', result.code, 'utf-8');
+}
