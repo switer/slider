@@ -33,12 +33,13 @@ for (var name in source) {
 	}
 	else if (source[name].match(/.*\.css$/)) {
 		console.log('#CSS minify -> ' + name);
-		ctn = cssmin(source[name]);
+		ctn = cssmin(fs.readFileSync(source[name], 'UTF-8'));
 	}
 	else {
 		console.log('-common -> ' + name);
 		ctn = fs.readFileSync(source[name], 'UTF-8');
 	}
+	// ctn = fs.readFileSync(source[name], 'UTF-8');
 	sourceMap[name] = ctn;
 }
 console.log('write sourceMap file');
