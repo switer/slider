@@ -981,7 +981,12 @@ Core.registerModule("canvas",function(sb){
             newSlider.appendChild(panel);
             newSlider.className = "editor";
             newSlider.zIndex = 1;
-            
+            $(newSlider).css({
+                font : 'initial',
+                color : 'initial',
+                lineHeight : 'initial',
+                letterSpacing : 'initial'
+            });
 
             if(currentSlider) sliders[currentSlider].style.display = "none";
             

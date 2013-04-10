@@ -9,8 +9,21 @@ var paintingBoards = {},
         datas = JSON.parse(datajson),
         DATA = JSON.parse(datas.cntData),
         conf = datas.cntConf;
+
+    function getSqrt(map) {
+        var len = 0;
+        for(var key in map){
+            if(map.hasOwnProperty(key)) len ++;
+        }
+        var sqrtNum = Math.sqrt(len);
+        if (sqrtNum % 1 > 0) sqrtNum = parseInt(sqrtNum) + 1; 
+        console.log(len, sqrtNum);
+        return sqrtNum;
+    }
+
     var module = {
         init:function(){
+            var sqrtNum = getSqrt(DATA);
             for(var s in DATA){
                 if(DATA.hasOwnProperty(s)){
                     var slider = document.createElement("DIV"),
@@ -19,14 +32,17 @@ var paintingBoards = {},
                     slider.appendChild(panel);
                     panel.setAttribute('style', DATA[s].panelAttr);
                     sliders[s] = slider;
+
                     $(slider)
                             .css({
                                 'height' : conf.height,
                                 'width'  : conf.width
                             })
-                            .data('x', index * ( parseInt(conf.width)  + 100) )
-                            .data('y', 0)
+                            .data('x', (index % sqrtNum) * ( parseInt(conf.width)  + 100))
+                            .data('y', parseInt(index / sqrtNum) * ( parseInt(conf.height)  + 100))
                             .addClass('slide step')
+                            // .data('x', index * ( parseInt(conf.width)  + 100) )
+                            // .data('y', 0)
                     index ++;
                     for (var e in elements) {
                         if(elements.hasOwnProperty(e)){
@@ -56,11 +72,11 @@ var paintingBoards = {},
                                 var text = document.createElement("div");
 
                                 elem = document.createElement("div");
+
                                 elem.setAttribute("style", data.cAttr);
                                 elem.style.zIndex = data.zIndex;
                                 text.setAttribute("style", data.eAttr);
                                 elem.appendChild(text);
-
                                 (function (eData) {
                                         var codeMirror = CodeMirror(text, {
                                           value: eData.value,
