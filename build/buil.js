@@ -22,6 +22,7 @@ var fs 		= require('fs'),
 		'impressJS' 	: 'impress/impress.js',
 		'impressHeader' : 'impress/impressHeader.html',
 		'impressFooter' : 'impress/impressFooter.html',
+		'impressReader' : 'impress/impressReader.js'
 	}
 var ctn,
 	sourceMap = {};

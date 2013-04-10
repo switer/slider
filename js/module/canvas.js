@@ -800,6 +800,7 @@ Core.registerModule("canvas",function(sb){
             global._createThumb(sliders.getFirstElement(), function (thumb) {
                 var sliderJson = global._createSliderJSONData(),
                     count = 0,
+                    slideType = 'impress',
                     datas;
                 datas = {
                     cntConf : {
@@ -814,10 +815,13 @@ Core.registerModule("canvas",function(sb){
                     styleBegin  = '<style type="text/css">',
                     styleEnd    = '</style>',
                     stream      = JSON.stringify(datas),
-                    // header      = window._sourceMap.blogHeader,
                     header      = window._sourceMap.header,
-                    // footer      = window._sourceMap.blogFooter,
                     footer      = window._sourceMap.footer,
+                    blogHeader          = window._sourceMap.blogHeader,
+                    blogFooter          = window._sourceMap.blogFooter,
+                    impressHeader       = window._sourceMap.impressHeader,
+                    impressFooter       = window._sourceMap.impressFooter,
+                    impressReader       = window._sourceMap.impressReader,
                     cmJS        = window._sourceMap.cmJS,
                     cmThemeJS   = window._sourceMap.cmThemeJS,
                     cmCss       = window._sourceMap.cmCSS,
@@ -825,28 +829,67 @@ Core.registerModule("canvas",function(sb){
                     animation   = window._sourceMap.animationCSS,
                     drawJS      = window._sourceMap.drawJS, //画板（用作批注）
                     zepto       = window._sourceMap.zepto, 
+                    impressCSS  = window._sourceMap.impressCSS, 
+                    impressJS   = window._sourceMap.impressJS, 
                     dataJsonMarkBegin   = '<!--[DATA_JSON_BEGIN]-->', 
                     dataJsonMarkEnd     = '<!--[DATA_JSON_END]-->';
+
+                
 
                 var dataHtml = dataJsonMarkBegin + '<script type="text/html" id="datajson">' 
                                 + stream + scriptEnd + dataJsonMarkEnd,
                     combHTML;
-                if (sliderJson.isHasCode) {  //按需添加代码片段
-                    combHTML =  header +
-                                styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
-                                dataHtml +
-                                scriptBegin + cmJS + cmThemeJS + scriptEnd +
+
+                if (slideType === 'impress') {
+                    header = impressHeader, footer = impressFooter;
+                }
+                //包含了高亮代码输入框
+                if (sliderJson.isHasCode) {
+                    header += styleBegin + cmCss + styleEnd +
+                                styleBegin + cmThemeCSS + styleEnd +
+                                scriptBegin + cmJS + scriptEnd + 
+                                scriptBegin + cmThemeJS + scriptEnd;
+                }
+                switch (slideType) {
+                    case 'impress' :
+                    
+                    combHTML =  header + dataHtml +
+                                styleBegin + impressCSS + styleEnd +
+                                scriptBegin + impressJS + scriptEnd +
                                 scriptBegin + zepto + scriptEnd +
-                                scriptBegin + drawJS + scriptEnd +
-                                footer
-                } else { //不需要添加codemirror的代码
+                                scriptBegin + impressReader + scriptEnd +
+                                footer;
+                    break; 
+                    case 'blog' :; 
+                    case 'slide' :
+
                     combHTML =  header +
                                 styleBegin + animation + styleEnd +
                                 dataHtml +
                                 scriptBegin + zepto + scriptEnd +
                                 scriptBegin + drawJS + scriptEnd +
-                                footer
+                                footer;
+                    break; 
                 }
+                // if (isImpressSlider) {
+                    
+                // }
+                // else if (sliderJson.isHasCode) {  //按需添加代码片段
+                //     combHTML =  header +
+                //                 styleBegin + cmCss + cmThemeCSS + animation + styleEnd +
+                //                 dataHtml +
+                //                 scriptBegin + cmJS + cmThemeJS + scriptEnd +
+                //                 scriptBegin + zepto + scriptEnd +
+                //                 scriptBegin + drawJS + scriptEnd +
+                //                 footer
+                // } else { //不需要添加codemirror的代码
+                //     combHTML =  header +
+                //                 styleBegin + animation + styleEnd +
+                //                 dataHtml +
+                //                 scriptBegin + zepto + scriptEnd +
+                //                 scriptBegin + drawJS + scriptEnd +
+                //                 footer
+                // }
                 callback && callback(combHTML)
                 
             });
