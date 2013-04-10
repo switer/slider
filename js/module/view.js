@@ -7,7 +7,7 @@ Core.registerModule("view",function(sb){
 
     var SCREEN_SIZE_MAP = {
             '16:9'  : {x:160, y:90,     scale : 6 },
-            '16:10' : {x:160, y:100,    scale : 6 },
+            '8:5'   : {x:160, y:100,    scale : 6 },
             '6:5'   : {x:120, y:100,    scale : 5 },
             '5:3'   : {x:150, y:90,     scale : 4 },
             '4:3'   : {x:160, y:120,    scale : 5 },
@@ -15,10 +15,12 @@ Core.registerModule("view",function(sb){
             '1:1'   : {x:160, y:160,    scale : 4 }
         },
         MAGIN_TOP_MAP = {
-            '4:3'   : '-15px',
             '16:9'  : '10px',
-            '16:10'  : '10px',
-            '2:1'   : '18px',
+            '8:5'   : '5px',
+            '6:5'   : '5px',
+            '5:3'   : '10px',
+            '4:3'   : '-15px',
+            '2:1'   : '0px',
             '1:1'   : '-50px'
         },
         DEFAULT_SCREEN = '4:3',
@@ -103,7 +105,9 @@ Core.registerModule("view",function(sb){
         //更改预览窗口的大小
         changeScreenScale : function (value) {
             var sMap = SCREEN_SIZE_MAP[value]
-            if (!sMap) return;
+            if (!sMap) {
+                sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN]
+            }
             FRAME_X = sMap.x;
             FRAME_Y = sMap.y;
             FRAME_SCALE_SIZE = sMap.scale;

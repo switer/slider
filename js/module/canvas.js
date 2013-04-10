@@ -17,7 +17,7 @@ Core.registerModule("canvas",function(sb){
         },
         SCREEN_SIZE_MAP = {
             '16:9'  : {x:960,y:540},
-            '16:10' : {x:960,y:600},
+            '8:5' : {x:960,y:600},
             '6:5'   : {x:600,y:500},
             '5:3'   : {x:600,y:360},
             '4:3'   : {x:800,y:600},
@@ -478,9 +478,18 @@ Core.registerModule("canvas",function(sb){
                         value : dataUrl
                     }
                 });
+            } else {
+                sb.notify({
+                    type : "setStyleAttr",
+                    data : {
+                        key : "backgroundImage",
+                        value : dataUrl
+                    }
+                })
+                // var tar = SliderDataSet[currentSlider][rightMenuBtn];
+                // console.log(tar);
+                // tar && $(tar.container).css('backgroundImage', dataUrl);
             }
-            // var tar = SliderDataSet[currentSlider][rightMenuBtn];
-            // tar && $(tar.container).find('.panel').css('backgroundImage', dataUrl);
         },
         changeCodeType : function (param) {
             if (!rightMenuBtn || rightMenuBtn === 'panel') return;
@@ -494,7 +503,8 @@ Core.registerModule("canvas",function(sb){
             var sMap;
             sMap = SCREEN_SIZE_MAP[value];
             if (!sMap) {
-                throw new Error('Unmatched screen size');
+                // throw new Error('Unmatched screen size');
+                sMap = SCREEN_SIZE_MAP[DEFAULT_SCREEN];
             }
             canvasX = sMap.x;
             canvasY = sMap.y;
