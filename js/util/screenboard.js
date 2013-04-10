@@ -4,7 +4,7 @@
 	global.screenBoard = sb;
 
 	sb.create = function () {
-		var scales = ['16:9', '16:10',"6:5", "5:3", "4:3", '2:1', '1:1'],
+		var scales = ['16:9', '8:5',"6:5", "5:3", "4:3", '2:1', '1:1'],
 			scaleElem, 
 			$scaleElem,
 			closeMenu = document.createElement('div'),
