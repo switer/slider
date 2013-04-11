@@ -810,7 +810,7 @@ Core.registerModule("canvas",function(sb){
             global._createThumb(sliders.getFirstElement(), function (thumb) {
                 var sliderJson = global._createSliderJSONData(),
                     count = 0,
-                    slideType = 'impress',
+                    slideType = 'slide',
                     datas;
                 datas = {
                     cntConf : {
@@ -991,12 +991,7 @@ Core.registerModule("canvas",function(sb){
             newSlider.appendChild(panel);
             newSlider.className = "editor";
             newSlider.zIndex = 1;
-            $(newSlider).css({
-                font : 'initial',
-                color : 'initial',
-                lineHeight : 'initial',
-                letterSpacing : 'initial'
-            });
+
 
             if(currentSlider) sliders[currentSlider].style.display = "none";
             
@@ -1207,6 +1202,12 @@ Core.registerModule("canvas",function(sb){
                 textBox.setAttribute("style", "height:"+obj.height+"px;width:"+obj.width+"px;overflow:hidden;outline: none;");
             }
             container.style.zIndex = global._getMaxZIndex(currentSlider);
+            $(container).css({
+                font : 'initial',
+                color : 'initial',
+                lineHeight : 'initial',
+                letterSpacing : 'initial'
+            });
 
             textBox.setAttribute("contenteditable", "true");
             container.appendChild(textBox);
@@ -1276,8 +1277,13 @@ Core.registerModule("canvas",function(sb){
             /**********/
             codeWrap.appendChild(textArea)
             $(containerDatas.container).append(codeWrap);
-
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
+            $(containerDatas.container).css({
+                font : 'initial',
+                color : 'initial',
+                lineHeight : 'initial',
+                letterSpacing : 'initial'
+            });
             editor.appendChild(containerDatas.container)
             
             var codeMirror = CodeMirror(textArea, {
