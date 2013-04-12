@@ -1,6 +1,7 @@
 <script type="text/javascript">
     var paintingBoards = {},
-        targetSlider = null;
+        targetSlider = null,
+        globalScope = {};
     (function(){
         var canvas = document.getElementById("slider-preview"),code = document.getElementById("code"),
         sliders = {};
@@ -12,6 +13,7 @@
             datas = JSON.parse(datajson),
             DATA = JSON.parse(datas.cntData),
             conf = datas.cntConf;
+        globalScope.conf = conf;
         var showPenel = document.getElementById('slider-preview');
         showPenel.style.height = conf.height;
         showPenel.style.width = conf.width;
@@ -178,9 +180,9 @@
         module.start();
     }());
     (function () {
-        var tar = document.querySelector('#slider-preview'),
+            var tar = document.querySelector('#slider-preview'),
                 defaultScale = 'scale(1)',
-                defaultMarginTop = '0px',
+                defaultMarginTop =  '50px',
                 scaleName = 'WebkitTransform',
                 global = {};
 
