@@ -223,10 +223,8 @@ Core.registerModule("canvas",function(sb){
                 left        : "-125px",
                 top         : "0px"
             })
-            .attr('title', '当前幻灯片的过度动画')
-            .on('click', function () {
-
-            })
+            .attr('title', '当前幻灯片的过度动画');
+            
             sb.move(showAnim, showAnim, {top : true});
 
             editorContainer.appendChild(showAnim);
@@ -1671,6 +1669,7 @@ Core.registerModule("canvas",function(sb){
             // ChooseBox.hide(global._choosebox);
         },
         changeSliderAnim:function(newAnim){
+            alert(newAnim);
             sliders[currentSlider].setAttribute("data-anim", newAnim);
             sb.notify({
                 type:"changeShowAnim",
@@ -1678,6 +1677,7 @@ Core.registerModule("canvas",function(sb){
             });
         },
         changeShowAnim:function(anim){
+            console.log(anim, anim_name[anim])
             showAnim.innerHTML = anim_name[anim];
         },
         setSelect : function (elemID) {
