@@ -3,7 +3,59 @@ var paintingBoards = {},
 (function(){
     var impressContainer = document.getElementById("impress"),
         sliders = {},
-        index = 0;
+        index = 0,
+        animMap = {
+            'none' : 'slide',
+            "anim-move-left"    : 'slide',
+            "anim-move-right"   : 'slide',
+            "anim-move-top"     : 'slide',
+            "anim-move-bottom"  : 'slide',
+            "anim-move-top-left"        : 'slide',
+            "anim-move-top-right"       : 'slide',
+            "anim-move-bottom-left"     : 'slide',
+            "anim-move-bottom-right"    : 'slide',
+            "anim-scale"    : 'scale',
+            "anim-xSpin"    : 'rotate-x',
+            "anim-ySpin"    : 'rotete-y',
+            "anim-rightRotate"  : 'rotate',
+            "anim-leftRotate"   : 'rotate',
+        },
+        animations = {
+
+            'slide' : {
+                        "class" : 'slide',
+                        "datas" : {}
+            },
+            'scale' : {
+                        "class" : 'slide',
+                        "datas" : {
+                            'scale' : 4
+                        }
+            },
+            'rotate-x' : {
+                        "class" : '', 
+                        "datas" : {
+                            'rotate' : 90,
+                            'scale' : 5
+                        }
+            },
+            'rotate-y' : {
+                        "class" : '', 
+                        "datas" : {
+                            'rotate-x' : -40,
+                            'scale' : 2,
+                            'z' : -100
+                        }
+            },
+            'rotate' : {
+                        "class" : '', 
+                        "datas" : {
+                            'rotate' : 300,
+                            'scale' : 1,
+                            'z' : -200
+                        }
+            }
+        }
     
     var datajson = document.getElementById('datajson').innerHTML,
         datas = JSON.parse(datajson),
@@ -20,7 +72,16 @@ var paintingBoards = {},
         console.log(len, sqrtNum);
         return sqrtNum;
     }
-
+    function setAttr(elem, map) {
+        var datas = map.datas,
+            className = map.class;
+        $(elem).addClass(className);  
+        for(var key in datas){
+            if(datas.hasOwnProperty(key)) {
+                $(elem).data(key, datas[key]);
+            }
+        }
+    }
     var module = {
         init:function(){
             var sqrtNum = getSqrt(DATA);
@@ -28,7 +89,9 @@ var paintingBoards = {},
                 if(DATA.hasOwnProperty(s)){
                     var slider = document.createElement("DIV"),
                         panel = document.createElement("DIV"),
-                        elements = DATA[s].element;
+                        elements = DATA[s].element,
+                        anim = animMap[DATA[s].anim];
+                    console.log(animMap, DATA[s].anim, anim, animations, animations[anim]);
                     slider.appendChild(panel);
                     panel.setAttribute('style', DATA[s].panelAttr);
                     sliders[s] = slider;
@@ -40,9 +103,10 @@ var paintingBoards = {},
                             })
                             .data('x', (index % sqrtNum) * ( parseInt(conf.width)  + 100))
                             .data('y', parseInt(index / sqrtNum) * ( parseInt(conf.height)  + 100))
-                            .addClass('slide step')
-                            // .data('x', index * ( parseInt(conf.width)  + 100) )
-                            // .data('y', 0)
+                            .addClass('step')
+
+                    anim && animations[anim] && setAttr(slider, animations[anim]);
+
                     index ++;
                     for (var e in elements) {
                         if(elements.hasOwnProperty(e)){
@@ -88,7 +152,7 @@ var paintingBoards = {},
                                         });
                                         setTimeout(function () {
                                             module.triggerWindowResize();
-                                        }, 0);
+                                        }, 10);
                                 })(data)
 
                             }

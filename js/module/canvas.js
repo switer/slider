@@ -281,7 +281,8 @@ Core.registerModule("canvas",function(sb){
                 "codeboxSetting" : this.codeboxSetting,
                 "changeCodeType" : this.changeCodeType,
                 "codeboxThemeSetting" : this.codeboxThemeSetting,
-                "autoSaveTimer" : this.autoSaveTimer
+                "autoSaveTimer" : this.autoSaveTimer,
+                "playSlider" :  this.playSlider
             });
             for (i = 0; item =  eomItems[i]; i++) {
                 item.onclick = function(e){
@@ -442,6 +443,30 @@ Core.registerModule("canvas",function(sb){
                 // global.saveTempFile();
                 return '要离开正在编辑的内容？'
             }
+            $('#previewContainer').find('.close-menu').on('click', function () {
+                global._playFrame && $(global._playFrame).remove();
+                $('#previewContainer').addClass('dp-none');
+                $('#appContainer').removeClass('dp-none');
+            })
+        },
+        //预览
+        playSlider : function () {
+            global._createSaveData(function (playHtml) {
+                var $previewContainer = $('#previewContainer'),
+                    iframe = document.createElement('iframe'),
+                    $appContainer = $('#appContainer');
+                    iframe.src= 'about:_blank';
+                    iframe.id = 'preview-frame';
+                    $(iframe).on('load', function () {
+                        var doc = iframe.contentWindow.document;
+                        doc.write(playHtml);
+                        iframe.contentWindow.focus();
+                    })
+                    global._playFrame = iframe;
+                    $previewContainer.append(iframe).removeClass('dp-none');
+                    $appContainer.addClass('dp-none');
+
+            })
         },
         autoSaveTimer : function () {
             console.log('setTimer');
@@ -808,7 +833,7 @@ Core.registerModule("canvas",function(sb){
             global._createThumb(sliders.getFirstElement(), function (thumb) {
                 var sliderJson = global._createSliderJSONData(),
                     count = 0,
-                    slideType = 'impress',
+                    slideType = 'slide',
                     datas;
                 datas = {
                     cntConf : {
@@ -989,12 +1014,7 @@ Core.registerModule("canvas",function(sb){
             newSlider.appendChild(panel);
             newSlider.className = "editor";
             newSlider.zIndex = 1;
-            $(newSlider).css({
-                font : 'initial',
-                color : 'initial',
-                lineHeight : 'initial',
-                letterSpacing : 'initial'
-            });
+
 
             if(currentSlider) sliders[currentSlider].style.display = "none";
             
@@ -1205,6 +1225,12 @@ Core.registerModule("canvas",function(sb){
                 textBox.setAttribute("style", "height:"+obj.height+"px;width:"+obj.width+"px;overflow:hidden;outline: none;");
             }
             container.style.zIndex = global._getMaxZIndex(currentSlider);
+            $(container).css({
+                font : 'initial',
+                color : 'initial',
+                lineHeight : 'initial',
+                letterSpacing : 'initial'
+            });
 
             textBox.setAttribute("contenteditable", "true");
             container.appendChild(textBox);
@@ -1274,8 +1300,13 @@ Core.registerModule("canvas",function(sb){
             /**********/
             codeWrap.appendChild(textArea)
             $(containerDatas.container).append(codeWrap);
-
             containerDatas.container.style.zIndex = global._getMaxZIndex(currentSlider);
+            $(containerDatas.container).css({
+                font : 'initial',
+                color : 'initial',
+                lineHeight : 'initial',
+                letterSpacing : 'initial'
+            });
             editor.appendChild(containerDatas.container)
             
             var codeMirror = CodeMirror(textArea, {
