@@ -469,7 +469,6 @@ Core.registerModule("canvas",function(sb){
             })
         },
         autoSaveTimer : function () {
-            console.log('setTimer');
             //一个定时器定时保存文件
             window.setInterval( global.saveTempFile, 1000*5);
         },
@@ -681,7 +680,6 @@ Core.registerModule("canvas",function(sb){
                                 .replace(/\<\!\-\-\[DATA_JSON_END\]\-\-\>/,'')
                                 .replace(/^\<script[^\<\>]*\>/,'')
                                 .replace(/\<\/script\>/,'');
-                   console.log(data);
                     global.renderSlider(data);
                 } 
 
@@ -1400,7 +1398,6 @@ Core.registerModule("canvas",function(sb){
                     rgbArr;
 
                 type = item.getAttribute("data-type");
-                console.log('rightMenuBtn', rightMenuBtn);
                 if (rightMenuBtn === 'panel') {
                     attrValue =   sliders[currentSlider].style[type] || defaultAtt[type];
                 } else {
@@ -1700,7 +1697,6 @@ Core.registerModule("canvas",function(sb){
             // ChooseBox.hide(global._choosebox);
         },
         changeSliderAnim:function(newAnim){
-            alert(newAnim);
             sliders[currentSlider].setAttribute("data-anim", newAnim);
             sb.notify({
                 type:"changeShowAnim",
@@ -1708,7 +1704,6 @@ Core.registerModule("canvas",function(sb){
             });
         },
         changeShowAnim:function(anim){
-            console.log(anim, anim_name[anim])
             showAnim.innerHTML = anim_name[anim];
         },
         setSelect : function (elemID) {
